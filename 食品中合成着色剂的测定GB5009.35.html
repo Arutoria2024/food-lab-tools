@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GB 5009.35-2023 食品中合成着色剂的测定 完整实验流程图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background: #f0f5fa;
+            padding: 25px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 30px 30px 40px;
+        }
+        h1 {
+            font-size: 26px;
+            color: #0a2f44;
+            border-left: 6px solid #1a7a8a;
+            padding-left: 18px;
+            margin-bottom: 4px;
+        }
+        .sub {
+            color: #4a6a7a;
+            font-size: 14px;
+            margin-bottom: 22px;
+            padding-left: 24px;
+            background: #ecf3f8;
+            display: inline-block;
+            padding: 6px 24px;
+            border-radius: 30px;
+        }
+        .note-box {
+            background: #fef9e6;
+            border: 1px solid #f0dca0;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6a5a1a;
+            line-height: 1.8;
+        }
+        .note-box strong {
+            color: #8a6d1a;
+        }
+
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 20px 10px;
+            background: #f8fbfe;
+            border-radius: 16px;
+            border: 1px solid #dce6ef;
+            margin-bottom: 30px;
+        }
+
+        .node {
+            background: #ffffff;
+            border: 2px solid #c8d6e5;
+            border-radius: 12px;
+            padding: 14px 24px;
+            min-width: 200px;
+            max-width: 750px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.15s;
+        }
+        .node:hover {
+            border-color: #1a7a8a;
+            box-shadow: 0 4px 14px rgba(26, 122, 138, 0.12);
+        }
+        .node-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0a2f44;
+        }
+        .node-desc {
+            font-size: 13px;
+            color: #4a5a6a;
+            margin-top: 4px;
+            line-height: 1.6;
+        }
+        .node-desc .highlight {
+            background: #fef3d6;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #8a6d1a;
+        }
+        .node-desc .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 11px;
+            padding: 0 10px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+        .node-desc .warn {
+            color: #b33;
+            font-weight: 600;
+        }
+
+        .node-start {
+            border-color: #1a7a8a;
+            background: #eef7fa;
+        }
+        .node-start .node-title {
+            color: #0a4a5a;
+        }
+        .node-end {
+            border-color: #1a8a4a;
+            background: #eaf7f0;
+        }
+        .node-end .node-title {
+            color: #0a6a3a;
+        }
+        .node-method {
+            border-color: #8e44ad;
+            background: #f8f0fc;
+        }
+        .node-warn {
+            border-color: #c0392b;
+            background: #fdf0ee;
+        }
+        .node-warn .node-title {
+            color: #a93226;
+        }
+
+        .arrow-connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2px 0;
+        }
+        .arrow-line {
+            width: 2px;
+            height: 16px;
+            background: #8aa9bb;
+        }
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 14px solid #8aa9bb;
+        }
+
+        .sub-flow {
+            width: 100%;
+            max-width: 750px;
+            background: #f4f8fb;
+            border-radius: 12px;
+            padding: 14px 18px;
+            border: 1px solid #d0dce8;
+            margin: 4px 0;
+        }
+        .sub-flow .sub-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1a4a6a;
+            text-align: center;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #d0dce8;
+            padding-bottom: 6px;
+        }
+        .sub-flow .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 5px 0;
+            font-size: 13px;
+            color: #2a4a5a;
+            line-height: 1.6;
+            border-bottom: 1px dashed #e0e8ee;
+        }
+        .sub-flow .step-item:last-child {
+            border-bottom: none;
+        }
+        .sub-flow .step-num {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            background: #1a7a8a;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+        .sub-flow .step-item .highlight {
+            background: #fef3d6;
+            padding: 0 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 28px;
+            justify-content: center;
+            padding: 12px 16px;
+            margin-top: 12px;
+            background: #f4f8fb;
+            border-radius: 10px;
+            border: 1px solid #dce6ef;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #2a4a5a;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid #c8d6e5;
+        }
+        .legend-color.start {
+            border-color: #1a7a8a;
+            background: #eef7fa;
+        }
+        .legend-color.method {
+            border-color: #8e44ad;
+            background: #f8f0fc;
+        }
+        .legend-color.end {
+            border-color: #1a8a4a;
+            background: #eaf7f0;
+        }
+        .legend-color.warn {
+            border-color: #c0392b;
+            background: #fdf0ee;
+        }
+
+        .footnote {
+            margin-top: 28px;
+            font-size: 13px;
+            color: #5a6a7a;
+            border-top: 1px solid #dce6ef;
+            padding-top: 18px;
+            line-height: 1.8;
+        }
+        .footnote .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 12px;
+            padding: 1px 12px;
+            border-radius: 20px;
+            margin: 2px 4px 2px 0;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 16px;
+            }
+            .node {
+                padding: 10px 14px;
+                min-width: unset;
+            }
+            .sub-flow {
+                padding: 10px 12px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            .legend {
+                gap: 10px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧪 GB 5009.35-2023 · 食品中合成着色剂的测定</h1>
+    <div class="sub">高效液相色谱法（HPLC-DAD）— 外标法定量</div>
+
+    <div class="note-box">
+        <strong>📌 适用范围：</strong> 食品中 <strong>11种合成着色剂</strong> 的测定（柠檬黄、新红、苋菜红、靛蓝、胭脂红、日落黄、诱惑红、亮蓝、酸性红、喹啉黄、赤藓红）[reference:1]。<br>
+        <strong>🎯 定量方式：</strong> 采用 <span class="highlight">外标法</span> 定量[reference:2]。<br>
+        <strong>📅 标准状态：</strong> 2023-09-06 发布，2024-03-06 实施[reference:3]。<br>
+        <strong>📊 方法性能：</strong> 检出限 0.2~0.5 mg/kg，定量限 0.3~1.5 mg/kg[reference:4]。
+    </div>
+
+    <!-- ===== 主流程图 ===== -->
+    <div class="flowchart">
+
+        <!-- 1. 样品制备 -->
+        <div class="node node-start">
+            <div class="node-title">📦 样品制备</div>
+            <div class="node-desc">
+                取均匀试样 <span class="highlight">5~10 g</span>（精确至 0.01 g）<br>
+                固体试样需粉碎、混匀；液体试样直接取样
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 2. 提取 -->
+        <div class="node node-method">
+            <div class="node-title">🧪 提取（乙醇氨水溶液）</div>
+            <div class="node-desc">
+                加入 <span class="highlight">乙醇氨水溶液</span>（700 mL无水乙醇 + 4 mL氨水，定容至1 L）[reference:5]<br>
+                涡旋混匀，<span class="highlight">超声波提取 10~15 min</span><br>
+                <span class="highlight">4000 r/min</span> 离心 5 min，取上清液
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 3. 基质分类处理 -->
+        <div class="node node-warn">
+            <div class="node-title">📂 基质分类处理</div>
+            <div class="node-desc">
+                <span class="tag">液体类</span> 直接取提取液过固相萃取柱[reference:6]<br>
+                <span class="tag">固体类</span> 可先加 <span class="highlight">2~5 mL 水</span>，50°C水浴超声溶解[reference:7]<br>
+                <span class="tag">含油量较大</span> 加 <span class="highlight">20 mL 石油醚</span> 涡旋超声除油[reference:8]
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 4. 固相萃取净化 -->
+        <div class="node">
+            <div class="node-title">🧹 固相萃取净化（WAX柱）</div>
+            <div class="node-desc">
+                <span class="highlight">WAX固相萃取柱</span> 依次用 <span class="highlight">6 mL 甲醇</span> 和 <span class="highlight">6 mL 水</span> 活化[reference:9]<br>
+                提取液以 <span class="highlight">1 滴/秒</span> 过柱，弃去流出液<br>
+                依次用 <span class="highlight">6 mL 2% 甲酸水</span> 和 <span class="highlight">6 mL 甲醇</span> 淋洗，弃去淋洗液[reference:10]<br>
+                <span class="highlight">抽干小柱</span> 5 min[reference:11]
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 5. 洗脱 -->
+        <div class="node">
+            <div class="node-title">💧 洗脱</div>
+            <div class="node-desc">
+                用 <span class="highlight">2% 氨水甲醇溶液</span>（2 mL氨水 + 甲醇定容至100 mL）[reference:12]<br>
+                洗脱，收集洗脱液
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 6. 浓缩与复溶 -->
+        <div class="node">
+            <div class="node-title">🌡️ 浓缩与复溶</div>
+            <div class="node-desc">
+                洗脱液于 <span class="highlight">40 °C</span> 氮吹至近干<br>
+                加入 <span class="highlight">1.0~2.0 mL 5% 甲醇水溶液</span> 复溶[reference:13]<br>
+                过 <span class="highlight">0.22 μm 滤膜</span>
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 7. 仪器分析 -->
+        <div class="node node-method">
+            <div class="node-title">📊 HPLC-DAD 分析</div>
+            <div class="node-desc">
+                <span class="highlight">色谱柱：</span>C18柱（4.6×250 mm, 5 μm）[reference:14]<br>
+                <span class="highlight">流动相：</span>A：20 mmol/L 乙酸铵，B：甲醇[reference:15]<br>
+                <span class="highlight">梯度洗脱</span>，流速 <span class="highlight">1.0 mL/min</span>[reference:16]<br>
+                <span class="highlight">检测波长：</span>415 nm（柠檬黄、喹啉黄）/ 520 nm（新红、苋菜红等）/ 610 nm（靛蓝、亮蓝）[reference:17]<br>
+                <span class="highlight">定量方式：</span>外标法
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 8. 结果 -->
+        <div class="node node-end">
+            <div class="node-title">✅ 结果计算与报告</div>
+            <div class="node-desc">
+                外标法定量，计算各着色剂含量（mg/kg）<br>
+                扣除空白值，保留 <span class="highlight">三位有效数字</span>
+            </div>
+        </div>
+
+        <!-- ===== 图例 ===== -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color start"></div>
+                <span>起始/制备</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color method"></div>
+                <span>前处理/仪器分析</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color end"></div>
+                <span>终点/结果</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color warn"></div>
+                <span>注意事项</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 关键操作要点 ===== -->
+    <details style="background:#e8f0f8; border-radius:12px; padding:6px 18px; margin-top:10px; border:1px solid #c8dae5;">
+        <summary style="font-weight:700; font-size:16px; color:#0a2f44; cursor:pointer; list-style:none; display:flex; align-items:center; gap:8px; padding:8px 0;">
+            <span>📋 关键操作要点与质量控制</span>
+            <span style="margin-left:auto; transition:transform 0.2s;">▼</span>
+        </summary>
+        <div style="padding:10px 6px 18px 6px; font-size:14px; line-height:1.8; color:#1a2a3a;">
+            <div style="margin-bottom:10px; border-left:4px solid #1a7a8a; padding-left:16px;">
+                <strong>🧪 前处理要点</strong><br>
+                • 提取溶剂：<span class="highlight">乙醇氨水溶液</span>（700 mL无水乙醇 + 4 mL氨水，定容至1 L）[reference:18]<br>
+                • 固相萃取柱：<span class="highlight">WAX弱阴离子交换柱</span>，使用前需用甲醇和水活化[reference:19]<br>
+                • 含油量较大的试样需先用 <span class="highlight">石油醚</span> 除油[reference:20]<br>
+                • 氮吹温度控制在 <span class="highlight">40 °C</span> 以下，防止目标物降解
+            </div>
+            <div style="margin-bottom:10px; border-left:4px solid #d4a017; padding-left:16px;">
+                <strong>📊 仪器分析要点</strong><br>
+                • 检测波长：<span class="highlight">415 nm</span>（柠檬黄、喹啉黄）/ <span class="highlight">520 nm</span>（新红、苋菜红、胭脂红、日落黄、诱惑红、酸性红、赤藓红）/ <span class="highlight">610 nm</span>（靛蓝、亮蓝）[reference:21]<br>
+                • 流动相：<span class="highlight">20 mmol/L 乙酸铵 + 甲醇</span>，梯度洗脱[reference:22]<br>
+                • 11种着色剂中，喹啉黄和亮蓝存在多个异构体，需注意色谱峰的归属
+            </div>
+            <div style="border-left:4px solid #c0392b; padding-left:16px;">
+                <strong>⚠️ 质量控制要求</strong><br>
+                • 须进行 <span class="highlight">空白试验、加标回收率试验、平行样测定</span><br>
+                • 加标回收率应在 <span class="highlight">70% ~ 120%</span> 之间[reference:24]<br>
+                • WAX固相萃取柱不同批次间可能存在差异，使用前需进行 <span class="highlight">批次验收测试</span>[reference:25]
+            </div>
+        </div>
+    </details>
+
+    <!-- ===== 底部说明 ===== -->
+    <div class="footnote">
+        <strong>📌 编制依据：</strong><br>
+        <span class="tag">📖</span> GB 5009.35-2023《食品安全国家标准 食品中合成着色剂的测定》[reference:26]<br>
+        <span class="tag">📖</span> 代替 GB 5009.35-2016、GB 5009.141-2016、GB/T 9695.6-2008、GB/T 21916-2008[reference:27]<br>
+        <span class="tag">📖</span> 发布部门：国家卫生健康委员会、国家市场监督管理总局[reference:28]<br>
+        <span class="tag">📋</span> 本标准适用于食品中11种合成着色剂（柠檬黄、新红、苋菜红、靛蓝、胭脂红、日落黄、诱惑红、亮蓝、酸性红、喹啉黄、赤藓红）的测定[reference:29]<br>
+        <span class="tag">⚠️</span> 检测结果以 <strong>mg/kg</strong> 表示，计算结果需扣除空白值，保留 <strong>3位有效数字</strong>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GB/T 21317-2007 四环素类兽药残留检测操作规程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background: #f0f5fa;
+            padding: 25px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1300px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 30px 30px 40px;
+        }
+        h1 {
+            font-size: 26px;
+            color: #0a2f44;
+            border-left: 6px solid #1a7a8a;
+            padding-left: 18px;
+            margin-bottom: 4px;
+        }
+        .sub {
+            color: #4a6a7a;
+            font-size: 14px;
+            margin-bottom: 25px;
+            padding-left: 24px;
+            background: #ecf3f8;
+            display: inline-block;
+            padding: 6px 24px;
+            border-radius: 30px;
+        }
+        .note-box {
+            background: #fef9e6;
+            border: 1px solid #f0dca0;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6a5a1a;
+            line-height: 1.8;
+        }
+        .note-box strong {
+            color: #8a6d1a;
+        }
+
+        /* ===== 流程图 ===== */
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 30px;
+            padding: 20px 10px;
+            background: #f8fbfe;
+            border-radius: 16px;
+            border: 1px solid #dce6ef;
+        }
+
+        .node {
+            background: #ffffff;
+            border: 2px solid #c8d6e5;
+            border-radius: 12px;
+            padding: 14px 24px;
+            min-width: 200px;
+            max-width: 650px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.15s;
+        }
+        .node:hover {
+            border-color: #1a7a8a;
+            box-shadow: 0 4px 14px rgba(26, 122, 138, 0.12);
+        }
+        .node-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0a2f44;
+        }
+        .node-desc {
+            font-size: 13px;
+            color: #4a5a6a;
+            margin-top: 4px;
+            line-height: 1.6;
+        }
+        .node-desc .highlight {
+            background: #fef3d6;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #8a6d1a;
+        }
+        .node-desc .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 11px;
+            padding: 0 10px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+        .node-start {
+            border-color: #1a7a8a;
+            background: #eef7fa;
+        }
+        .node-start .node-title {
+            color: #0a4a5a;
+        }
+        .node-decision {
+            border-color: #d4a017;
+            background: #fefaf0;
+            border-style: dashed;
+        }
+        .node-end {
+            border-color: #1a8a4a;
+            background: #eaf7f0;
+        }
+        .node-end .node-title {
+            color: #0a6a3a;
+        }
+        .node-warn {
+            border-color: #c0392b;
+            background: #fdf0ee;
+        }
+        .node-warn .node-title {
+            color: #a93226;
+        }
+        .node-branch {
+            border-color: #7f8c8d;
+            background: #f4f6f8;
+            border-style: dotted;
+        }
+        .node-method {
+            border-color: #2a7f8a;
+            background: #f0f7fc;
+        }
+
+        .arrow-connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2px 0;
+        }
+        .arrow-line {
+            width: 2px;
+            height: 16px;
+            background: #8aa9bb;
+        }
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 14px solid #8aa9bb;
+        }
+        .arrow-short {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid #8aa9bb;
+        }
+
+        .branch-wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            width: 100%;
+            padding: 6px 0;
+        }
+        .branch-col {
+            flex: 1 1 280px;
+            min-width: 240px;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .branch-label {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1a5a7a;
+            background: #dce8f0;
+            padding: 4px 18px;
+            border-radius: 30px;
+            margin-bottom: 4px;
+        }
+        .branch-col .node {
+            max-width: 100%;
+            padding: 10px 16px;
+        }
+        .branch-col .node-title {
+            font-size: 14px;
+        }
+        .branch-col .node-desc {
+            font-size: 12px;
+        }
+
+        /* 子流程（详细步骤） */
+        .sub-flow {
+            width: 100%;
+            max-width: 650px;
+            background: #f4f8fb;
+            border-radius: 12px;
+            padding: 14px 18px;
+            border: 1px solid #d0dce8;
+            margin: 4px 0;
+        }
+        .sub-flow .sub-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1a4a6a;
+            text-align: center;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #d0dce8;
+            padding-bottom: 6px;
+        }
+        .sub-flow .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 5px 0;
+            font-size: 13px;
+            color: #2a4a5a;
+            line-height: 1.6;
+            border-bottom: 1px dashed #e0e8ee;
+        }
+        .sub-flow .step-item:last-child {
+            border-bottom: none;
+        }
+        .sub-flow .step-num {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            background: #1a7a8a;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+        .sub-flow .step-item .highlight {
+            background: #fef3d6;
+            padding: 0 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* 详细步骤卡片 */
+        .detail-section {
+            margin-top: 30px;
+        }
+        .detail-section .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0a2f44;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #1a7a8a;
+        }
+        .detail-card {
+            background: #f9fcff;
+            border: 1px solid #dce6ef;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+        }
+        .detail-card .card-title {
+            font-weight: 700;
+            font-size: 17px;
+            color: #0a2f44;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .detail-card .card-title .tag-method {
+            background: #2a7f8a;
+            color: #fff;
+            font-size: 12px;
+            border-radius: 30px;
+            padding: 0 14px;
+            line-height: 26px;
+        }
+        .detail-card .step-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .detail-card .step-list li {
+            padding: 5px 0 5px 28px;
+            position: relative;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #2a4a5a;
+            border-bottom: 1px dashed #ecf2f6;
+        }
+        .detail-card .step-list li:last-child {
+            border-bottom: none;
+        }
+        .detail-card .step-list li::before {
+            content: "▸";
+            position: absolute;
+            left: 4px;
+            color: #1a7a8a;
+            font-weight: 700;
+        }
+        .detail-card .step-list li .highlight {
+            background: #fef3d6;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #8a6d1a;
+        }
+        .detail-card .step-list li .warn {
+            color: #b33;
+            font-weight: 600;
+        }
+        .detail-card .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin: 8px 0;
+        }
+        .detail-card .param-table th,
+        .detail-card .param-table td {
+            border: 1px solid #d0dce8;
+            padding: 6px 10px;
+            text-align: center;
+        }
+        .detail-card .param-table th {
+            background: #e4edf5;
+            font-weight: 700;
+        }
+
+        .footnote {
+            margin-top: 30px;
+            font-size: 13px;
+            color: #5a6a7a;
+            border-top: 1px solid #dce6ef;
+            padding-top: 18px;
+            line-height: 1.8;
+        }
+        .footnote .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 12px;
+            padding: 1px 12px;
+            border-radius: 20px;
+            margin: 2px 4px 2px 0;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 16px;
+            }
+            .node {
+                padding: 10px 14px;
+                min-width: unset;
+            }
+            .branch-wrapper {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .branch-col {
+                max-width: 100%;
+                width: 100%;
+            }
+            .sub-flow {
+                padding: 10px 12px;
+            }
+            .detail-card {
+                padding: 14px 16px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧪 GB/T 21317-2007 · 四环素类兽药残留检测</h1>
+    <div class="sub">动物源性食品 — 液相色谱-质谱/质谱法与高效液相色谱法</div>
+
+    <!-- ===== 说明 ===== -->
+    <div class="note-box">
+        <strong>📌 适用范围：</strong> 动物肌肉、内脏组织、水产品、牛奶等动物源性食品中 <strong>四环素类</strong> 兽药残留量的测定。<br>
+        <strong>🎯 检测目标：</strong> 7种（HPLC法）或10种（LC-MS/MS法）四环素类药物，包括土霉素、四环素、金霉素、强力霉素等。<br>
+        <strong>⚙️ 原理：</strong> 采用 <span class="highlight">Na₂EDTA-McIlvaine缓冲液（pH 4.0）</span> 提取，经 <span class="highlight">HLB固相萃取柱</span> 净化，液相色谱或液相色谱-质谱/质谱测定，外标法定量。
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- 主流程图 -->
+    <!-- ========================================================== -->
+    <div class="flowchart">
+
+        <!-- 1. 样品制备 -->
+        <div class="node node-start">
+            <div class="node-title">📦 样品制备与贮存</div>
+            <div class="node-desc">
+                动物肌肉/肝脏/肾脏/水产品：取约 <span class="highlight">500 g</span> 组织捣碎均匀<br>
+                牛奶：取约 <span class="highlight">500 g</span> 充分混匀<br>
+                密封，标记，<span class="highlight">-18 °C</span> 以下冷冻保存
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 2. 提取 -->
+        <div class="node">
+            <div class="node-title">🔬 提取</div>
+            <div class="node-desc">
+                称取 <span class="highlight">5 g</span> 试样，加 <span class="highlight">0.1 mol/L Na₂EDTA-McIlvaine缓冲液（pH 4.0）</span><br>
+                冰水浴超声提取三次，离心，合并上清液，定容至 <span class="highlight">50 mL</span>
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 3. 净化 -->
+        <div class="node">
+            <div class="node-title">🧪 净化（HLB固相萃取）</div>
+            <div class="node-desc">
+                取 <span class="highlight">10 mL</span> 提取液过 <span class="highlight">HLB柱</span>（60 mg, 3 mL）<br>
+                依次用 <span class="highlight">5 mL 水</span> 和 <span class="highlight">5 mL 甲醇+水（1+19）</span> 淋洗<br>
+                抽干后，用 <span class="highlight">10 mL 甲醇+乙酸乙酯（1+9）</span> 洗脱<br>
+                吹氮浓缩至干，用 <span class="highlight">1.0 mL（LC-MS/MS）或 0.5 mL（HPLC）</span> 甲醇+三氟乙酸水溶液（1+19）复溶
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 4. 分支：测定方法 -->
+        <div class="node node-branch">
+            <div class="node-title">📊 仪器测定</div>
+            <div class="node-desc">根据实验室条件选择以下方法之一</div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <div class="branch-wrapper">
+            <div class="branch-col">
+                <div class="branch-label">🔹 液相色谱-质谱/质谱法</div>
+                <div class="node node-method">
+                    <div class="node-title">LC-MS/MS</div>
+                    <div class="node-desc">
+                        C8柱（150×2.1 mm, 5 μm）<br>
+                        流动相：甲醇 + 10 mmol/L 三氟乙酸（梯度）<br>
+                        流速 300 μL/min，柱温 30 °C<br>
+                        进样量 30 μL<br>
+                        <span class="highlight">ESI⁺，MRM模式</span>
+                    </div>
+                </div>
+            </div>
+            <div class="branch-col">
+                <div class="branch-label">🔸 高效液相色谱法</div>
+                <div class="node node-method">
+                    <div class="node-title">HPLC-UV/DAD</div>
+                    <div class="node-desc">
+                        C8柱（250×4.6 mm, 5 μm）<br>
+                        流动相：甲醇+乙腈+10 mmol/L 三氟乙酸（梯度）<br>
+                        流速 1.5 mL/min，柱温 30 °C<br>
+                        进样量 100 μL，检测波长 <span class="highlight">350 nm</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 5. 空白试验 & 结果计算 -->
+        <div class="node">
+            <div class="node-title">📝 空白试验 &amp; 结果计算</div>
+            <div class="node-desc">
+                同法处理空白样品（不加试样）<br>
+                外标法定量：<span class="highlight">X = (Aₓ × cₛ × V) / (Aₛ × m)</span>
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 6. 结果 -->
+        <div class="node node-end">
+            <div class="node-title">✅ 出具检测报告</div>
+            <div class="node-desc">
+                测定低限：<span class="highlight">50.0 μg/kg</span>（两种方法均适用）<br>
+                报告各四环素类药物残留量（μg/kg）
+            </div>
+        </div>
+
+    </div><!-- end flowchart -->
+
+
+    <!-- ========================================================== -->
+    <!-- 详细操作步骤 -->
+    <!-- ========================================================== -->
+
+    <div class="detail-section">
+        <div class="section-title">📋 详细操作步骤</div>
+
+        <!-- 1. 样品制备 -->
+        <div class="detail-card">
+            <div class="card-title">1. 样品制备与贮存</div>
+            <ul class="step-list">
+                <li><strong>动物肌肉、肝脏、肾脏和水产品：</strong> 从所取全部样品中取出约 <span class="highlight">500 g</span>，用组织捣碎机充分捣碎均匀，装入洁净容器中，密封，标明标记，于 <span class="highlight">-18 °C</span> 以下冷冻存放。</li>
+                <li><strong>牛奶：</strong> 从所取全部样品中取出约 <span class="highlight">500 g</span>，充分混匀，装入洁净容器中，密封，标明标记，于 <span class="highlight">-18 °C</span> 以下冷冻存放。</li>
+                <li><span class="warn">⚠️ 操作过程中应防止样品受到污染或残留物含量发生变化。</span></li>
+            </ul>
+        </div>
+
+        <!-- 2. 提取 -->
+        <div class="detail-card">
+            <div class="card-title">2. 提取</div>
+            <ul class="step-list">
+                <li><strong>动物肝脏、肾脏、肌肉组织、水产品：</strong> 称取均质试样 <span class="highlight">5 g</span>（精确到0.01 g）置于50 mL聚丙烯离心管中，分别用约20 mL、20 mL、10 mL <span class="highlight">0.1 mol/L Na₂EDTA-McIlvaine缓冲液（pH 4.0）</span> 冰水浴超声提取三次，每次旋涡混合1 min，超声提取10 min，3000 r/min离心5 min（温度低于15 °C），合并上清液（注意控制总提取液体积不超过50 mL），并定容至 <span class="highlight">50 mL</span>，混匀，5000 r/min离心10 min（温度低于15 °C），用快速滤纸过滤，待净化。</li>
+                <li><strong>牛奶：</strong> 称取混匀试样 <span class="highlight">5 g</span>（精确到0.01 g）置于50 mL比色管中，用0.1 mol/L Na₂EDTA-McIlvaine缓冲液溶解并定容至 <span class="highlight">50 mL</span>，旋涡混合1 min，冰水浴超声10 min，转移至50 mL聚丙烯离心管中，冷却至0～4 °C，5000 r/min离心10 min（温度低于15 °C），用快速滤纸过滤，待净化。</li>
+            </ul>
+        </div>
+
+        <!-- 3. 净化 -->
+        <div class="detail-card">
+            <div class="card-title">3. 净化（HLB固相萃取）</div>
+            <ul class="step-list">
+                <li>准确吸取 <span class="highlight">10 mL</span> 提取液（相当于1 g样品）以 <span class="highlight">1滴/秒</span> 的速度过 <span class="highlight">HLB固相萃取柱</span>（60 mg, 3 mL，使用前分别用5 mL甲醇和5 mL水预处理）。</li>
+                <li>待样液完全流出后，依次用 <span class="highlight">5 mL 水</span> 和 <span class="highlight">5 mL 甲醇+水（1+19）</span> 淋洗，弃去全部流出液。</li>
+                <li><span class="highlight">2.0 kPa</span> 以下减压抽干 <span class="highlight">5 min</span>。</li>
+                <li>用 <span class="highlight">10 mL 甲醇+乙酸乙酯（1+9）</span> 洗脱，收集洗脱液。</li>
+                <li>将洗脱液吹氮浓缩至干（温度低于 <span class="highlight">40 °C</span>）。</li>
+                <li>用 <span class="highlight">1.0 mL（LC-MS/MS法）或 0.5 mL（HPLC法）</span> 甲醇+三氟乙酸水溶液（1+19）溶解残渣，过 <span class="highlight">0.45 μm</span> 滤膜，待测定。</li>
+            </ul>
+        </div>
+
+        <!-- 4. 测定 -->
+        <div class="detail-card">
+            <div class="card-title">4. 仪器测定</div>
+            <ul class="step-list">
+                <li><strong>方法A：液相色谱-质谱/质谱法（LC-MS/MS）</strong>
+                    <ul style="list-style:none; padding-left:20px; margin-top:4px;">
+                        <li>• 色谱柱：Inertsil C8-3, 5 μm, 150 mm × 2.1 mm（内径）或相当者。</li>
+                        <li>• 流动相：甲醇 + 10 mmol/L 三氟乙酸，梯度洗脱（见标准表1）。</li>
+                        <li>• 流速：300 μL/min；柱温：30 °C；进样量：30 μL。</li>
+                        <li>• 质谱：ESI⁺，MRM模式，参考条件见标准附录A。</li>
+                        <li>• 定性：保留时间偏差≤±2.5%，信噪比（S/N）≥3（定性离子）和≥10（定量离子），离子丰度比偏差符合表2规定。</li>
+                    </ul>
+                </li>
+                <li><strong>方法B：高效液相色谱法（HPLC）</strong>
+                    <ul style="list-style:none; padding-left:20px; margin-top:4px;">
+                        <li>• 色谱柱：Inertsil C8-3, 5 μm, 250 mm × 4.6 mm（内径）或相当者。</li>
+                        <li>• 流动相：甲醇 + 乙腈 + 10 mmol/L 三氟乙酸，梯度洗脱（见标准表3）。</li>
+                        <li>• 流速：1.5 mL/min；柱温：30 °C；进样量：100 μL。</li>
+                        <li>• 检测波长：<span class="highlight">350 nm</span>。</li>
+                    </ul>
+                </li>
+                <li><strong>定量：</strong> 外标峰面积法定量，标准工作溶液和样液等体积参插进样，响应值均应在线性范围内。</li>
+            </ul>
+        </div>
+
+        <!-- 5. 空白试验 -->
+        <div class="detail-card">
+            <div class="card-title">5. 空白试验</div>
+            <ul class="step-list">
+                <li>除不加试样外，均按上述测定步骤进行。</li>
+            </ul>
+        </div>
+
+        <!-- 6. 结果计算 -->
+        <div class="detail-card">
+            <div class="card-title">6. 结果计算</div>
+            <ul class="step-list">
+                <li>采用外标法定量，按公式计算：</li>
+                <li style="padding-left:40px; background:#f4f8fb; border-radius:6px; margin:4px 0; font-family:'Times New Roman',serif; font-style:italic;">
+                    X = (Aₓ × cₛ × V) / (Aₛ × m)
+                </li>
+                <li>其中：X — 样品中待测组分含量（μg/kg）；Aₓ — 测定液中待测组分的峰面积；cₛ — 标准液中待测组分的浓度（μg/L）；V — 定容体积（mL）；Aₛ — 标准液中待测组分的峰面积；m — 最终样液所代表的样品质量（g）。</li>
+            </ul>
+        </div>
+
+        <!-- 7. 测定低限、回收率与精密度 -->
+        <div class="detail-card">
+            <div class="card-title">7. 方法性能指标</div>
+            <ul class="step-list">
+                <li><strong>测定低限：</strong> 两种方法均为 <span class="highlight">50.0 μg/kg</span>（各化合物）。</li>
+                <li><strong>回收率范围：</strong> 一般在 <span class="highlight">70%～110%</span> 之间（详见标准附录C）。</li>
+                <li><strong>精密度：</strong> 相对标准偏差（RSD）一般 <span class="highlight">＜10%</span>。</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- 底部安全提示 -->
+    <!-- ========================================================== -->
+    <div class="footnote">
+        <strong>📌 安全与注意事项：</strong><br>
+        <span class="tag">⚠️</span> 操作过程中涉及 <strong>甲醇、乙腈、三氟乙酸</strong> 等有机溶剂，应在通风橱内进行，佩戴防护手套。<br>
+        <span class="tag">🧊</span> 提取、离心等步骤需在 <strong>低温（＜15 °C）</strong> 条件下进行，以防止四环素类药物的降解。<br>
+        <span class="tag">🧪</span> HLB固相萃取柱使用前须经 <strong>甲醇和水活化</strong>，保持柱体湿润。<br>
+        <span class="tag">📊</span> LC-MS/MS定性时，须满足 <strong>保留时间、信噪比、离子丰度比</strong> 等全部要求，方可确证。<br>
+        <span class="tag">📋</span> 本操作规程依据 GB/T 21317-2007 编制，具体操作细节应参考标准原文。
+    </div>
+
+</div>
+</body>
+</html>

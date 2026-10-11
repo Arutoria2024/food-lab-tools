@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GB/T 21311-2007 硝基呋喃代谢物残留检测 实验流程图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background: #f0f5fa;
+            padding: 25px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 30px 30px 40px;
+        }
+        h1 {
+            font-size: 26px;
+            color: #0a2f44;
+            border-left: 6px solid #1a7a8a;
+            padding-left: 18px;
+            margin-bottom: 4px;
+        }
+        .sub {
+            color: #4a6a7a;
+            font-size: 14px;
+            margin-bottom: 22px;
+            padding-left: 24px;
+            background: #ecf3f8;
+            display: inline-block;
+            padding: 6px 24px;
+            border-radius: 30px;
+        }
+        .note-box {
+            background: #fef9e6;
+            border: 1px solid #f0dca0;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6a5a1a;
+            line-height: 1.8;
+        }
+        .note-box strong {
+            color: #8a6d1a;
+        }
+
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 20px 10px;
+            background: #f8fbfe;
+            border-radius: 16px;
+            border: 1px solid #dce6ef;
+            margin-bottom: 30px;
+        }
+
+        .node {
+            background: #ffffff;
+            border: 2px solid #c8d6e5;
+            border-radius: 12px;
+            padding: 14px 24px;
+            min-width: 200px;
+            max-width: 750px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.15s;
+        }
+        .node:hover {
+            border-color: #1a7a8a;
+            box-shadow: 0 4px 14px rgba(26, 122, 138, 0.12);
+        }
+        .node-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0a2f44;
+        }
+        .node-desc {
+            font-size: 13px;
+            color: #4a5a6a;
+            margin-top: 4px;
+            line-height: 1.6;
+        }
+        .node-desc .highlight {
+            background: #fef3d6;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #8a6d1a;
+        }
+        .node-desc .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 11px;
+            padding: 0 10px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+        .node-desc .warn {
+            color: #b33;
+            font-weight: 600;
+        }
+
+        .node-start {
+            border-color: #1a7a8a;
+            background: #eef7fa;
+        }
+        .node-start .node-title {
+            color: #0a4a5a;
+        }
+        .node-end {
+            border-color: #1a8a4a;
+            background: #eaf7f0;
+        }
+        .node-end .node-title {
+            color: #0a6a3a;
+        }
+        .node-warn {
+            border-color: #c0392b;
+            background: #fdf0ee;
+        }
+        .node-warn .node-title {
+            color: #a93226;
+        }
+        .node-method {
+            border-color: #8e44ad;
+            background: #f8f0fc;
+        }
+
+        .arrow-connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2px 0;
+        }
+        .arrow-line {
+            width: 2px;
+            height: 16px;
+            background: #8aa9bb;
+        }
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 14px solid #8aa9bb;
+        }
+
+        .sub-flow {
+            width: 100%;
+            max-width: 750px;
+            background: #f4f8fb;
+            border-radius: 12px;
+            padding: 14px 18px;
+            border: 1px solid #d0dce8;
+            margin: 4px 0;
+        }
+        .sub-flow .sub-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1a4a6a;
+            text-align: center;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #d0dce8;
+            padding-bottom: 6px;
+        }
+        .sub-flow .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 5px 0;
+            font-size: 13px;
+            color: #2a4a5a;
+            line-height: 1.6;
+            border-bottom: 1px dashed #e0e8ee;
+        }
+        .sub-flow .step-item:last-child {
+            border-bottom: none;
+        }
+        .sub-flow .step-num {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            background: #1a7a8a;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+        .sub-flow .step-item .highlight {
+            background: #fef3d6;
+            padding: 0 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 28px;
+            justify-content: center;
+            padding: 12px 16px;
+            margin-top: 12px;
+            background: #f4f8fb;
+            border-radius: 10px;
+            border: 1px solid #dce6ef;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #2a4a5a;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid #c8d6e5;
+        }
+        .legend-color.start {
+            border-color: #1a7a8a;
+            background: #eef7fa;
+        }
+        .legend-color.method {
+            border-color: #8e44ad;
+            background: #f8f0fc;
+        }
+        .legend-color.end {
+            border-color: #1a8a4a;
+            background: #eaf7f0;
+        }
+        .legend-color.warn {
+            border-color: #c0392b;
+            background: #fdf0ee;
+        }
+
+        .footnote {
+            margin-top: 28px;
+            font-size: 13px;
+            color: #5a6a7a;
+            border-top: 1px solid #dce6ef;
+            padding-top: 18px;
+            line-height: 1.8;
+        }
+        .footnote .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 12px;
+            padding: 1px 12px;
+            border-radius: 20px;
+            margin: 2px 4px 2px 0;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 16px;
+            }
+            .node {
+                padding: 10px 14px;
+                min-width: unset;
+            }
+            .sub-flow {
+                padding: 10px 12px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            .legend {
+                gap: 10px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧪 GB/T 21311-2007 · 硝基呋喃代谢物残留检测</h1>
+    <div class="sub">高效液相色谱-串联质谱法（HPLC-MS/MS）— 稳定同位素内标法定量</div>
+
+    <div class="note-box">
+        <strong>📌 适用范围：</strong> 肌肉、内脏、鱼、虾、蛋、奶、蜂蜜和肠衣等动物源性食品[reference:2]。<br>
+        <strong>🎯 检测目标：</strong> AOZ（3-氨基-2-恶唑酮）、AMOZ（5-吗啉甲基-3-氨基-2-恶唑烷基酮）、AHD（1-氨基-乙内酰脲）、SEM（氨基脲）[reference:3]。
+    </div>
+
+    <!-- ===== 主流程图 ===== -->
+    <div class="flowchart">
+
+        <!-- 1. 样品制备 -->
+        <div class="node node-start">
+            <div class="node-title">📦 样品制备</div>
+            <div class="node-desc">
+                称取 <span class="highlight">2 g</span> 均匀试样（精确至 0.01 g）<br>
+                肌肉、内脏、鱼、虾、蛋、奶、蜂蜜、肠衣等
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 2. 水解与衍生 -->
+        <div class="node node-method">
+            <div class="node-title">🧪 酸水解与衍生化</div>
+            <div class="node-desc">
+                加入 <span class="highlight">10 mL 0.2 mol/L 盐酸</span>，均质 1 min[reference:4]<br>
+                加入 <span class="highlight">50 μL 混合内标</span> + <span class="highlight">100 μL 邻硝基苯甲醛</span>（衍生试剂）[reference:5]<br>
+                涡旋 30 s，振荡 30 min，<span class="highlight">37 °C 恒温过夜（16 h）</span>[reference:6]
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 3. pH调节与提取 -->
+        <div class="node">
+            <div class="node-title">⚖️ pH调节与液液提取</div>
+            <div class="node-desc">
+                加入 <span class="highlight">1 mL 0.3 mol/L 碘酸钾</span>[reference:7]<br>
+                用 <span class="highlight">2.0 mol/L NaOH</span> 调节 pH 至 <span class="highlight">7.4 ± 0.2</span>[reference:8]<br>
+                加入 <span class="highlight">10 mL 乙酸乙酯</span>，振荡提取 10 min[reference:9]<br>
+                <span class="highlight">8000 r/min</span> 离心 10 min，收集乙酸乙酯层[reference:10]<br>
+                残渣用 <span class="highlight">10 mL 乙酸乙酯</span> 再提取一次，合并提取液[reference:11]
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 4. 净化 -->
+        <div class="node">
+            <div class="node-title">🧹 净化（去脂）</div>
+            <div class="node-desc">
+                合并提取液于 <span class="highlight">40 °C</span> 氮吹至干[reference:12]<br>
+                残渣用 <span class="highlight">1 mL 0.1% 甲酸水</span>（含 0.0005 mol/L 乙酸铵）溶解[reference:13]<br>
+                加入 <span class="highlight">3 mL 乙腈饱和的正己烷</span> 液液提取，去除脂肪[reference:14]<br>
+                下层水相过 <span class="highlight">0.22 μm</span> 滤膜[reference:15]
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 5. 仪器分析 -->
+        <div class="node node-method">
+            <div class="node-title">📊 HPLC-MS/MS 分析</div>
+            <div class="node-desc">
+                <span class="highlight">色谱柱：</span>C18柱（2.1×150 mm, 3 μm）[reference:16]<br>
+                <span class="highlight">流动相：</span>0.1% 甲酸水（含乙酸铵）+ 乙腈，梯度洗脱[reference:17]<br>
+                <span class="highlight">质谱：</span>ESI⁺，MRM 模式[reference:18]<br>
+                <span class="highlight">定量方式：</span>稳定同位素内标法[reference:19]
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 6. 结果 -->
+        <div class="node node-end">
+            <div class="node-title">✅ 结果计算与报告</div>
+            <div class="node-desc">
+                内标法定量，计算各代谢物残留量（μg/kg）<br>
+                出具检测报告
+            </div>
+        </div>
+
+        <!-- ===== 图例 ===== -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color start"></div>
+                <span>起始/制备</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color method"></div>
+                <span>前处理/仪器分析</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color end"></div>
+                <span>终点/结果</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color warn"></div>
+                <span>注意事项</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 关键操作要点 ===== -->
+    <details style="background:#e8f0f8; border-radius:12px; padding:6px 18px; margin-top:10px; border:1px solid #c8dae5;">
+        <summary style="font-weight:700; font-size:16px; color:#0a2f44; cursor:pointer; list-style:none; display:flex; align-items:center; gap:8px; padding:8px 0;">
+            <span>📋 关键操作要点与质量控制</span>
+            <span style="margin-left:auto; transition:transform 0.2s;">▼</span>
+        </summary>
+        <div style="padding:10px 6px 18px 6px; font-size:14px; line-height:1.8; color:#1a2a3a;">
+            <div style="margin-bottom:10px; border-left:4px solid #1a7a8a; padding-left:16px;">
+                <strong>🧪 前处理要点</strong><br>
+                • 衍生化反应须在 <span class="highlight">37 °C 避光</span> 条件下进行 <span class="highlight">16 h</span>（过夜）[reference:20]<br>
+                • 调节 pH 至 <span class="highlight">7.4 ± 0.2</span> 是提取效率的关键[reference:21]<br>
+                • 乙酸乙酯提取须进行 <span class="highlight">两次</span>，合并提取液[reference:22]<br>
+                • 氮吹温度控制在 <span class="highlight">40 °C</span> 以下，防止目标物降解[reference:23]
+            </div>
+            <div style="margin-bottom:10px; border-left:4px solid #d4a017; padding-left:16px;">
+                <strong>📊 仪器分析要点</strong><br>
+                • 采用 <span class="highlight">稳定同位素内标法</span> 定量，校正基质效应[reference:24]<br>
+                • MRM 模式监测：AMOZ (335.2→291.2)、AHD (249.2→134.1)、AOZ (236.1→133.9) 等[reference:25]<br>
+                • 须同时监测内标通道（如 D₅-AMOZ、¹³C-AHD、D₄-AOZ）[reference:26]
+            </div>
+            <div style="border-left:4px solid #c0392b; padding-left:16px;">
+                <strong>⚠️ 质量控制要求</strong><br>
+                • 须进行 <span class="highlight">空白试验、加标回收率试验、平行样测定</span><br>
+                • 标准曲线相关系数 R² ≥ 0.990<br>
+                • 加标回收率应在 <span class="highlight">70% ~ 120%</span> 之间
+            </div>
+        </div>
+    </details>
+
+    <!-- ===== 底部说明 ===== -->
+    <div class="footnote">
+        <strong>📌 编制依据：</strong><br>
+        <span class="tag">📖</span> GB/T 21311-2007《动物源性食品中硝基呋喃类药物代谢物残留量检测方法 高效液相色谱/串联质谱法》[reference:27]<br>
+        <span class="tag">📖</span> 代替 SN/T 1627-2005，适用于进出口动物源性食品中硝基呋喃代谢物的测定[reference:28]<br>
+        <span class="tag">🔬</span> 检测设备：高效液相色谱-串联四极杆质谱仪（HPLC-MS/MS）<br>
+        <span class="tag">📋</span> 本标准适用于 AOZ、AMOZ、AHD、SEM 四种代谢物的定性确证和定量测定[reference:29]
+    </div>
+</div>
+</body>
+</html>

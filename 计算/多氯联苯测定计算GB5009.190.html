@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GB 5009.190-2014 多氯联苯（PCBs）自动计算系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background: #f0f5fa;
+            padding: 25px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 28px 28px 40px;
+        }
+        h1 {
+            font-size: 26px;
+            color: #0a2f44;
+            border-left: 6px solid #1a7a8a;
+            padding-left: 18px;
+            margin-bottom: 4px;
+        }
+        .sub {
+            color: #4a6a7a;
+            font-size: 14px;
+            margin-bottom: 22px;
+            padding-left: 24px;
+            background: #ecf3f8;
+            display: inline-block;
+            padding: 6px 24px;
+            border-radius: 30px;
+        }
+
+        /* 方法切换标签 */
+        .method-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #1a7a8a;
+        }
+        .method-tabs .tab {
+            flex: 1;
+            padding: 12px 20px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+            background: #f4f8fb;
+            color: #4a6a7a;
+            border: none;
+        }
+        .method-tabs .tab:hover {
+            background: #e6f3f7;
+        }
+        .method-tabs .tab.active {
+            background: #1a7a8a;
+            color: #fff;
+        }
+
+        /* 计算卡片 */
+        .calc-panel {
+            display: none;
+        }
+        .calc-panel.active {
+            display: block;
+        }
+
+        .card {
+            background: #f9fcff;
+            border: 1px solid #dce6ef;
+            border-radius: 16px;
+            padding: 20px 22px;
+            margin-bottom: 20px;
+        }
+        .card .card-title {
+            font-weight: 700;
+            font-size: 17px;
+            color: #1a4a6a;
+            border-bottom: 2px solid #d0dce8;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .card .card-title .badge {
+            background: #1a7a8a;
+            color: #fff;
+            font-size: 12px;
+            border-radius: 30px;
+            padding: 0 14px;
+            line-height: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 12px;
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2a4a5a;
+            min-width: 120px;
+        }
+        .form-group input,
+        .form-group select {
+            border: 1.5px solid #d0dce8;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 14px;
+            background: #fff;
+            flex: 1;
+            min-width: 80px;
+            max-width: 180px;
+            transition: 0.2s;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #1a7a8a;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 122, 138, 0.15);
+        }
+        .form-group .unit {
+            font-size: 12px;
+            color: #5a7a8a;
+        }
+        .form-group .hint {
+            font-size: 12px;
+            color: #7a8a9a;
+            margin-left: 4px;
+        }
+
+        .btn {
+            background: #1a7a8a;
+            color: #fff;
+            border: none;
+            padding: 9px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(26, 122, 138, 0.25);
+        }
+        .btn:hover {
+            background: #0e5f6e;
+            transform: translateY(-1px);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #1a7a8a;
+            border: 2px solid #1a7a8a;
+            box-shadow: none;
+            padding: 5px 14px;
+            font-size: 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-outline:hover {
+            background: #e6f3f7;
+        }
+
+        .result-box {
+            background: #eaf5f9;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-top: 14px;
+            border-left: 5px solid #1a7a8a;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dashed #c8dae5;
+            font-size: 14px;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-item .label {
+            color: #3a5a6a;
+        }
+        .result-item .value {
+            font-weight: 700;
+            color: #0a2f44;
+        }
+        .result-item .value.pass {
+            color: #1a8a4a;
+        }
+        .result-item .value.fail {
+            color: #c0392b;
+        }
+
+        .json-area {
+            background: #1e2a36;
+            color: #b8d4e0;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 160px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        .flex-end {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .pcb-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 16px;
+            font-size: 13px;
+            color: #2a4a5a;
+            padding: 6px 0 6px 16px;
+        }
+        @media (max-width: 600px) {
+            .pcb-list {
+                grid-template-columns: 1fr;
+            }
+        }
+        .pcb-list .item {
+            padding: 2px 0;
+            border-bottom: 1px dashed #e8eef4;
+        }
+
+        .footnote {
+            margin-top: 28px;
+            font-size: 13px;
+            color: #5a6a7a;
+            border-top: 1px solid #dce6ef;
+            padding-top: 18px;
+            line-height: 1.8;
+        }
+        .footnote .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 12px;
+            padding: 1px 12px;
+            border-radius: 20px;
+            margin: 2px 4px 2px 0;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 16px;
+            }
+            .form-group label {
+                min-width: 70px;
+                font-size: 12px;
+            }
+            .form-group input {
+                font-size: 13px;
+                max-width: 100%;
+            }
+            .card {
+                padding: 14px 14px;
+            }
+            .method-tabs .tab {
+                font-size: 13px;
+                padding: 10px 12px;
+            }
+            .pcb-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 GB 5009.190-2014 · 多氯联苯（PCBs）自动计算</h1>
+        <div class="sub">食品中指示性多氯联苯含量测定 — 第一法（同位素稀释-GC-MS）&amp; 第二法（GC-ECD）</div>
+
+        <!-- ===== 方法切换标签 ===== -->
+        <div class="method-tabs">
+            <button class="tab active" data-method="method1" onclick="switchMethod('method1')">🔬 第一法 · 同位素稀释-GC-MS</button>
+            <button class="tab" data-method="method2" onclick="switchMethod('method2')">📊 第二法 · GC-ECD 外标法</button>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- 第一法：同位素稀释-气相色谱-质谱法 -->
+        <!-- ============================================================ -->
+        <div id="method1" class="calc-panel active">
+
+            <div class="card">
+                <div class="card-title">
+                    📊 同位素稀释内标法计算
+                    <span class="badge">13C₁₂标记内标</span>
+                </div>
+
+                <div class="form-group">
+                    <label>PCB 单体 :</label>
+                    <select id="m1_compound">
+                        <option value="PCB28">PCB28</option>
+                        <option value="PCB52">PCB52</option>
+                        <option value="PCB101">PCB101</option>
+                        <option value="PCB118">PCB118</option>
+                        <option value="PCB138">PCB138</option>
+                        <option value="PCB153">PCB153</option>
+                        <option value="PCB180">PCB180</option>
+                        <option value="PCB18">PCB18</option>
+                        <option value="PCB33">PCB33</option>
+                        <option value="PCB44">PCB44</option>
+                        <option value="PCB70">PCB70</option>
+                        <option value="PCB105">PCB105</option>
+                        <option value="PCB128">PCB128</option>
+                        <option value="PCB170">PCB170</option>
+                        <option value="PCB187">PCB187</option>
+                        <option value="PCB194">PCB194</option>
+                        <option value="PCB195">PCB195</option>
+                        <option value="PCB199">PCB199</option>
+                        <option value="PCB206">PCB206</option>
+                    </select>
+                    <span class="hint">第一法可测定19种PCB单体[reference:3]</span>
+                </div>
+
+                <div class="form-group">
+                    <label>内标浓度 c<sub>is</sub> :</label>
+                    <input type="number" id="m1_isConc" value="100.0" step="0.1">
+                    <span class="unit">μg/L</span>
+                </div>
+                <div class="form-group">
+                    <label>内标加入体积 V<sub>is</sub> :</label>
+                    <input type="number" id="m1_isVol" value="10.0" step="0.1">
+                    <span class="unit">μL</span>
+                </div>
+                <div class="form-group">
+                    <label>内标峰面积 A<sub>is</sub> :</label>
+                    <input type="number" id="m1_isArea" value="850000" step="1">
+                </div>
+                <div class="form-group">
+                    <label>目标物峰面积 A<sub>x</sub> :</label>
+                    <input type="number" id="m1_targetArea" value="320000" step="1">
+                </div>
+                <div class="form-group">
+                    <label>样品质量 m :</label>
+                    <input type="number" id="m1_sampleMass" value="5.0" step="0.01">
+                    <span class="unit">g</span>
+                    <span class="hint">（以湿重计）</span>
+                </div>
+                <div class="form-group">
+                    <label>定容体积 V :</label>
+                    <input type="number" id="m1_finalVol" value="1.0" step="0.1">
+                    <span class="unit">mL</span>
+                </div>
+                <div class="form-group">
+                    <label>GB 2762 限值 :</label>
+                    <input type="number" id="m1_limit" value="0.5" step="0.1">
+                    <span class="unit">mg/kg</span>
+                    <span class="hint">（以脂肪计，参考限值）</span>
+                </div>
+
+                <button class="btn" onclick="calcMethod1()" style="width:100%;">🧪 计算含量</button>
+
+                <div id="m1_result" style="margin-top:14px;">
+                    <!-- 动态填充 -->
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📋 检测信息</div>
+                <div style="font-size:14px; color:#2a4a5a; line-height:1.8;">
+                    <p><strong>📌 测定低限：</strong> 0.02 μg/kg（以湿重计）[reference:4]</p>
+                    <p><strong>🔬 检测方法：</strong> 稳定性同位素稀释-气相色谱-质谱法[reference:5]</p>
+                    <p><strong>⚖️ 定量方式：</strong> 内标法定量[reference:6]</p>
+                    <p><strong>📊 质控要求：</strong> 加标回收率 70% ~ 120%[reference:7]</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- 第二法：气相色谱-电子捕获检测器法 -->
+        <!-- ============================================================ -->
+        <div id="method2" class="calc-panel">
+
+            <div class="card">
+                <div class="card-title">
+                    📊 外标法计算
+                    <span class="badge">GC-ECD 外标法定量</span>
+                </div>
+
+                <div class="form-group">
+                    <label>PCB 单体 :</label>
+                    <select id="m2_compound">
+                        <option value="PCB28">PCB28</option>
+                        <option value="PCB52">PCB52</option>
+                        <option value="PCB101">PCB101</option>
+                        <option value="PCB118">PCB118</option>
+                        <option value="PCB138">PCB138</option>
+                        <option value="PCB153">PCB153</option>
+                        <option value="PCB180">PCB180</option>
+                    </select>
+                    <span class="hint">第二法测定7种指示性PCBs[reference:8]</span>
+                </div>
+
+                <div class="form-group">
+                    <label>标准品浓度 c<sub>s</sub> :</label>
+                    <input type="number" id="m2_stdConc" value="50.0" step="0.1">
+                    <span class="unit">μg/L</span>
+                </div>
+                <div class="form-group">
+                    <label>标准品峰面积 A<sub>s</sub> :</label>
+                    <input type="number" id="m2_stdArea" value="650000" step="1">
+                </div>
+                <div class="form-group">
+                    <label>样品峰面积 A<sub>x</sub> :</label>
+                    <input type="number" id="m2_sampleArea" value="280000" step="1">
+                </div>
+                <div class="form-group">
+                    <label>样品质量 m :</label>
+                    <input type="number" id="m2_sampleMass" value="5.0" step="0.01">
+                    <span class="unit">g</span>
+                    <span class="hint">（以湿重计）</span>
+                </div>
+                <div class="form-group">
+                    <label>定容体积 V :</label>
+                    <input type="number" id="m2_finalVol" value="1.0" step="0.1">
+                    <span class="unit">mL</span>
+                </div>
+                <div class="form-group">
+                    <label>GB 2762 限值 :</label>
+                    <input type="number" id="m2_limit" value="0.5" step="0.1">
+                    <span class="unit">mg/kg</span>
+                    <span class="hint">（以脂肪计，参考限值）</span>
+                </div>
+
+                <button class="btn" onclick="calcMethod2()" style="width:100%;">🧪 计算含量</button>
+
+                <div id="m2_result" style="margin-top:14px;">
+                    <!-- 动态填充 -->
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📋 检测信息</div>
+                <div style="font-size:14px; color:#2a4a5a; line-height:1.8;">
+                    <p><strong>📌 测定低限：</strong> 0.5 μg/kg（以湿重计）[reference:9]</p>
+                    <p><strong>🔬 检测方法：</strong> 气相色谱-电子捕获检测器法（GC-ECD）[reference:10]</p>
+                    <p><strong>⚖️ 定量方式：</strong> 外标法定量</p>
+                    <p><strong>📊 质控要求：</strong> 加标回收率 70% ~ 120%[reference:11]</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== JSON 数据导出 ===== -->
+        <div class="card" style="background:#f4f8fb; margin-top:10px;">
+            <div class="card-title">
+                📁 实验数据汇总 (JSON)
+                <span style="margin-left:auto; display:flex; gap:8px;">
+                    <button class="btn-outline" onclick="exportJSON()">💾 导出 JSON</button>
+                    <button class="btn-outline" onclick="document.getElementById('jsonFileInput').click()">📂 导入 JSON</button>
+                    <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="importJSON(event)">
+                </span>
+            </div>
+            <div class="json-area" id="jsonDisplay">
+                // 点击「计算含量」或「导出 JSON」后更新
+            </div>
+        </div>
+
+        <!-- ===== 底部 ===== -->
+        <div class="footnote">
+            <strong>📌 编制依据：</strong><br>
+            <span class="tag">📖</span> GB 5009.190-2014《食品安全国家标准 食品中指示性多氯联苯含量的测定》[reference:12]<br>
+            <span class="tag">📖</span> 代替 GB/T 5009.190-2006《食品中指示性多氯联苯含量的测定》和 GB/T 22331-2008《水产品中多氯联苯残留量的测定 气相色谱法》[reference:13]<br>
+            <span class="tag">🔬</span> 第一法：稳定性同位素稀释-气相色谱-质谱法[reference:14]；第二法：气相色谱-电子捕获检测器法[reference:15]<br>
+            <span class="tag">📋</span> 第一法可测定19种PCBs，第二法测定7种指示性PCBs[reference:16]
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================================
+        // 方法切换
+        // ============================================================
+        function switchMethod(method) {
+            document.querySelectorAll('.calc-panel').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(method).classList.add('active');
+            document.querySelector(`.tab[data-method="${method}"]`).classList.add('active');
+            updateJSON();
+        }
+
+        // ============================================================
+        // 第一法：同位素稀释内标法
+        // 公式：X = (Aₓ × c_is × V_is × V) / (A_is × m)
+        // 其中 c_is × V_is 为加入的内标总量 (μg)
+        // ============================================================
+        function calcMethod1() {
+            const compound = document.getElementById('m1_compound').value;
+            const cis = parseFloat(document.getElementById('m1_isConc').value);
+            const Vis = parseFloat(document.getElementById('m1_isVol').value);
+            const Ais = parseFloat(document.getElementById('m1_isArea').value);
+            const Ax = parseFloat(document.getElementById('m1_targetArea').value);
+            const m = parseFloat(document.getElementById('m1_sampleMass').value);
+            const V = parseFloat(document.getElementById('m1_finalVol').value);
+            const limit = parseFloat(document.getElementById('m1_limit').value);
+
+            if ([cis, Vis, Ais, Ax, m, V, limit].some(isNaN)) {
+                alert('请完整填写所有参数！');
+                return;
+            }
+            if (Ais === 0) {
+                alert('内标峰面积不能为 0！');
+                return;
+            }
+
+            // 内标加入总量 (μg)
+            const isTotal = cis * Vis / 1000; // Vis 单位为 μL，转换为 mL
+            // 样品中目标物含量 (μg/kg)
+            const content = (Ax * isTotal * V) / (Ais * m) * 1000;
+
+            const isPass = content <= limit;
+            const statusText = isPass ? '✅ 合格（未超标）' : '❌ 不合格（超标）';
+            const statusClass = isPass ? 'pass' : 'fail';
+
+            const resultHTML = `
+                <div class="result-box">
+                    <div class="result-item"><span class="label">PCB 单体</span><span class="value">${compound}</span></div>
+                    <div class="result-item"><span class="label">内标浓度 (c<sub>is</sub>)</span><span class="value">${cis.toFixed(2)} μg/L</span></div>
+                    <div class="result-item"><span class="label">内标加入体积 (V<sub>is</sub>)</span><span class="value">${Vis.toFixed(1)} μL</span></div>
+                    <div class="result-item"><span class="label">内标加入总量</span><span class="value">${(cis * Vis / 1000).toFixed(4)} μg</span></div>
+                    <div class="result-item"><span class="label">内标峰面积 (A<sub>is</sub>)</span><span class="value">${Ais.toFixed(0)}</span></div>
+                    <div class="result-item"><span class="label">目标物峰面积 (A<sub>x</sub>)</span><span class="value">${Ax.toFixed(0)}</span></div>
+                    <div class="result-item"><span class="label">样品质量 (m)</span><span class="value">${m.toFixed(2)} g</span></div>
+                    <div class="result-item"><span class="label">定容体积 (V)</span><span class="value">${V.toFixed(1)} mL</span></div>
+                    <div class="result-item" style="border-bottom:2px solid #1a7a8a; padding-top:8px; margin-top:4px;">
+                        <span class="label" style="font-weight:700; font-size:16px;">PCBs 含量 (μg/kg)</span>
+                        <span class="value" style="font-size:18px;">${content.toFixed(3)}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">GB 2762 限值 (μg/kg)</span>
+                        <span class="value">${(limit * 1000).toFixed(0)}</span>
+                    </div>
+                    <div class="result-item" style="border-top:2px solid #d0dce8; margin-top:6px; padding-top:10px;">
+                        <span class="label" style="font-weight:700;">判定结果</span>
+                        <span class="value ${statusClass}" style="font-size:18px;">${statusText}</span>
+                    </div>
+                    <div class="result-item" style="font-size:12px; color:#6a8a9a; border-top:1px dashed #c8dae5; margin-top:4px; padding-top:6px;">
+                        <span class="label">📌 方法性能</span>
+                        <span class="value" style="font-weight:400;">检出限 0.02 μg/kg（以湿重计）[reference:17]</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('m1_result').innerHTML = resultHTML;
+            updateJSON();
+        }
+
+        // ============================================================
+        // 第二法：外标法
+        // 公式：X = (Aₓ × cₛ × V) / (Aₛ × m)
+        // ============================================================
+        function calcMethod2() {
+            const compound = document.getElementById('m2_compound').value;
+            const cs = parseFloat(document.getElementById('m2_stdConc').value);
+            const As = parseFloat(document.getElementById('m2_stdArea').value);
+            const Ax = parseFloat(document.getElementById('m2_sampleArea').value);
+            const m = parseFloat(document.getElementById('m2_sampleMass').value);
+            const V = parseFloat(document.getElementById('m2_finalVol').value);
+            const limit = parseFloat(document.getElementById('m2_limit').value);
+
+            if ([cs, As, Ax, m, V, limit].some(isNaN)) {
+                alert('请完整填写所有参数！');
+                return;
+            }
+            if (As === 0) {
+                alert('标准品峰面积不能为 0！');
+                return;
+            }
+
+            // 样品中目标物含量 (μg/kg)
+            const content = (Ax * cs * V) / (As * m);
+
+            const isPass = content <= limit;
+            const statusText = isPass ? '✅ 合格（未超标）' : '❌ 不合格（超标）';
+            const statusClass = isPass ? 'pass' : 'fail';
+
+            const resultHTML = `
+                <div class="result-box">
+                    <div class="result-item"><span class="label">PCB 单体</span><span class="value">${compound}</span></div>
+                    <div class="result-item"><span class="label">标准品浓度 (c<sub>s</sub>)</span><span class="value">${cs.toFixed(2)} μg/L</span></div>
+                    <div class="result-item"><span class="label">标准品峰面积 (A<sub>s</sub>)</span><span class="value">${As.toFixed(0)}</span></div>
+                    <div class="result-item"><span class="label">样品峰面积 (A<sub>x</sub>)</span><span class="value">${Ax.toFixed(0)}</span></div>
+                    <div class="result-item"><span class="label">样品质量 (m)</span><span class="value">${m.toFixed(2)} g</span></div>
+                    <div class="result-item"><span class="label">定容体积 (V)</span><span class="value">${V.toFixed(1)} mL</span></div>
+                    <div class="result-item" style="border-bottom:2px solid #1a7a8a; padding-top:8px; margin-top:4px;">
+                        <span class="label" style="font-weight:700; font-size:16px;">PCBs 含量 (μg/kg)</span>
+                        <span class="value" style="font-size:18px;">${content.toFixed(3)}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">GB 2762 限值 (μg/kg)</span>
+                        <span class="value">${(limit * 1000).toFixed(0)}</span>
+                    </div>
+                    <div class="result-item" style="border-top:2px solid #d0dce8; margin-top:6px; padding-top:10px;">
+                        <span class="label" style="font-weight:700;">判定结果</span>
+                        <span class="value ${statusClass}" style="font-size:18px;">${statusText}</span>
+                    </div>
+                    <div class="result-item" style="font-size:12px; color:#6a8a9a; border-top:1px dashed #c8dae5; margin-top:4px; padding-top:6px;">
+                        <span class="label">📌 方法性能</span>
+                        <span class="value" style="font-weight:400;">检出限 0.5 μg/kg（以湿重计）[reference:18]</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('m2_result').innerHTML = resultHTML;
+            updateJSON();
+        }
+
+        // ============================================================
+        // JSON 导入导出
+        // ============================================================
+        function collectData() {
+            const activeMethod = document.querySelector('.calc-panel.active')?.id || 'method1';
+            const data = {
+                method: activeMethod === 'method1' ? 'GB 5009.190-2014 第一法 同位素稀释-GC-MS' :
+                    'GB 5009.190-2014 第二法 GC-ECD 外标法',
+                timestamp: new Date().toISOString(),
+                parameters: {}
+            };
+            if (activeMethod === 'method1') {
+                data.parameters = {
+                    compound: document.getElementById('m1_compound').value,
+                    is_conc: parseFloat(document.getElementById('m1_isConc').value) || 0,
+                    is_vol: parseFloat(document.getElementById('m1_isVol').value) || 0,
+                    is_area: parseFloat(document.getElementById('m1_isArea').value) || 0,
+                    target_area: parseFloat(document.getElementById('m1_targetArea').value) || 0,
+                    sample_mass: parseFloat(document.getElementById('m1_sampleMass').value) || 0,
+                    final_vol: parseFloat(document.getElementById('m1_finalVol').value) || 0,
+                    limit: parseFloat(document.getElementById('m1_limit').value) || 0
+                };
+            } else {
+                data.parameters = {
+                    compound: document.getElementById('m2_compound').value,
+                    std_conc: parseFloat(document.getElementById('m2_stdConc').value) || 0,
+                    std_area: parseFloat(document.getElementById('m2_stdArea').value) || 0,
+                    sample_area: parseFloat(document.getElementById('m2_sampleArea').value) || 0,
+                    sample_mass: parseFloat(document.getElementById('m2_sampleMass').value) || 0,
+                    final_vol: parseFloat(document.getElementById('m2_finalVol').value) || 0,
+                    limit: parseFloat(document.getElementById('m2_limit').value) || 0
+                };
+            }
+            // 提取结果
+            const resultDiv = activeMethod === 'method1' ?
+                document.getElementById('m1_result') :
+                document.getElementById('m2_result');
+            const contentMatch = resultDiv.innerText.match(/PCBs 含量.*?(\d+\.\d+)/);
+            const statusMatch = resultDiv.innerText.includes('合格') ? 'pass' :
+                (resultDiv.innerText.includes('不合格') ? 'fail' : 'unknown');
+            data.result = {
+                content: contentMatch ? parseFloat(contentMatch[1]) : null,
+                status: statusMatch
+            };
+            return data;
+        }
+
+        function updateJSON() {
+            const data = collectData();
+            document.getElementById('jsonDisplay').textContent = JSON.stringify(data, null, 2);
+        }
+
+        function exportJSON() {
+            const data = collectData();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `PCBs_${new Date().toISOString().slice(0,10)}.json`;
+            link.click();
+        }
+
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    const p = json.parameters;
+                    if (json.method && json.method.includes('第一法')) {
+                        switchMethod('method1');
+                        if (p) {
+                            if (p.compound) document.getElementById('m1_compound').value = p.compound;
+                            if (p.is_conc !== undefined) document.getElementById('m1_isConc').value = p.is_conc;
+                            if (p.is_vol !== undefined) document.getElementById('m1_isVol').value = p.is_vol;
+                            if (p.is_area !== undefined) document.getElementById('m1_isArea').value = p.is_area;
+                            if (p.target_area !== undefined) document.getElementById('m1_targetArea').value = p.target_area;
+                            if (p.sample_mass !== undefined) document.getElementById('m1_sampleMass').value = p.sample_mass;
+                            if (p.final_vol !== undefined) document.getElementById('m1_finalVol').value = p.final_vol;
+                            if (p.limit !== undefined) document.getElementById('m1_limit').value = p.limit;
+                        }
+                    } else {
+                        switchMethod('method2');
+                        if (p) {
+                            if (p.compound) document.getElementById('m2_compound').value = p.compound;
+                            if (p.std_conc !== undefined) document.getElementById('m2_stdConc').value = p.std_conc;
+                            if (p.std_area !== undefined) document.getElementById('m2_stdArea').value = p.std_area;
+                            if (p.sample_area !== undefined) document.getElementById('m2_sampleArea').value = p.sample_area;
+                            if (p.sample_mass !== undefined) document.getElementById('m2_sampleMass').value = p.sample_mass;
+                            if (p.final_vol !== undefined) document.getElementById('m2_finalVol').value = p.final_vol;
+                            if (p.limit !== undefined) document.getElementById('m2_limit').value = p.limit;
+                        }
+                    }
+                    updateJSON();
+                    alert('✅ 数据导入成功！');
+                } catch (err) {
+                    alert('❌ JSON 解析失败：' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // 自动更新 JSON
+        document.addEventListener('input', function(e) {
+            if (e.target.closest('.form-group') || e.target.closest('select')) {
+                clearTimeout(window.jsonTimeout);
+                window.jsonTimeout = setTimeout(updateJSON, 400);
+            }
+        });
+
+        updateJSON();
+    </script>
+</body>
+</html>

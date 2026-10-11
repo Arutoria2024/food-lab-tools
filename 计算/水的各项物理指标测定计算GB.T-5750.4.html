@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GB/T 5750.4-2023 水质指标自动分析系统</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js">
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background: #f0f5fa;
+            padding: 20px 15px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1300px;
+            width: 100%;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 25px 25px 35px;
+        }
+        h1 {
+            font-size: 26px;
+            color: #0a2f44;
+            border-left: 6px solid #1a7a8a;
+            padding-left: 18px;
+            margin-bottom: 4px;
+        }
+        .sub {
+            color: #4a6a7a;
+            font-size: 14px;
+            margin-bottom: 22px;
+            padding-left: 24px;
+            background: #ecf3f8;
+            display: inline-block;
+            padding: 6px 24px;
+            border-radius: 30px;
+        }
+
+        /* 指标卡片网格 */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        @media (max-width: 900px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: #f9fcff;
+            border: 1px solid #dce6ef;
+            border-radius: 16px;
+            padding: 18px 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        }
+        .card-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1a4a6a;
+            border-bottom: 2px solid #d0dce8;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .card-title .badge {
+            background: #1a7a8a;
+            color: #fff;
+            font-size: 12px;
+            border-radius: 30px;
+            padding: 0 14px;
+            line-height: 24px;
+        }
+        .card-title .limit-tag {
+            background: #e8d44d;
+            color: #5a4a0a;
+            font-size: 12px;
+            border-radius: 30px;
+            padding: 0 12px;
+            line-height: 24px;
+            margin-left: auto;
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 12px;
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2a4a5a;
+            min-width: 80px;
+        }
+        .form-group input,
+        .form-group select {
+            border: 1.5px solid #d0dce8;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 14px;
+            background: #fff;
+            flex: 1;
+            min-width: 70px;
+            transition: 0.2s;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #1a7a8a;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 122, 138, 0.15);
+        }
+        .form-group input.small {
+            max-width: 100px;
+        }
+        .form-group .unit {
+            font-size: 12px;
+            color: #5a7a8a;
+        }
+
+        .btn {
+            background: #1a7a8a;
+            color: #fff;
+            border: none;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(26, 122, 138, 0.25);
+        }
+        .btn:hover {
+            background: #0e5f6e;
+            transform: translateY(-1px);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #1a7a8a;
+            border: 2px solid #1a7a8a;
+            box-shadow: none;
+            padding: 5px 14px;
+            font-size: 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-outline:hover {
+            background: #e6f3f7;
+        }
+        .btn-sm {
+            padding: 4px 14px;
+            font-size: 12px;
+        }
+
+        .result-box {
+            background: #eaf5f9;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-top: 14px;
+            border-left: 5px solid #1a7a8a;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px dashed #c8dae5;
+            font-size: 14px;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-item .label {
+            color: #3a5a6a;
+        }
+        .result-item .value {
+            font-weight: 700;
+            color: #0a2f44;
+        }
+        .result-item .value.pass {
+            color: #1a8a4a;
+        }
+        .result-item .value.fail {
+            color: #c0392b;
+        }
+
+        .std-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+        .std-table th {
+            background: #e4edf5;
+            padding: 6px 4px;
+            text-align: center;
+            border: 1px solid #d0dce8;
+            font-size: 12px;
+        }
+        .std-table td {
+            padding: 4px 2px;
+            text-align: center;
+            border: 1px solid #d0dce8;
+        }
+        .std-table input {
+            width: 65px;
+            padding: 4px 2px;
+            border: 1px solid #c8d6e5;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .std-table input:focus {
+            border-color: #1a7a8a;
+            outline: none;
+        }
+
+        .chart-container {
+            height: 200px;
+            margin-top: 8px;
+        }
+        .json-area {
+            background: #1e2a36;
+            color: #b8d4e0;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 180px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        .flex-end {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .mt-8 {
+            margin-top: 8px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-muted {
+            color: #6a8a9a;
+            font-size: 13px;
+        }
+        .hidden {
+            display: none;
+        }
+
+        /* 折叠流程 */
+        .flow-toggle {
+            background: #e8f0f8;
+            border-radius: 12px;
+            padding: 6px 18px;
+            margin-bottom: 20px;
+            border: 1px solid #c8dae5;
+        }
+        .flow-toggle summary {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0a2f44;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+        }
+        .flow-toggle summary::-webkit-details-marker {
+            display: none;
+        }
+        .flow-toggle summary .arrow {
+            margin-left: auto;
+            transition: transform 0.2s;
+        }
+        .flow-toggle[open] summary .arrow {
+            transform: rotate(180deg);
+        }
+        .flow-content {
+            padding: 10px 6px 18px 6px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #1a2a3a;
+        }
+        .flow-content .step {
+            margin-bottom: 10px;
+            border-left: 4px solid #1a7a8a;
+            padding-left: 14px;
+        }
+        .flow-content .step strong {
+            color: #0a4a5a;
+        }
+        .flow-content .step .highlight {
+            background: #fef3d6;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 14px;
+            }
+            .form-group label {
+                min-width: 60px;
+                font-size: 12px;
+            }
+            .form-group input {
+                font-size: 13px;
+                padding: 5px 8px;
+            }
+            .card {
+                padding: 14px 14px;
+            }
+            .std-table input {
+                width: 50px;
+                font-size: 11px;
+            }
+            .grid-2 {
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💧 GB/T 5750.4-2023 · 水质指标自动分析</h1>
+        <div class="sub">感官性状与物理指标 — 自动计算 &amp; 超标判定</div>
+
+        <!-- ========== 折叠实验流程总览 ========== -->
+        <details class="flow-toggle" open>
+            <summary>
+                <span>📋 实验操作流程总览（点击展开/收起）</span>
+                <span class="arrow">▼</span>
+            </summary>
+            <div class="flow-content">
+                <div class="step">
+                    <strong>1. 总硬度（EDTA滴定法）</strong><br>
+                    取50mL水样，加缓冲液(pH=10)和铬黑T指示剂，用EDTA标准溶液滴定至纯蓝色。计算：总硬度(mg/L) = (V₁ - V₀) × c × 100.09 × 1000 / V[reference:0][reference:1]
+                </div>
+                <div class="step">
+                    <strong>2. 溶解性总固体（称量法）</strong><br>
+                    水样过滤后，取100mL于恒重蒸发皿，水浴蒸干，105℃烘干至恒重。计算：TDS(mg/L) = (m₁ - m₀) × 1000 / V[reference:2][reference:3]
+                </div>
+                <div class="step">
+                    <strong>3. 挥发酚类（4-氨基安替比林萃取法）</strong><br>
+                    250mL水样蒸馏，馏出液与4-氨基安替比林和铁氰化钾显色，三氯甲烷萃取，460nm测吸光度。以标准曲线定量[reference:4]。
+                </div>
+                <div class="step">
+                    <strong>4. 阴离子合成洗涤剂（亚甲基蓝法）</strong><br>
+                    水样与亚甲基蓝反应，三氯甲烷萃取蓝色络合物，650nm测吸光度。以十二烷基苯磺酸钠标准曲线定量[reference:5]。
+                </div>
+                <div style="margin-top:10px; padding:8px 14px; background:#fef6e6; border-radius:8px; color:#8a6d1a;">
+                    ⚠️ <strong>安全提示：</strong> 三氯甲烷、氰化钾（总硬度干扰消除用）有毒，操作须在通风橱内进行。
+                </div>
+            </div>
+        </details>
+
+        <!-- ========== 指标卡片网格 ========== -->
+        <div class="grid-2">
+
+            <!-- ====== 卡片1：总硬度 ====== -->
+            <div class="card">
+                <div class="card-title">
+                    🧂 总硬度
+                    <span class="badge">EDTA滴定法</span>
+                    <span class="limit-tag">限值 ≤450 mg/L</span>
+                </div>
+                <div class="form-group">
+                    <label>水样体积 V (mL) :</label>
+                    <input type="number" id="hardnessVol" value="50.0" step="0.5" class="small">
+                </div>
+                <div class="form-group">
+                    <label>EDTA浓度 c (mol/L) :</label>
+                    <input type="number" id="edtaConc" value="0.0100" step="0.0001" class="small">
+                </div>
+                <div class="form-group">
+                    <label>样品消耗 V₁ (mL) :</label>
+                    <input type="number" id="edtaSample" value="8.50" step="0.01" class="small">
+                </div>
+                <div class="form-group">
+                    <label>空白消耗 V₀ (mL) :</label>
+                    <input type="number" id="edtaBlank" value="0.05" step="0.01" class="small">
+                </div>
+                <div class="form-group">
+                    <label>GB 5749 限值 :</label>
+                    <input type="number" id="hardnessLimit" value="450" step="1" class="small">
+                    <span class="unit">mg/L</span>
+                </div>
+                <button class="btn" onclick="calcHardness()">计算总硬度</button>
+                <div id="hardnessResult" class="result-box hidden">
+                    <!-- 动态填充 -->
+                </div>
+            </div>
+
+            <!-- ====== 卡片2：溶解性总固体 ====== -->
+            <div class="card">
+                <div class="card-title">
+                    ⚖️ 溶解性总固体
+                    <span class="badge">称量法</span>
+                    <span class="limit-tag">限值 ≤1000 mg/L</span>
+                </div>
+                <div class="form-group">
+                    <label>水样体积 V (mL) :</label>
+                    <input type="number" id="tdsVol" value="100" step="1" class="small">
+                </div>
+                <div class="form-group">
+                    <label>蒸发皿质量 m₀ (mg) :</label>
+                    <input type="number" id="tdsM0" value="32450.0" step="0.1" class="small">
+                </div>
+                <div class="form-group">
+                    <label>蒸发皿+残渣 m₁ (mg) :</label>
+                    <input type="number" id="tdsM1" value="32485.6" step="0.1" class="small">
+                </div>
+                <div class="form-group">
+                    <label>GB 5749 限值 :</label>
+                    <input type="number" id="tdsLimit" value="1000" step="1" class="small">
+                    <span class="unit">mg/L</span>
+                </div>
+                <button class="btn" onclick="calcTDS()">计算溶解性总固体</button>
+                <div id="tdsResult" class="result-box hidden">
+                    <!-- 动态填充 -->
+                </div>
+            </div>
+
+            <!-- ====== 卡片3：挥发酚类 ====== -->
+            <div class="card">
+                <div class="card-title">
+                    🧪 挥发酚类
+                    <span class="badge">4-氨基安替比林法</span>
+                    <span class="limit-tag">限值 ≤0.002 mg/L</span>
+                </div>
+                <div class="form-group">
+                    <label>水样体积 V (mL) :</label>
+                    <input type="number" id="phenolVol" value="250" step="1" class="small">
+                </div>
+                <div class="form-group">
+                    <label>标准曲线斜率 b :</label>
+                    <input type="number" id="phenolSlope" value="0.220" step="0.001" class="small">
+                    <span class="unit">A/μg</span>
+                </div>
+                <div class="form-group">
+                    <label>标准曲线截距 a :</label>
+                    <input type="number" id="phenolIntercept" value="0.005" step="0.001" class="small">
+                </div>
+                <div class="form-group">
+                    <label>样品吸光度 A₁ :</label>
+                    <input type="number" id="phenolAbs" value="0.125" step="0.001" class="small">
+                </div>
+                <div class="form-group">
+                    <label>空白吸光度 A₀ :</label>
+                    <input type="number" id="phenolBlank" value="0.010" step="0.001" class="small">
+                </div>
+                <div class="form-group">
+                    <label>GB 5749 限值 :</label>
+                    <input type="number" id="phenolLimit" value="0.002" step="0.001" class="small">
+                    <span class="unit">mg/L</span>
+                </div>
+                <button class="btn" onclick="calcPhenol()">计算挥发酚类</button>
+                <div id="phenolResult" class="result-box hidden">
+                    <!-- 动态填充 -->
+                </div>
+            </div>
+
+            <!-- ====== 卡片4：阴离子合成洗涤剂 ====== -->
+            <div class="card">
+                <div class="card-title">
+                    🧼 阴离子合成洗涤剂
+                    <span class="badge">亚甲基蓝法</span>
+                    <span class="limit-tag">限值 ≤0.3 mg/L</span>
+                </div>
+                <div class="form-group">
+                    <label>水样体积 V (mL) :</label>
+                    <input type="number" id="detergentVol" value="100" step="1" class="small">
+                </div>
+                <div class="form-group">
+                    <label>标准曲线斜率 b :</label>
+                    <input type="number" id="detergentSlope" value="0.185" step="0.001" class="small">
+                    <span class="unit">A/μg</span>
+                </div>
+                <div class="form-group">
+                    <label>标准曲线截距 a :</label>
+                    <input type="number" id="detergentIntercept" value="0.008" step="0.001" class="small">
+                </div>
+                <div class="form-group">
+                    <label>样品吸光度 A₁ :</label>
+                    <input type="number" id="detergentAbs" value="0.245" step="0.001" class="small">
+                </div>
+                <div class="form-group">
+                    <label>空白吸光度 A₀ :</label>
+                    <input type="number" id="detergentBlank" value="0.012" step="0.001" class="small">
+                </div>
+                <div class="form-group">
+                    <label>GB 5749 限值 :</label>
+                    <input type="number" id="detergentLimit" value="0.3" step="0.1" class="small">
+                    <span class="unit">mg/L</span>
+                </div>
+                <button class="btn" onclick="calcDetergent()">计算洗涤剂</button>
+                <div id="detergentResult" class="result-box hidden">
+                    <!-- 动态填充 -->
+                </div>
+            </div>
+
+        </div><!-- end grid-2 -->
+
+        <!-- ========== JSON 数据导出 ========== -->
+        <div class="card" style="margin-top:20px; background:#f4f8fb;">
+            <div class="card-title">
+                📁 实验数据汇总 (JSON)
+                <span style="margin-left:auto; display:flex; gap:8px;">
+                    <button class="btn-outline btn-sm" onclick="exportAllJSON()">💾 导出 JSON</button>
+                    <button class="btn-outline btn-sm" onclick="document.getElementById('jsonFileInput').click()">📂 导入 JSON</button>
+                    <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="importAllJSON(event)">
+                </span>
+            </div>
+            <div class="json-area" id="jsonDisplay">
+                // 点击「计算」或「导出 JSON」后更新
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================================
+        // 工具：显示结果
+        // ============================================================
+        function showResult(containerId, items, isPass, limit) {
+            const container = document.getElementById(containerId);
+            container.classList.remove('hidden');
+            let html = '<div class="result-box">';
+            items.forEach(item => {
+                html += `<div class="result-item"><span class="label">${item.label}</span><span class="value">${item.value}</span></div>`;
+            });
+            const statusText = isPass ? '✅ 合格（未超标）' : '❌ 不合格（超标）';
+            const statusClass = isPass ? 'pass' : 'fail';
+            html += `
+                <div class="result-item" style="border-top:2px solid #d0dce8;margin-top:6px;padding-top:8px;">
+                    <span class="label" style="font-weight:700;">判定结果</span>
+                    <span class="value ${statusClass}" style="font-size:17px;">${statusText}</span>
+                </div>
+            `;
+            html += '</div>';
+            container.innerHTML = html;
+            updateJSON();
+        }
+
+        // ============================================================
+        // 1. 总硬度
+        // ============================================================
+        function calcHardness() {
+            const V = parseFloat(document.getElementById('hardnessVol').value);
+            const c = parseFloat(document.getElementById('edtaConc').value);
+            const V1 = parseFloat(document.getElementById('edtaSample').value);
+            const V0 = parseFloat(document.getElementById('edtaBlank').value);
+            const limit = parseFloat(document.getElementById('hardnessLimit').value);
+            if ([V, c, V1, V0, limit].some(isNaN)) { alert('请完整填写参数！'); return; }
+            const result = ((V1 - V0) * c * 100.09 * 1000) / V;
+            const isPass = result <= limit;
+            showResult('hardnessResult', [
+                { label: '水样体积', value: V.toFixed(1) + ' mL' },
+                { label: 'EDTA浓度', value: c.toFixed(4) + ' mol/L' },
+                { label: '样品消耗 V₁', value: V1.toFixed(2) + ' mL' },
+                { label: '空白消耗 V₀', value: V0.toFixed(2) + ' mL' },
+                { label: '总硬度 (以CaCO₃计)', value: result.toFixed(2) + ' mg/L' },
+                { label: 'GB 5749 限值', value: limit.toFixed(0) + ' mg/L' }
+            ], isPass, limit);
+        }
+
+        // ============================================================
+        // 2. 溶解性总固体
+        // ============================================================
+        function calcTDS() {
+            const V = parseFloat(document.getElementById('tdsVol').value);
+            const m0 = parseFloat(document.getElementById('tdsM0').value);
+            const m1 = parseFloat(document.getElementById('tdsM1').value);
+            const limit = parseFloat(document.getElementById('tdsLimit').value);
+            if ([V, m0, m1, limit].some(isNaN)) { alert('请完整填写参数！'); return; }
+            const result = ((m1 - m0) * 1000) / V;
+            const isPass = result <= limit;
+            showResult('tdsResult', [
+                { label: '水样体积', value: V.toFixed(0) + ' mL' },
+                { label: '蒸发皿质量 m₀', value: m0.toFixed(1) + ' mg' },
+                { label: '蒸发皿+残渣 m₁', value: m1.toFixed(1) + ' mg' },
+                { label: '残渣质量 (m₁-m₀)', value: (m1 - m0).toFixed(1) + ' mg' },
+                { label: '溶解性总固体 (TDS)', value: result.toFixed(1) + ' mg/L' },
+                { label: 'GB 5749 限值', value: limit.toFixed(0) + ' mg/L' }
+            ], isPass, limit);
+        }
+
+        // ============================================================
+        // 3. 挥发酚类
+        // ============================================================
+        function calcPhenol() {
+            const V = parseFloat(document.getElementById('phenolVol').value);
+            const b = parseFloat(document.getElementById('phenolSlope').value);
+            const a = parseFloat(document.getElementById('phenolIntercept').value);
+            const A1 = parseFloat(document.getElementById('phenolAbs').value);
+            const A0 = parseFloat(document.getElementById('phenolBlank').value);
+            const limit = parseFloat(document.getElementById('phenolLimit').value);
+            if ([V, b, a, A1, A0, limit].some(isNaN)) { alert('请完整填写参数！'); return; }
+            const net = A1 - A0;
+            const mass = (net - a) / b; // μg
+            if (mass < 0) { alert('计算质量为负，请检查吸光度或曲线参数！'); return; }
+            const result = mass / V; // mg/L
+            const isPass = result <= limit;
+            showResult('phenolResult', [
+                { label: '水样体积', value: V.toFixed(0) + ' mL' },
+                { label: '样品吸光度 A₁', value: A1.toFixed(4) },
+                { label: '空白吸光度 A₀', value: A0.toFixed(4) },
+                { label: '净吸光度 (A₁-A₀)', value: net.toFixed(4) },
+                { label: '测定液中酚质量', value: mass.toFixed(2) + ' μg' },
+                { label: '挥发酚类 (以苯酚计)', value: result.toFixed(4) + ' mg/L' },
+                { label: 'GB 5749 限值', value: limit.toFixed(3) + ' mg/L' }
+            ], isPass, limit);
+        }
+
+        // ============================================================
+        // 4. 阴离子合成洗涤剂
+        // ============================================================
+        function calcDetergent() {
+            const V = parseFloat(document.getElementById('detergentVol').value);
+            const b = parseFloat(document.getElementById('detergentSlope').value);
+            const a = parseFloat(document.getElementById('detergentIntercept').value);
+            const A1 = parseFloat(document.getElementById('detergentAbs').value);
+            const A0 = parseFloat(document.getElementById('detergentBlank').value);
+            const limit = parseFloat(document.getElementById('detergentLimit').value);
+            if ([V, b, a, A1, A0, limit].some(isNaN)) { alert('请完整填写参数！'); return; }
+            const net = A1 - A0;
+            const mass = (net - a) / b; // μg
+            if (mass < 0) { alert('计算质量为负，请检查吸光度或曲线参数！'); return; }
+            const result = mass / V; // mg/L
+            const isPass = result <= limit;
+            showResult('detergentResult', [
+                { label: '水样体积', value: V.toFixed(0) + ' mL' },
+                { label: '样品吸光度 A₁', value: A1.toFixed(4) },
+                { label: '空白吸光度 A₀', value: A0.toFixed(4) },
+                { label: '净吸光度 (A₁-A₀)', value: net.toFixed(4) },
+                { label: '测定液中DBS质量', value: mass.toFixed(2) + ' μg' },
+                { label: '阴离子合成洗涤剂 (以DBS计)', value: result.toFixed(3) + ' mg/L' },
+                { label: 'GB 5749 限值', value: limit.toFixed(1) + ' mg/L' }
+            ], isPass, limit);
+        }
+
+        // ============================================================
+        // JSON 导入导出
+        // ============================================================
+        function collectAllData() {
+            const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
+            const getStr = (id) => document.getElementById(id).value;
+            return {
+                method: 'GB/T 5750.4-2023 感官性状与物理指标',
+                timestamp: new Date().toISOString(),
+                hardness: {
+                    vol: getVal('hardnessVol'),
+                    edtaConc: getVal('edtaConc'),
+                    edtaSample: getVal('edtaSample'),
+                    edtaBlank: getVal('edtaBlank'),
+                    limit: getVal('hardnessLimit')
+                },
+                tds: {
+                    vol: getVal('tdsVol'),
+                    m0: getVal('tdsM0'),
+                    m1: getVal('tdsM1'),
+                    limit: getVal('tdsLimit')
+                },
+                phenol: {
+                    vol: getVal('phenolVol'),
+                    slope: getVal('phenolSlope'),
+                    intercept: getVal('phenolIntercept'),
+                    abs: getVal('phenolAbs'),
+                    blank: getVal('phenolBlank'),
+                    limit: getVal('phenolLimit')
+                },
+                detergent: {
+                    vol: getVal('detergentVol'),
+                    slope: getVal('detergentSlope'),
+                    intercept: getVal('detergentIntercept'),
+                    abs: getVal('detergentAbs'),
+                    blank: getVal('detergentBlank'),
+                    limit: getVal('detergentLimit')
+                }
+            };
+        }
+
+        function updateJSON() {
+            const data = collectAllData();
+            document.getElementById('jsonDisplay').textContent = JSON.stringify(data, null, 2);
+        }
+
+        function exportAllJSON() {
+            const data = collectAllData();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `water_quality_${new Date().toISOString().slice(0,10)}.json`;
+            link.click();
+        }
+
+        function importAllJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    const map = {
+                        'hardnessVol': json.hardness?.vol,
+                        'edtaConc': json.hardness?.edtaConc,
+                        'edtaSample': json.hardness?.edtaSample,
+                        'edtaBlank': json.hardness?.edtaBlank,
+                        'hardnessLimit': json.hardness?.limit,
+                        'tdsVol': json.tds?.vol,
+                        'tdsM0': json.tds?.m0,
+                        'tdsM1': json.tds?.m1,
+                        'tdsLimit': json.tds?.limit,
+                        'phenolVol': json.phenol?.vol,
+                        'phenolSlope': json.phenol?.slope,
+                        'phenolIntercept': json.phenol?.intercept,
+                        'phenolAbs': json.phenol?.abs,
+                        'phenolBlank': json.phenol?.blank,
+                        'phenolLimit': json.phenol?.limit,
+                        'detergentVol': json.detergent?.vol,
+                        'detergentSlope': json.detergent?.slope,
+                        'detergentIntercept': json.detergent?.intercept,
+                        'detergentAbs': json.detergent?.abs,
+                        'detergentBlank': json.detergent?.blank,
+                        'detergentLimit': json.detergent?.limit
+                    };
+                    for (const [id, val] of Object.entries(map)) {
+                        if (val !== undefined && val !== null) {
+                            document.getElementById(id).value = val;
+                        }
+                    }
+                    updateJSON();
+                    alert('✅ 数据导入成功！');
+                } catch (err) {
+                    alert('❌ JSON 解析失败：' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // 自动更新 JSON 显示
+        document.addEventListener('input', function(e) {
+            if (e.target.closest('.form-group') || e.target.closest('.std-table')) {
+                clearTimeout(window.jsonTimeout);
+                window.jsonTimeout = setTimeout(updateJSON, 400);
+            }
+        });
+
+        // 初始化 JSON
+        updateJSON();
+    </script>
+</body>
+</html>

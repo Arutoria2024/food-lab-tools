@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GB 5009.34-2022 二氧化硫测定 第一法 酸碱滴定法 实验流程图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background: #f0f5fa;
+            padding: 25px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 30px 30px 40px;
+        }
+        h1 {
+            font-size: 26px;
+            color: #0a2f44;
+            border-left: 6px solid #1a7a8a;
+            padding-left: 18px;
+            margin-bottom: 4px;
+        }
+        .sub {
+            color: #4a6a7a;
+            font-size: 14px;
+            margin-bottom: 25px;
+            padding-left: 24px;
+            background: #ecf3f8;
+            display: inline-block;
+            padding: 6px 24px;
+            border-radius: 30px;
+        }
+        .note-box {
+            background: #fef9e6;
+            border: 1px solid #f0dca0;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6a5a1a;
+            line-height: 1.8;
+        }
+        .note-box strong {
+            color: #8a6d1a;
+        }
+
+        /* ===== 流程图 ===== */
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 20px 10px;
+            background: #f8fbfe;
+            border-radius: 16px;
+            border: 1px solid #dce6ef;
+        }
+
+        .node {
+            background: #ffffff;
+            border: 2px solid #c8d6e5;
+            border-radius: 12px;
+            padding: 14px 24px;
+            min-width: 200px;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.15s;
+        }
+        .node:hover {
+            border-color: #1a7a8a;
+            box-shadow: 0 4px 14px rgba(26, 122, 138, 0.12);
+        }
+        .node-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0a2f44;
+        }
+        .node-desc {
+            font-size: 13px;
+            color: #4a5a6a;
+            margin-top: 4px;
+            line-height: 1.6;
+        }
+        .node-desc .highlight {
+            background: #fef3d6;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #8a6d1a;
+        }
+        .node-desc .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 11px;
+            padding: 0 10px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+        .node-desc .warn {
+            color: #b33;
+            font-weight: 600;
+        }
+
+        /* 节点颜色变体 */
+        .node-start {
+            border-color: #1a7a8a;
+            background: #eef7fa;
+        }
+        .node-start .node-title {
+            color: #0a4a5a;
+        }
+        .node-decision {
+            border-color: #d4a017;
+            background: #fefaf0;
+            border-style: dashed;
+        }
+        .node-end {
+            border-color: #1a8a4a;
+            background: #eaf7f0;
+        }
+        .node-end .node-title {
+            color: #0a6a3a;
+        }
+        .node-warn {
+            border-color: #c0392b;
+            background: #fdf0ee;
+        }
+        .node-warn .node-title {
+            color: #a93226;
+        }
+        .node-branch {
+            border-color: #7f8c8d;
+            background: #f4f6f8;
+            border-style: dotted;
+        }
+        .node-method {
+            border-color: #2a7f8a;
+            background: #f0f7fc;
+        }
+        .node-sample {
+            border-color: #8e44ad;
+            background: #f8f0fc;
+        }
+
+        .arrow-connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2px 0;
+        }
+        .arrow-line {
+            width: 2px;
+            height: 16px;
+            background: #8aa9bb;
+        }
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 14px solid #8aa9bb;
+        }
+        .arrow-short {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid #8aa9bb;
+        }
+        .arrow-label {
+            font-size: 11px;
+            color: #7f8c8d;
+            padding: 0 8px;
+            background: #f0f5fa;
+            border-radius: 10px;
+            margin: 2px 0;
+        }
+
+        /* 分支布局 */
+        .branch-wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            width: 100%;
+            padding: 6px 0;
+        }
+        .branch-col {
+            flex: 1 1 260px;
+            min-width: 220px;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .branch-label {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1a5a7a;
+            background: #dce8f0;
+            padding: 4px 18px;
+            border-radius: 30px;
+            margin-bottom: 4px;
+        }
+        .branch-col .node {
+            max-width: 100%;
+            padding: 10px 16px;
+        }
+        .branch-col .node-title {
+            font-size: 14px;
+        }
+        .branch-col .node-desc {
+            font-size: 12px;
+        }
+
+        /* 子流程（详细步骤展开） */
+        .sub-flow {
+            width: 100%;
+            max-width: 700px;
+            background: #f4f8fb;
+            border-radius: 12px;
+            padding: 14px 18px;
+            border: 1px solid #d0dce8;
+            margin: 4px 0;
+        }
+        .sub-flow .sub-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1a4a6a;
+            text-align: center;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #d0dce8;
+            padding-bottom: 6px;
+        }
+        .sub-flow .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 5px 0;
+            font-size: 13px;
+            color: #2a4a5a;
+            line-height: 1.6;
+            border-bottom: 1px dashed #e0e8ee;
+        }
+        .sub-flow .step-item:last-child {
+            border-bottom: none;
+        }
+        .sub-flow .step-num {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            background: #1a7a8a;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+        .sub-flow .step-item .highlight {
+            background: #fef3d6;
+            padding: 0 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* 图例 */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 28px;
+            justify-content: center;
+            padding: 12px 16px;
+            margin-top: 12px;
+            background: #f4f8fb;
+            border-radius: 10px;
+            border: 1px solid #dce6ef;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #2a4a5a;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid #c8d6e5;
+        }
+        .legend-color.start {
+            border-color: #1a7a8a;
+            background: #eef7fa;
+        }
+        .legend-color.sample {
+            border-color: #8e44ad;
+            background: #f8f0fc;
+        }
+        .legend-color.decision {
+            border-color: #d4a017;
+            background: #fefaf0;
+            border-style: dashed;
+        }
+        .legend-color.end {
+            border-color: #1a8a4a;
+            background: #eaf7f0;
+        }
+        .legend-color.warn {
+            border-color: #c0392b;
+            background: #fdf0ee;
+        }
+
+        /* 底部 */
+        .footnote {
+            margin-top: 28px;
+            font-size: 13px;
+            color: #5a6a7a;
+            border-top: 1px solid #dce6ef;
+            padding-top: 18px;
+            line-height: 1.8;
+        }
+        .footnote .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 12px;
+            padding: 1px 12px;
+            border-radius: 20px;
+            margin: 2px 4px 2px 0;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 16px;
+            }
+            .node {
+                padding: 10px 14px;
+                min-width: unset;
+            }
+            .branch-wrapper {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .branch-col {
+                max-width: 100%;
+                width: 100%;
+            }
+            .sub-flow {
+                padding: 10px 12px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            .legend {
+                gap: 10px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 GB 5009.34-2022 · 二氧化硫测定（第一法）</h1>
+        <div class="sub">酸碱滴定法 — 充氮蒸馏 · 过氧化氢吸收 · NaOH滴定</div>
+
+        <!-- ===== 说明 ===== -->
+        <div class="note-box">
+            <strong>📌 方法原理：</strong> 试样酸化后在加热条件下释放二氧化硫，经 <span class="highlight">过氧化氢溶液</span> 吸收并氧化生成硫酸，以 <span class="highlight">氢氧化钠标准溶液</span> 滴定，根据消耗量计算二氧化硫含量。<br>
+            <strong>⚙️ 装置：</strong> 充氮蒸馏装置（见标准附录A），含圆底烧瓶、竖式回流冷凝管、分液漏斗、氮气入口。
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- 主流程图 -->
+        <!-- ========================================================== -->
+        <div class="flowchart">
+
+            <!-- 1. 样品前处理 -->
+            <div class="node node-start">
+                <div class="node-title">📦 样品前处理</div>
+                <div class="node-desc">
+                    <span class="tag">固体/半流体</span> 取 <span class="highlight">20~100 g</span> 粉碎混匀<br>
+                    <span class="tag">液体</span> 取 <span class="highlight">20~200 mL</span> 混匀<br>
+                    置于圆底烧瓶 A 中，加水 <span class="highlight">200~500 mL</span>
+                </div>
+            </div>
+            <div class="arrow-connector">
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+            </div>
+
+            <!-- 2. 装置搭建 -->
+            <div class="node">
+                <div class="node-title">🔧 充氮蒸馏装置搭建</div>
+                <div class="node-desc">
+                    按附录 A 图 A.1 安装装置<br>
+                    冷凝管上端 E 口连接玻璃导管，插入 <span class="highlight">100 mL 锥形瓶</span> 底部<br>
+                    锥形瓶内加入 <span class="highlight">3% 过氧化氢溶液 50 mL</span> 作为吸收液
+                </div>
+            </div>
+            <div class="arrow-connector">
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+            </div>
+
+            <!-- 3. 加指示剂 + 预中和 -->
+            <div class="node node-sample">
+                <div class="node-title">🎯 吸收液预处理</div>
+                <div class="node-desc">
+                    吸收液中加入 <span class="highlight">3 滴甲基红指示剂</span>（2.5 g/L）<br>
+                    用 <span class="highlight">0.01 mol/L NaOH</span> 滴定至 <span class="highlight">黄色</span>（即终点）<br>
+                    <span class="warn">⚠️ 若超过终点，须舍弃该吸收液重新配制</span>
+                </div>
+            </div>
+            <div class="arrow-connector">
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+            </div>
+
+            <!-- 4. 充氮蒸馏 -->
+            <div class="node">
+                <div class="node-title">💨 充氮蒸馏</div>
+                <div class="node-desc">
+                    开通氮气，调节流量 <span class="highlight">1.0~2.0 L/min</span><br>
+                    分液漏斗 C 中加入 <span class="highlight">10 mL 6 mol/L 盐酸</span>，快速流入蒸馏瓶<br>
+                    加热至沸，保持 <span class="highlight">微沸 1.5 h</span>，停止加热
+                </div>
+            </div>
+            <div class="arrow-connector">
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+            </div>
+
+            <!-- 5. 滴定 -->
+            <div class="node node-decision">
+                <div class="node-title">🧪 酸碱滴定</div>
+                <div class="node-desc">
+                    吸收液放冷后摇匀<br>
+                    用 <span class="highlight">0.01 mol/L NaOH 标准溶液</span> 滴定至 <span class="highlight">黄色且 20 s 不褪</span><br>
+                    记录消耗体积 V
+                </div>
+            </div>
+            <div class="arrow-connector">
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+            </div>
+
+            <!-- 6. 空白试验 -->
+            <div class="node node-sample">
+                <div class="node-title">⬜ 空白试验</div>
+                <div class="node-desc">
+                    除 <span class="highlight">不加试样</span> 外，其余操作完全相同<br>
+                    记录空白消耗 NaOH 体积 V₀
+                </div>
+            </div>
+            <div class="arrow-connector">
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+            </div>
+
+            <!-- 7. 结果计算 -->
+            <div class="node node-end">
+                <div class="node-title">📊 结果计算</div>
+                <div class="node-desc">
+                    <strong>X</strong> = (V − V₀) × c × <span class="highlight">0.032</span> × 1000 × 1000 / m<br>
+                    <span style="font-size:12px; color:#5a7a8a;">
+                        X — SO₂ 含量（mg/kg 或 mg/L）<br>
+                        V — 试样消耗 NaOH 体积（mL）<br>
+                        V₀ — 空白消耗 NaOH 体积（mL）<br>
+                        c — NaOH 浓度（mol/L）<br>
+                        m — 试样质量或体积（g 或 mL）
+                    </span>
+                </div>
+            </div>
+
+            <!-- ===== 图例 ===== -->
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color start"></div>
+                    <span>起始/准备</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color sample"></div>
+                    <span>样品处理</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color decision"></div>
+                    <span>滴定/判定</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color end"></div>
+                    <span>终点/结果</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color warn"></div>
+                    <span>注意事项</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- 关键操作要点（折叠式） -->
+        <!-- ========================================================== -->
+        <details class="flow-toggle" style="margin-top: 20px; background: #e8f0f8; border-radius: 12px; padding: 6px 18px; border: 1px solid #c8dae5;">
+            <summary style="font-weight: 700; font-size: 16px; color: #0a2f44; cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; padding: 8px 0;">
+                <span>📋 关键操作要点与安全提示</span>
+                <span style="margin-left: auto; transition: transform 0.2s;">▼</span>
+            </summary>
+            <div style="padding: 10px 6px 18px 6px; font-size: 14px; line-height: 1.8; color: #1a2a3a;">
+                <div style="margin-bottom: 10px; border-left: 4px solid #1a7a8a; padding-left: 16px;">
+                    <strong>🧪 试剂配制</strong><br>
+                    • <span class="highlight">过氧化氢溶液 (3%)</span> — 30% H₂O₂ 100 mL 加水至 1000 mL，<strong>临用现配</strong><br>
+                    • <span class="highlight">盐酸溶液 (6 mol/L)</span> — 盐酸 50 mL 缓缓倾入 50 mL 水中，边加边搅拌<br>
+                    • <span class="highlight">甲基红乙醇溶液 (2.5 g/L)</span> — 甲基红 0.25 g 溶于 100 mL 无水乙醇<br>
+                    • <span class="highlight">NaOH 标准溶液 (0.01 mol/L)</span> — 0.1 mol/L NaOH 稀释 10 倍，需标定
+                </div>
+                <div style="margin-bottom: 10px; border-left: 4px solid #d4a017; padding-left: 16px;">
+                    <strong>⚠️ 关键操作点</strong><br>
+                    • 蒸馏前吸收液须用 NaOH 预中和至 <span class="highlight">黄色</span>（甲基红终点）<br>
+                    • 氮气流量控制在 <span class="highlight">1.0~2.0 L/min</span>，过低吸收不完全，过高易喷溅<br>
+                    • 盐酸加入后应 <span class="highlight">立即加热</span>，防止 SO₂ 逸散<br>
+                    • 蒸馏时间 <span class="highlight">1.5 h</span>，确保 SO₂ 完全释放<br>
+                    • 滴定终点为 <span class="highlight">黄色且 20 s 不褪</span>，注意终点判断
+                </div>
+                <div style="border-left: 4px solid #c0392b; padding-left: 16px;">
+                    <strong>⚠️ 安全提示</strong><br>
+                    • 盐酸、过氧化氢有 <span class="warn">腐蚀性</span>，操作时佩戴防护手套、护目镜<br>
+                    • 氮气为 <span class="warn">窒息性气体</span>，操作在通风橱内进行<br>
+                    • 蒸馏过程中注意 <span class="warn">防止暴沸</span>，可加入玻璃珠或沸石
+                </div>
+            </div>
+        </details>
+
+        <!-- ===== 底部说明 ===== -->
+        <div class="footnote">
+            <strong>📌 编制依据：</strong><br>
+            <span class="tag">📖</span> GB 5009.34-2022《食品安全国家标准 食品中二氧化硫的测定》第一法 酸碱滴定法<br>
+            <span class="tag">🔬</span> 装置示意图参见标准附录 A 图 A.1（充氮蒸馏装置）<br>
+            <span class="tag">📊</span> 计算结果保留 <strong>三位有效数字</strong>；精密度：两次独立测定结果绝对差值 ≤ 算术平均值的 10%<br>
+            <span class="tag">📋</span> 固体/半流体称样量 35 g 时，检出限 1 mg/kg，定量限 10 mg/kg；液体取样 50 mL 时，检出限 1 mg/L，定量限 6 mg/L
+        </div>
+
+    </div>
+</body>
+</html>

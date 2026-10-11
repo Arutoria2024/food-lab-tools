@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GB 5009.33-2016 亚硝酸盐测定 第二法 分光光度法</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js">
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background: #f0f5fa;
+            padding: 25px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1300px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 28px 28px 40px;
+        }
+        h1 {
+            font-size: 26px;
+            color: #0a2f44;
+            border-left: 6px solid #1a7a8a;
+            padding-left: 18px;
+            margin-bottom: 4px;
+        }
+        .sub {
+            color: #4a6a7a;
+            font-size: 14px;
+            margin-bottom: 22px;
+            padding-left: 24px;
+            background: #ecf3f8;
+            display: inline-block;
+            padding: 6px 24px;
+            border-radius: 30px;
+        }
+
+        /* 折叠流程样式 */
+        .flow-toggle {
+            background: #e8f0f8;
+            border-radius: 12px;
+            padding: 6px 18px;
+            margin-bottom: 22px;
+            border: 1px solid #c8dae5;
+        }
+        .flow-toggle summary {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0a2f44;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+        }
+        .flow-toggle summary::-webkit-details-marker {
+            display: none;
+        }
+        .flow-toggle summary .arrow {
+            margin-left: auto;
+            transition: transform 0.2s;
+        }
+        .flow-toggle[open] summary .arrow {
+            transform: rotate(180deg);
+        }
+        .flow-content {
+            padding: 10px 6px 18px 6px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #1a2a3a;
+        }
+        .flow-content .step {
+            margin-bottom: 12px;
+            border-left: 4px solid #1a7a8a;
+            padding-left: 16px;
+        }
+        .flow-content .step strong {
+            color: #0a4a5a;
+        }
+        .flow-content .step .highlight {
+            background: #fef3d6;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #8a6d1a;
+        }
+        .flow-content .step .warn {
+            color: #b33;
+            font-weight: 600;
+        }
+        .flow-content .reagent-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 20px;
+            padding: 6px 0 6px 16px;
+            font-size: 13px;
+        }
+        @media (max-width: 600px) {
+            .flow-content .reagent-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 计算卡片 */
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 10px;
+        }
+        @media (max-width: 900px) {
+            .calc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: #f9fcff;
+            border: 1px solid #dce6ef;
+            border-radius: 16px;
+            padding: 20px 22px;
+        }
+        .card .card-title {
+            font-weight: 700;
+            font-size: 17px;
+            color: #1a4a6a;
+            border-bottom: 2px solid #d0dce8;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .card .card-title .badge {
+            background: #1a7a8a;
+            color: #fff;
+            font-size: 12px;
+            border-radius: 30px;
+            padding: 0 14px;
+            line-height: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 12px;
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2a4a5a;
+            min-width: 100px;
+        }
+        .form-group input {
+            border: 1.5px solid #d0dce8;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 14px;
+            background: #fff;
+            flex: 1;
+            min-width: 80px;
+            max-width: 150px;
+            transition: 0.2s;
+        }
+        .form-group input:focus {
+            border-color: #1a7a8a;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 122, 138, 0.15);
+        }
+        .form-group .unit {
+            font-size: 12px;
+            color: #5a7a8a;
+        }
+
+        .std-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        .std-table th {
+            background: #e4edf5;
+            padding: 6px 4px;
+            text-align: center;
+            border: 1px solid #d0dce8;
+            font-size: 12px;
+        }
+        .std-table td {
+            padding: 4px 2px;
+            text-align: center;
+            border: 1px solid #d0dce8;
+        }
+        .std-table input {
+            width: 70px;
+            padding: 4px 2px;
+            border: 1px solid #c8d6e5;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .std-table input:focus {
+            border-color: #1a7a8a;
+            outline: none;
+        }
+        .std-table .std-mass {
+            font-weight: 600;
+        }
+
+        .btn {
+            background: #1a7a8a;
+            color: #fff;
+            border: none;
+            padding: 9px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(26, 122, 138, 0.25);
+        }
+        .btn:hover {
+            background: #0e5f6e;
+            transform: translateY(-1px);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #1a7a8a;
+            border: 2px solid #1a7a8a;
+            box-shadow: none;
+            padding: 5px 14px;
+            font-size: 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-outline:hover {
+            background: #e6f3f7;
+        }
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+
+        .chart-container {
+            height: 200px;
+            margin-top: 10px;
+        }
+
+        .result-box {
+            background: #eaf5f9;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-top: 14px;
+            border-left: 5px solid #1a7a8a;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dashed #c8dae5;
+            font-size: 14px;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-item .label {
+            color: #3a5a6a;
+        }
+        .result-item .value {
+            font-weight: 700;
+            color: #0a2f44;
+        }
+        .result-item .value.pass {
+            color: #1a8a4a;
+        }
+        .result-item .value.fail {
+            color: #c0392b;
+        }
+
+        .json-area {
+            background: #1e2a36;
+            color: #b8d4e0;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 160px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .flex-end {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+        .mt-8 {
+            margin-top: 8px;
+        }
+        .text-muted {
+            color: #6a8a9a;
+            font-size: 13px;
+        }
+
+        /* 方程显示 */
+        #equationDisplay {
+            font-size: 14px;
+            background: #f2f7fc;
+            padding: 8px 14px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 16px;
+            }
+            .form-group label {
+                min-width: 70px;
+                font-size: 12px;
+            }
+            .form-group input {
+                font-size: 13px;
+                max-width: 100%;
+            }
+            .card {
+                padding: 14px 14px;
+            }
+            .std-table input {
+                width: 50px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 GB 5009.33-2016 · 亚硝酸盐测定（第二法）</h1>
+        <div class="sub">分光光度法 — 盐酸萘乙二胺法 · 外标法定量</div>
+
+        <!-- ===== 折叠实验流程 ===== -->
+        <details class="flow-toggle" open>
+            <summary>
+                <span>📋 实验操作流程（点击展开/收起）</span>
+                <span class="arrow">▼</span>
+            </summary>
+            <div class="flow-content">
+                <div class="step">
+                    <strong>1. 试剂准备</strong>
+                    <div class="reagent-grid">
+                        <div class="item"><span class="highlight">亚铁氰化钾溶液 (106 g/L)</span> — 10.6 g 亚铁氰化钾溶于水定容至 100 mL</div>
+                        <div class="item"><span class="highlight">乙酸锌溶液 (220 g/L)</span> — 22.0 g 乙酸锌溶于水定容至 100 mL</div>
+                        <div class="item"><span class="highlight">对氨基苯磺酸溶液 (4 g/L)</span> — 0.4 g 对氨基苯磺酸溶于水定容至 100 mL，<span class="warn">避光保存</span></div>
+                        <div class="item"><span class="highlight">盐酸萘乙二胺溶液 (2 g/L)</span> — 0.2 g 盐酸萘乙二胺溶于水定容至 100 mL，<span class="warn">避光保存</span></div>
+                        <div class="item"><span class="highlight">亚硝酸钠标准使用液 (5.0 μg/mL)</span> — 临用现配</div>
+                        <div class="item"><span class="highlight">饱和硼砂溶液 (50 g/L)</span> — 5.0 g 硼砂溶于 100 mL 热水</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <strong>2. 样品前处理</strong><br>
+                    • 称取 <span class="highlight">5 g</span>（精确至 0.01 g）均匀试样，置于 250 mL 锥形瓶中。<br>
+                    • 加入 <span class="highlight">12.5 mL</span> 饱和硼砂溶液，摇匀。<br>
+                    • 加入约 <span class="highlight">150 mL</span> 70 °C 热水，混匀，沸水浴加热 <span class="highlight">15 min</span>。<br>
+                    • 冷却后定量转移至 <span class="highlight">200 mL</span> 容量瓶中。
+                </div>
+                <div class="step">
+                    <strong>3. 沉淀蛋白质与脂肪</strong><br>
+                    • 加入 <span class="highlight">5 mL</span> 亚铁氰化钾溶液，摇匀。<br>
+                    • 加入 <span class="highlight">5 mL</span> 乙酸锌溶液，摇匀。<br>
+                    • <span class="warn">⚠️ 顺序不可调换！</span> 放置 <span class="highlight">30 min</span>。
+                </div>
+                <div class="step">
+                    <strong>4. 过滤</strong><br>
+                    • 用定量滤纸过滤，<span class="highlight">弃去初滤液 30 mL</span>，收集其余滤液备用。
+                </div>
+                <div class="step">
+                    <strong>5. 标准曲线制备</strong><br>
+                    • 取 9 支 50 mL 比色管，分别加入亚硝酸钠标准使用液 <span class="highlight">0, 0.20, 0.40, 0.60, 0.80, 1.00, 1.50, 2.00, 2.50 mL</span>。<br>
+                    • 各加纯水至 <span class="highlight">40 mL</span>。
+                </div>
+                <div class="step">
+                    <strong>6. 显色反应</strong><br>
+                    • 标准系列和样品管中各加入 <span class="highlight">2.0 mL</span> 对氨基苯磺酸溶液，摇匀，避光静置 <span class="highlight">3~5 min</span>。<br>
+                    • 加入 <span class="highlight">1.0 mL</span> 盐酸萘乙二胺溶液，加水至刻度，摇匀。<br>
+                    • <span class="highlight">避光静置 15 min</span>。
+                </div>
+                <div class="step">
+                    <strong>7. 比色测定</strong><br>
+                    • 于 <span class="highlight">538 nm</span> 波长处，用 1 cm 比色皿，以 <span class="highlight">试剂空白调零</span>，测定吸光度。
+                </div>
+                <div class="step">
+                    <strong>8. 结果计算</strong><br>
+                    • 以标准系列质量为横坐标，吸光度为纵坐标绘制标准曲线。<br>
+                    • 亚硝酸盐含量（mg/kg）= <span class="highlight">(m₁ × 1000) / (m × V₂ / V₁)</span><br>
+                    &nbsp;&nbsp;其中：m₁ — 由标准曲线查得测定用样液中亚硝酸钠质量（μg），m — 试样质量（g），<br>
+                    &nbsp;&nbsp;V₁ — 试样处理液总体积（200 mL），V₂ — 测定用样液体积（40 mL）。
+                </div>
+                <div style="margin-top:10px; padding:8px 14px; background:#fef6e6; border-radius:8px; color:#8a6d1a;">
+                    ⚠️ <strong>安全提示：</strong> 对氨基苯磺酸、盐酸萘乙二胺有刺激性；亚硝酸钠为有毒物质，操作时佩戴防护手套。
+                </div>
+            </div>
+        </details>
+
+        <!-- ===== 计算系统 ===== -->
+        <div class="calc-grid">
+
+            <!-- 左列：标准曲线 -->
+            <div class="card">
+                <div class="card-title">
+                    📈 标准曲线 <span class="badge">质量 vs 吸光度</span>
+                </div>
+                <div class="form-group">
+                    <label>标准使用液浓度 :</label>
+                    <input type="number" id="stdConc" value="5.0" step="0.1" style="max-width:100px;">
+                    <span class="unit">μg/mL</span>
+                </div>
+                <table class="std-table" id="stdTable">
+                    <thead>
+                        <tr><th>#</th><th>取用体积 (mL)</th><th>NaNO₂ 质量 (μg)</th><th>吸光度 (A)</th></tr>
+                    </thead>
+                    <tbody id="stdBody">
+                        <!-- JS 动态生成 -->
+                    </tbody>
+                </table>
+                <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+                    <button class="btn-outline btn-sm" onclick="addStdRow()">＋ 添加</button>
+                    <button class="btn-outline btn-sm" onclick="removeStdRow()">－ 删除</button>
+                    <button class="btn-outline btn-sm" onclick="resetStdData()">↺ 重置</button>
+                </div>
+
+                <div style="margin-top:16px;">
+                    <div id="equationDisplay">点击「计算标准曲线」生成回归方程</div>
+                    <div class="chart-container">
+                        <canvas id="stdChart"></canvas>
+                    </div>
+                    <button class="btn" onclick="calcStandardCurve()" style="margin-top:8px; width:100%;">📊 计算标准曲线</button>
+                </div>
+            </div>
+
+            <!-- 右列：样品测定 -->
+            <div class="card">
+                <div class="card-title">
+                    🧪 样品测定 <span class="badge">外标法定量</span>
+                </div>
+
+                <div class="form-group">
+                    <label>样品名称 :</label>
+                    <input type="text" id="sampleName" value="火腿肠" style="max-width:140px;">
+                </div>
+                <div class="form-group">
+                    <label>试样质量 m (g) :</label>
+                    <input type="number" id="sampleMass" value="5.00" step="0.01">
+                    <span class="unit">g</span>
+                </div>
+                <div class="form-group">
+                    <label>定容体积 V₁ (mL) :</label>
+                    <input type="number" id="totalVol" value="200" step="1">
+                    <span class="unit">mL</span>
+                </div>
+                <div class="form-group">
+                    <label>测定取液体积 V₂ (mL) :</label>
+                    <input type="number" id="aliquotVol" value="40" step="1">
+                    <span class="unit">mL</span>
+                </div>
+                <div class="form-group">
+                    <label>样品吸光度 A₁ :</label>
+                    <input type="number" id="sampleAbs" value="0.285" step="0.001">
+                </div>
+                <div class="form-group">
+                    <label>空白吸光度 A₀ :</label>
+                    <input type="number" id="blankAbs" value="0.008" step="0.001">
+                </div>
+                <div class="form-group">
+                    <label>GB 2760 限值 :</label>
+                    <input type="number" id="limitVal" value="30" step="1">
+                    <span class="unit">mg/kg</span>
+                </div>
+
+                <button class="btn" onclick="analyzeSample()" style="width:100%;">🔬 分析样品</button>
+
+                <div id="resultArea" style="margin-top:14px;">
+                    <!-- 动态填充 -->
+                </div>
+
+                <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
+                    <button class="btn-outline btn-sm" onclick="exportJSON()">💾 导出 JSON</button>
+                    <button class="btn-outline btn-sm" onclick="document.getElementById('jsonFileInput').click()">📂 导入 JSON</button>
+                    <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="importJSON(event)">
+                </div>
+                <div style="margin-top:10px;">
+                    <div style="font-weight:600; color:#1a4a6a; font-size:13px;">📁 实验数据 (JSON)</div>
+                    <div class="json-area" id="jsonDisplay">
+                        // 点击「分析样品」或「导出 JSON」后更新
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 全局变量
+        // ============================================================
+        let stdData = [
+            { vol: 0.00, abs: 0.000 },
+            { vol: 0.20, abs: 0.042 },
+            { vol: 0.40, abs: 0.085 },
+            { vol: 0.60, abs: 0.128 },
+            { vol: 0.80, abs: 0.170 },
+            { vol: 1.00, abs: 0.213 },
+            { vol: 1.50, abs: 0.320 },
+            { vol: 2.00, abs: 0.426 },
+            { vol: 2.50, abs: 0.532 }
+        ];
+        let regression = { a: 0, b: 0, r2: 0 };
+        let chartInstance = null;
+
+        // ============================================================
+        // 初始化
+        // ============================================================
+        window.onload = function() {
+            renderStdTable();
+            updateJSON();
+        };
+
+        function renderStdTable() {
+            const tbody = document.getElementById('stdBody');
+            tbody.innerHTML = '';
+            const conc = parseFloat(document.getElementById('stdConc').value) || 5.0;
+            stdData.forEach((row, idx) => {
+                const mass = row.vol * conc;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${idx + 1}</td>
+                    <td><input type="number" class="std-vol" value="${row.vol.toFixed(2)}" step="0.01" data-idx="${idx}" style="width:60px;"></td>
+                    <td class="std-mass">${mass.toFixed(2)}</td>
+                    <td><input type="number" class="std-abs" value="${row.abs.toFixed(3)}" step="0.001" data-idx="${idx}" style="width:70px;"></td>
+                `;
+                tbody.appendChild(tr);
+            });
+            // 事件绑定
+            document.querySelectorAll('.std-vol').forEach(inp => {
+                inp.addEventListener('input', function() {
+                    const idx = parseInt(this.dataset.idx);
+                    const conc = parseFloat(document.getElementById('stdConc').value) || 5.0;
+                    const vol = parseFloat(this.value) || 0;
+                    const mass = vol * conc;
+                    const row = this.closest('tr');
+                    row.querySelector('.std-mass').textContent = mass.toFixed(2);
+                    stdData[idx].vol = vol;
+                    stdData[idx].abs = parseFloat(row.querySelector('.std-abs').value) || 0;
+                    updateJSON();
+                });
+            });
+            document.querySelectorAll('.std-abs').forEach(inp => {
+                inp.addEventListener('input', function() {
+                    const idx = parseInt(this.dataset.idx);
+                    stdData[idx].abs = parseFloat(this.value) || 0;
+                    updateJSON();
+                });
+            });
+            syncStdData();
+            updateJSON();
+        }
+
+        function syncStdData() {
+            const conc = parseFloat(document.getElementById('stdConc').value) || 5.0;
+            document.querySelectorAll('#stdBody tr').forEach((tr, idx) => {
+                const volInp = tr.querySelector('.std-vol');
+                const absInp = tr.querySelector('.std-abs');
+                if (volInp && absInp) {
+                    stdData[idx].vol = parseFloat(volInp.value) || 0;
+                    stdData[idx].abs = parseFloat(absInp.value) || 0;
+                }
+            });
+        }
+
+        // ============================================================
+        // 标准曲线计算
+        // ============================================================
+        function calcStandardCurve() {
+            syncStdData();
+            const conc = parseFloat(document.getElementById('stdConc').value) || 5.0;
+            const data = stdData.filter(d => d.vol > 0 || d.abs > 0);
+            if (data.length < 2) {
+                alert('至少需要2个有效数据点！');
+                return;
+            }
+            const x = data.map(d => d.vol * conc);
+            const y = data.map(d => d.abs);
+            const n = x.length;
+            let sumX = 0,
+                sumY = 0,
+                sumXY = 0,
+                sumX2 = 0,
+                sumY2 = 0;
+            for (let i = 0; i < n; i++) {
+                sumX += x[i];
+                sumY += y[i];
+                sumXY += x[i] * y[i];
+                sumX2 += x[i] * x[i];
+                sumY2 += y[i] * y[i];
+            }
+            const b = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            const a = (sumY - b * sumX) / n;
+            const meanY = sumY / n;
+            let ssTot = 0,
+                ssRes = 0;
+            for (let i = 0; i < n; i++) {
+                ssTot += (y[i] - meanY) ** 2;
+                ssRes += (y[i] - (a + b * x[i])) ** 2;
+            }
+            const r2 = ssTot > 0 ? 1 - ssRes / ssTot : 0;
+            regression = { a, b, r2 };
+
+            document.getElementById('equationDisplay').innerHTML = `
+                <strong>回归方程：</strong> y = ${a.toFixed(4)} + ${b.toFixed(4)} · x &nbsp;&nbsp;
+                <strong>R² =</strong> ${r2.toFixed(4)} &nbsp;&nbsp;
+                <span style="color:#8a6d1a;">（x = NaNO₂质量 μg，y = 吸光度）</span>
+            `;
+            drawChart(x, y, a, b);
+            updateJSON();
+            return { a, b, r2 };
+        }
+
+        function drawChart(x, y, a, b) {
+            const ctx = document.getElementById('stdChart').getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+            const minX = Math.min(...x, 0);
+            const maxX = Math.max(...x, 1);
+            const fitX = [],
+                fitY = [];
+            for (let i = 0; i <= 20; i++) {
+                const xi = minX + (maxX - minX) * (i / 20);
+                fitX.push(xi);
+                fitY.push(a + b * xi);
+            }
+            chartInstance = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: '标准点',
+                        data: x.map((xi, i) => ({ x: xi, y: y[i] })),
+                        backgroundColor: '#1a7a8a',
+                        pointRadius: 6,
+                        pointBorderColor: '#0a4a5a',
+                    }, {
+                        label: '拟合曲线',
+                        data: fitX.map((xi, i) => ({ x: xi, y: fitY[i] })),
+                        type: 'line',
+                        borderColor: '#d97706',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        fill: false,
+                        tension: 0.1,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => ctx.datasetIndex === 0 ?
+                                    `质量 ${ctx.parsed.x.toFixed(2)} μg, 吸光度 ${ctx.parsed.y.toFixed(4)}` :
+                                    ''
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 'NaNO₂ 质量 (μg)' } },
+                        y: { title: { display: true, text: '吸光度 (A)' } }
+                    }
+                }
+            });
+        }
+
+        // ============================================================
+        // 样品分析
+        // ============================================================
+        function analyzeSample() {
+            if (regression.r2 < 0.9 && stdData.length > 2) {
+                if (!confirm('R² 较低，确定继续计算吗？')) return;
+            }
+            const sampleAbs = parseFloat(document.getElementById('sampleAbs').value);
+            const blankAbs = parseFloat(document.getElementById('blankAbs').value);
+            const mass = parseFloat(document.getElementById('sampleMass').value);
+            const totalVol = parseFloat(document.getElementById('totalVol').value);
+            const aliquotVol = parseFloat(document.getElementById('aliquotVol').value);
+            const limit = parseFloat(document.getElementById('limitVal').value);
+            if ([sampleAbs, blankAbs, mass, totalVol, aliquotVol, limit].some(isNaN)) {
+                alert('请完整填写样品参数！');
+                return;
+            }
+            const netAbs = sampleAbs - blankAbs;
+            const massNaNO2 = (netAbs - regression.a) / regression.b;
+            if (massNaNO2 < 0) {
+                alert('计算质量为负值，请检查空白或样品吸光度！');
+                return;
+            }
+            // 含量计算：X (mg/kg) = (m1 * 1000) / (m * V2 / V1)
+            const content = (massNaNO2 * 1000) / (mass * aliquotVol / totalVol);
+            const isPass = content <= limit;
+            const statusText = isPass ? '✅ 合格（未超标）' : '❌ 不合格（超标）';
+            const statusClass = isPass ? 'pass' : 'fail';
+
+            const resultHTML = `
+                <div class="result-box">
+                    <div class="result-item"><span class="label">样品名称</span><span class="value">${document.getElementById('sampleName').value || '未命名'}</span></div>
+                    <div class="result-item"><span class="label">试样质量 (m)</span><span class="value">${mass.toFixed(2)} g</span></div>
+                    <div class="result-item"><span class="label">定容体积 (V₁)</span><span class="value">${totalVol.toFixed(0)} mL</span></div>
+                    <div class="result-item"><span class="label">测定取液体积 (V₂)</span><span class="value">${aliquotVol.toFixed(0)} mL</span></div>
+                    <div class="result-item"><span class="label">样品吸光度 (A₁)</span><span class="value">${sampleAbs.toFixed(4)}</span></div>
+                    <div class="result-item"><span class="label">空白吸光度 (A₀)</span><span class="value">${blankAbs.toFixed(4)}</span></div>
+                    <div class="result-item"><span class="label">净吸光度 (A₁ - A₀)</span><span class="value">${netAbs.toFixed(4)}</span></div>
+                    <div class="result-item"><span class="label">测定液中 NaNO₂ 质量</span><span class="value">${massNaNO2.toFixed(2)} μg</span></div>
+                    <div class="result-item" style="border-bottom:2px solid #1a7a8a; padding-top:8px; margin-top:4px;">
+                        <span class="label" style="font-weight:700; font-size:16px;">亚硝酸盐含量 (以NaNO₂计)</span>
+                        <span class="value" style="font-size:18px;">${content.toFixed(2)} mg/kg</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">GB 2760 限值</span>
+                        <span class="value">${limit.toFixed(0)} mg/kg</span>
+                    </div>
+                    <div class="result-item" style="border-top:2px solid #d0dce8; margin-top:6px; padding-top:10px;">
+                        <span class="label" style="font-weight:700;">判定结果</span>
+                        <span class="value ${statusClass}" style="font-size:18px;">${statusText}</span>
+                    </div>
+                    <div class="result-item" style="font-size:12px; color:#6a8a9a; border-top:1px dashed #c8dae5; margin-top:4px; padding-top:6px;">
+                        <span class="label">📌 方法性能</span>
+                        <span class="value" style="font-weight:400;">检出限 1.0 mg/kg，定量限 3.0 mg/kg</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('resultArea').innerHTML = resultHTML;
+            updateJSON();
+        }
+
+        // ============================================================
+        // JSON 导入导出
+        // ============================================================
+        function collectData() {
+            syncStdData();
+            const conc = parseFloat(document.getElementById('stdConc').value) || 5.0;
+            return {
+                method: 'GB 5009.33-2016 第二法 分光光度法',
+                timestamp: new Date().toISOString(),
+                std_conc: conc,
+                std_points: stdData.map(d => ({ vol: d.vol, mass: d.vol * conc, abs: d.abs })),
+                regression: regression,
+                sample: {
+                    name: document.getElementById('sampleName').value,
+                    mass: parseFloat(document.getElementById('sampleMass').value) || 0,
+                    total_vol: parseFloat(document.getElementById('totalVol').value) || 0,
+                    aliquot_vol: parseFloat(document.getElementById('aliquotVol').value) || 0,
+                    abs_sample: parseFloat(document.getElementById('sampleAbs').value) || 0,
+                    abs_blank: parseFloat(document.getElementById('blankAbs').value) || 0,
+                    limit: parseFloat(document.getElementById('limitVal').value) || 0
+                },
+                result: (() => {
+                    const resDiv = document.getElementById('resultArea');
+                    const contentMatch = resDiv.innerText.match(/亚硝酸盐含量.*?(\d+\.\d+)/);
+                    const statusMatch = resDiv.innerText.includes('合格') ? 'pass' :
+                        (resDiv.innerText.includes('不合格') ? 'fail' : 'unknown');
+                    return { content: contentMatch ? parseFloat(contentMatch[1]) : null,
+                    status: statusMatch };
+                })()
+            };
+        }
+
+        function updateJSON() {
+            const data = collectData();
+            document.getElementById('jsonDisplay').textContent = JSON.stringify(data, null, 2);
+        }
+
+        function exportJSON() {
+            const data = collectData();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `nitrite_${new Date().toISOString().slice(0,10)}.json`;
+            link.click();
+        }
+
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    if (json.std_conc) document.getElementById('stdConc').value = json.std_conc;
+                    if (json.std_points && json.std_points.length > 0) {
+                        stdData = json.std_points.map(p => ({ vol: p.vol || 0, abs: p.abs || 0 }));
+                        renderStdTable();
+                    }
+                    if (json.sample) {
+                        const s = json.sample;
+                        if (s.name) document.getElementById('sampleName').value = s.name;
+                        if (s.mass !== undefined) document.getElementById('sampleMass').value = s.mass;
+                        if (s.total_vol !== undefined) document.getElementById('totalVol').value = s.total_vol;
+                        if (s.aliquot_vol !== undefined) document.getElementById('aliquotVol').value = s.aliquot_vol;
+                        if (s.abs_sample !== undefined) document.getElementById('sampleAbs').value = s.abs_sample;
+                        if (s.abs_blank !== undefined) document.getElementById('blankAbs').value = s.abs_blank;
+                        if (s.limit !== undefined) document.getElementById('limitVal').value = s.limit;
+                    }
+                    if (json.regression) {
+                        regression = json.regression;
+                        document.getElementById('equationDisplay').innerHTML = `
+                            <strong>回归方程：</strong> y = ${regression.a.toFixed(4)} + ${regression.b.toFixed(4)} · x &nbsp;&nbsp;
+                            <strong>R² =</strong> ${regression.r2.toFixed(4)}
+                        `;
+                        const conc = parseFloat(document.getElementById('stdConc').value) || 5.0;
+                        const x = stdData.map(d => d.vol * conc);
+                        const y = stdData.map(d => d.abs);
+                        drawChart(x, y, regression.a, regression.b);
+                    }
+                    updateJSON();
+                    alert('✅ 数据导入成功！');
+                } catch (err) {
+                    alert('❌ JSON 解析失败：' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ============================================================
+        // 表格行操作
+        // ============================================================
+        function addStdRow() {
+            stdData.push({ vol: 0.0, abs: 0.0 });
+            renderStdTable();
+        }
+
+        function removeStdRow() {
+            if (stdData.length <= 2) { alert('至少保留2行数据'); return; }
+            stdData.pop();
+            renderStdTable();
+        }
+
+        function resetStdData() {
+            stdData = [
+                { vol: 0.00, abs: 0.000 },
+                { vol: 0.20, abs: 0.042 },
+                { vol: 0.40, abs: 0.085 },
+                { vol: 0.60, abs: 0.128 },
+                { vol: 0.80, abs: 0.170 },
+                { vol: 1.00, abs: 0.213 },
+                { vol: 1.50, abs: 0.320 },
+                { vol: 2.00, abs: 0.426 },
+                { vol: 2.50, abs: 0.532 }
+            ];
+            renderStdTable();
+            document.getElementById('stdConc').value = 5.0;
+            if (chartInstance) { chartInstance.destroy();
+                chartInstance = null; }
+            document.getElementById('equationDisplay').innerHTML = '点击「计算标准曲线」生成回归方程';
+            updateJSON();
+        }
+
+        // 监听输入变化
+        document.addEventListener('input', function(e) {
+            if (e.target.closest('.form-group') || e.target.closest('.std-table')) {
+                clearTimeout(window.jsonTimeout);
+                window.jsonTimeout = setTimeout(updateJSON, 400);
+            }
+        });
+    </script>
+</body>
+</html>

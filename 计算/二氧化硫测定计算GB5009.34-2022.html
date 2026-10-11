@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GB 5009.34-2022 二氧化硫测定 第一法 酸碱滴定法</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background: #f0f5fa;
+            padding: 25px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 28px 28px 40px;
+        }
+        h1 {
+            font-size: 26px;
+            color: #0a2f44;
+            border-left: 6px solid #1a7a8a;
+            padding-left: 18px;
+            margin-bottom: 4px;
+        }
+        .sub {
+            color: #4a6a7a;
+            font-size: 14px;
+            margin-bottom: 22px;
+            padding-left: 24px;
+            background: #ecf3f8;
+            display: inline-block;
+            padding: 6px 24px;
+            border-radius: 30px;
+        }
+        .note-box {
+            background: #fef9e6;
+            border: 1px solid #f0dca0;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 22px;
+            font-size: 14px;
+            color: #6a5a1a;
+            line-height: 1.8;
+        }
+        .note-box strong {
+            color: #8a6d1a;
+        }
+
+        /* 折叠流程样式 */
+        .flow-toggle {
+            background: #e8f0f8;
+            border-radius: 12px;
+            padding: 6px 18px;
+            margin-bottom: 22px;
+            border: 1px solid #c8dae5;
+        }
+        .flow-toggle summary {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0a2f44;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+        }
+        .flow-toggle summary::-webkit-details-marker {
+            display: none;
+        }
+        .flow-toggle summary .arrow {
+            margin-left: auto;
+            transition: transform 0.2s;
+        }
+        .flow-toggle[open] summary .arrow {
+            transform: rotate(180deg);
+        }
+        .flow-content {
+            padding: 10px 6px 18px 6px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #1a2a3a;
+        }
+        .flow-content .step {
+            margin-bottom: 12px;
+            border-left: 4px solid #1a7a8a;
+            padding-left: 16px;
+        }
+        .flow-content .step strong {
+            color: #0a4a5a;
+        }
+        .flow-content .step .highlight {
+            background: #fef3d6;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #8a6d1a;
+        }
+        .flow-content .step .warn {
+            color: #b33;
+            font-weight: 600;
+        }
+
+        .flow-content .reagent-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 20px;
+            padding: 6px 0 6px 16px;
+            font-size: 13px;
+        }
+        .flow-content .reagent-grid .item {
+            padding: 2px 0;
+            border-bottom: 1px dashed #e0e8ee;
+        }
+        @media (max-width: 600px) {
+            .flow-content .reagent-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 计算卡片 */
+        .calc-card {
+            background: #f9fcff;
+            border: 1px solid #dce6ef;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-top: 10px;
+        }
+        .calc-card .card-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: #1a4a6a;
+            border-bottom: 2px solid #d0dce8;
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+        }
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 16px;
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2a4a5a;
+            min-width: 130px;
+        }
+        .form-group input {
+            border: 1.5px solid #d0dce8;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            background: #fff;
+            flex: 1;
+            min-width: 100px;
+            max-width: 180px;
+            transition: 0.2s;
+        }
+        .form-group input:focus {
+            border-color: #1a7a8a;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 122, 138, 0.15);
+        }
+        .form-group .unit {
+            font-size: 13px;
+            color: #5a7a8a;
+        }
+        .btn {
+            background: #1a7a8a;
+            color: #fff;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(26, 122, 138, 0.25);
+        }
+        .btn:hover {
+            background: #0e5f6e;
+            transform: translateY(-1px);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #1a7a8a;
+            border: 2px solid #1a7a8a;
+            box-shadow: none;
+            padding: 6px 16px;
+            font-size: 13px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-outline:hover {
+            background: #e6f3f7;
+        }
+
+        .result-box {
+            background: #eaf5f9;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 18px;
+            border-left: 5px solid #1a7a8a;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px dashed #c8dae5;
+            font-size: 14px;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-item .label {
+            color: #3a5a6a;
+        }
+        .result-item .value {
+            font-weight: 700;
+            color: #0a2f44;
+        }
+        .result-item .value.pass {
+            color: #1a8a4a;
+        }
+        .result-item .value.fail {
+            color: #c0392b;
+        }
+
+        .json-area {
+            background: #1e2a36;
+            color: #b8d4e0;
+            padding: 14px 18px;
+            border-radius: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 180px;
+            overflow-y: auto;
+            margin-top: 12px;
+        }
+        .flex-end {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 16px;
+            }
+            .form-group label {
+                min-width: 90px;
+                font-size: 13px;
+            }
+            .form-group input {
+                max-width: 100%;
+            }
+            .calc-card {
+                padding: 14px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧪 GB 5009.34-2022 · 二氧化硫测定（第一法）</h1>
+    <div class="sub">酸碱滴定法 — 充氮蒸馏 · 过氧化氢吸收 · NaOH滴定</div>
+
+    <!-- ===== 提示 ===== -->
+    <div class="note-box">
+        <strong>📌 方法原理：</strong> 试样酸化后在加热条件下释放二氧化硫，经 <span class="highlight">过氧化氢溶液</span> 吸收并氧化生成硫酸，以 <span class="highlight">氢氧化钠标准溶液</span> 滴定，根据消耗量计算二氧化硫含量。<br>
+        <strong>⚙️ 装置：</strong> 充氮蒸馏装置（见标准附录A），含圆底烧瓶、回流冷凝管、分液漏斗、氮气入口。
+    </div>
+
+    <!-- ================= 折叠实验流程 ================= -->
+    <details class="flow-toggle" open>
+        <summary>
+            <span>📋 实验操作流程（点击展开/收起）</span>
+            <span class="arrow">▼</span>
+        </summary>
+        <div class="flow-content">
+
+            <div class="step">
+                <strong>1. 试剂准备</strong>
+                <div class="reagent-grid">
+                    <div class="item"><span class="highlight">过氧化氢溶液 (3%)</span> — 30% H₂O₂ 100 mL 加水至 1000 mL，临用现配</div>
+                    <div class="item"><span class="highlight">盐酸溶液 (6 mol/L)</span> — 盐酸 50 mL 缓缓倾入 50 mL 水中</div>
+                    <div class="item"><span class="highlight">甲基红乙醇溶液 (2.5 g/L)</span> — 甲基红 0.25 g 溶于 100 mL 无水乙醇</div>
+                    <div class="item"><span class="highlight">NaOH标准溶液 (0.01 mol/L)</span> — 0.1 mol/L NaOH 稀释 10 倍</div>
+                    <div class="item"><span class="highlight">氮气</span> — 纯度 &gt; 99.9%</div>
+                    <div class="item"><span class="highlight">无二氧化碳水</span> — 用于配制NaOH标准溶液</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <strong>2. 试样前处理</strong><br>
+                • <strong>固体/半流体</strong>：取 <span class="highlight">20 g ~ 100 g</span>（精确至 0.01 g），粉碎混匀。<br>
+                • <strong>液体</strong>：取 <span class="highlight">20 mL ~ 200 mL</span>（精确至 0.01 g），混匀。<br>
+                • 称量后置于圆底烧瓶 A 中，加水 <span class="highlight">200 mL ~ 500 mL</span>。
+            </div>
+
+            <div class="step">
+                <strong>3. 蒸馏装置安装</strong><br>
+                • 按附录 A 图 A.1 安装充氮蒸馏装置。<br>
+                • 冷凝管上端 E 口连接玻璃导管，插入 <span class="highlight">100 mL 锥形瓶</span> 底部。<br>
+                • 锥形瓶内加入 <span class="highlight">3% 过氧化氢溶液 50 mL</span> 作为吸收液（导管末端浸入液面下）。<br>
+                • 吸收液中加入 <span class="highlight">3 滴甲基红指示剂</span>，用 <span class="highlight">0.01 mol/L NaOH</span> 滴定至 <span class="highlight">黄色</span>（即终点，若超过则舍弃该吸收液）。
+            </div>
+
+            <div class="step">
+                <strong>4. 充氮蒸馏</strong><br>
+                • 开通氮气，调节流量至 <span class="highlight">1.0 ~ 2.0 L/min</span>。<br>
+                • 打开分液漏斗 C 活塞，使 <span class="highlight">10 mL 6 mol/L 盐酸</span> 快速流入蒸馏瓶。<br>
+                • 立即加热烧瓶内溶液至沸，保持 <span class="highlight">微沸 1.5 h</span>，停止加热。
+            </div>
+
+            <div class="step">
+                <strong>5. 滴定</strong><br>
+                • 将吸收液放冷后摇匀。<br>
+                • 用 <span class="highlight">0.01 mol/L NaOH 标准溶液</span> 滴定至 <span class="highlight">黄色且 20 s 不褪</span>，记录消耗体积 V。<br>
+                • 同时进行 <span class="highlight">空白试验</span>（不加试样，其余相同），记录空白消耗体积 V₀。
+            </div>
+
+            <div class="step">
+                <strong>6. 结果计算</strong><br>
+                • 二氧化硫含量（mg/kg 或 mg/L）= <span class="highlight">(V - V₀) × c × 0.032 × 1000 × 1000 / m</span><br>
+                &nbsp;&nbsp;其中：V — 试样消耗 NaOH 体积（mL），V₀ — 空白消耗体积（mL），<br>
+                &nbsp;&nbsp;c — NaOH 标准溶液浓度（mol/L），m — 试样质量或体积（g 或 mL）。<br>
+                • 计算结果保留 <span class="highlight">三位有效数字</span>。
+            </div>
+
+            <div style="margin-top:10px; padding:8px 14px; background:#fef6e6; border-radius:8px; color:#8a6d1a;">
+                ⚠️ <strong>安全提示：</strong> 盐酸、过氧化氢有腐蚀性；氮气为窒息性气体，操作在通风橱内进行。蒸馏过程中注意防止暴沸。
+            </div>
+        </div>
+    </details>
+
+    <!-- ================= 自动计算系统 ================= -->
+    <div class="calc-card">
+        <div class="card-title">📊 二氧化硫含量自动计算（酸碱滴定法）</div>
+
+        <div class="form-group">
+            <label>试样质量/体积 m :</label>
+            <input type="number" id="sampleMass" value="35.00" step="0.01">
+            <span class="unit">g 或 mL</span>
+        </div>
+        <div class="form-group">
+            <label>NaOH 标准溶液浓度 c :</label>
+            <input type="number" id="naohConc" value="0.0100" step="0.0001">
+            <span class="unit">mol/L</span>
+        </div>
+        <div class="form-group">
+            <label>试样消耗 NaOH 体积 V :</label>
+            <input type="number" id="sampleVol" value="6.80" step="0.01">
+            <span class="unit">mL</span>
+        </div>
+        <div class="form-group">
+            <label>空白消耗 NaOH 体积 V₀ :</label>
+            <input type="number" id="blankVol" value="0.10" step="0.01">
+            <span class="unit">mL</span>
+        </div>
+        <div class="form-group">
+            <label>GB 2760 限值 :</label>
+            <input type="number" id="limitVal" value="250" step="1">
+            <span class="unit">mg/kg 或 mg/L</span>
+        </div>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;">
+            <button class="btn" onclick="calcSO2()">🧪 计算含量</button>
+            <button class="btn-outline" onclick="exportJSON()">💾 导出 JSON</button>
+            <button class="btn-outline" onclick="document.getElementById('jsonFileInput').click()">📂 导入 JSON</button>
+            <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="importJSON(event)">
+        </div>
+
+        <!-- 结果展示 -->
+        <div id="resultArea" style="margin-top:20px;">
+            <!-- 动态填充 -->
+        </div>
+
+        <!-- JSON 显示 -->
+        <div style="margin-top:20px;">
+            <div style="font-weight:700; color:#1a4a6a; margin-bottom:6px;">📁 实验数据 (JSON)</div>
+            <div class="json-area" id="jsonDisplay">
+                // 点击「计算含量」或「导出 JSON」后更新
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // 核心计算 — 酸碱滴定法
+    // 公式：X = (V - V₀) × c × 0.032 × 1000 × 1000 / m
+    // 其中 0.032 为 1 mL 1 mol/L NaOH 相当的 SO₂ 质量（g/mmol）
+    // ============================================================
+    function calcSO2() {
+        const m = parseFloat(document.getElementById('sampleMass').value);
+        const c = parseFloat(document.getElementById('naohConc').value);
+        const V = parseFloat(document.getElementById('sampleVol').value);
+        const V0 = parseFloat(document.getElementById('blankVol').value);
+        const limit = parseFloat(document.getElementById('limitVal').value);
+
+        if ([m, c, V, V0, limit].some(isNaN)) {
+            alert('请完整填写所有参数！');
+            return;
+        }
+        if (V <= V0) {
+            alert('试样消耗体积应大于空白消耗体积！');
+            return;
+        }
+
+        // 计算
+        const netVol = V - V0;
+        const so2Content = (netVol * c * 0.032 * 1000 * 1000) / m;
+
+        // 判定
+        const isPass = so2Content <= limit;
+        const statusText = isPass ? '✅ 合格（未超标）' : '❌ 不合格（超标）';
+        const statusClass = isPass ? 'pass' : 'fail';
+
+        // 检出限/定量限提示
+        let lodInfo = '';
+        if (m >= 35) {
+            lodInfo = '（固体/半流体：检出限 1 mg/kg，定量限 10 mg/kg）';
+        } else if (m >= 10 && m < 35) {
+            lodInfo = '⚠️ 称样量低于35 g，检出限可能不满足要求。';
+        }
+
+        const resultHTML = `
+            <div class="result-box">
+                <div class="result-item"><span class="label">试样质量/体积 (m)</span><span class="value">${m.toFixed(2)} g/mL</span></div>
+                <div class="result-item"><span class="label">NaOH 浓度 (c)</span><span class="value">${c.toFixed(4)} mol/L</span></div>
+                <div class="result-item"><span class="label">试样消耗体积 (V)</span><span class="value">${V.toFixed(2)} mL</span></div>
+                <div class="result-item"><span class="label">空白消耗体积 (V₀)</span><span class="value">${V0.toFixed(2)} mL</span></div>
+                <div class="result-item"><span class="label">净消耗体积 (V - V₀)</span><span class="value">${netVol.toFixed(2)} mL</span></div>
+                <div class="result-item" style="border-bottom:2px solid #1a7a8a; padding-top:8px; margin-top:4px;">
+                    <span class="label" style="font-weight:700; font-size:16px;">二氧化硫含量 (mg/kg 或 mg/L)</span>
+                    <span class="value" style="font-size:18px;">${so2Content.toFixed(3)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">GB 2760 限值</span>
+                    <span class="value">${limit.toFixed(0)} mg/kg</span>
+                </div>
+                <div class="result-item" style="border-top:2px solid #d0dce8; margin-top:6px; padding-top:10px;">
+                    <span class="label" style="font-weight:700;">判定结果</span>
+                    <span class="value ${statusClass}" style="font-size:18px;">${statusText}</span>
+                </div>
+                <div class="result-item" style="font-size:12px; color:#6a8a9a; border-top:1px dashed #c8dae5; margin-top:4px; padding-top:6px;">
+                    <span class="label">📌 方法性能</span>
+                    <span class="value" style="font-weight:400;">${lodInfo || '液体（50 mL）：检出限 1 mg/L，定量限 6 mg/L'}</span>
+                </div>
+            </div>
+        `;
+        document.getElementById('resultArea').innerHTML = resultHTML;
+        updateJSON();
+    }
+
+    // ============================================================
+    // JSON 导入导出
+    // ============================================================
+    function collectData() {
+        return {
+            method: 'GB 5009.34-2022 第一法 酸碱滴定法',
+            timestamp: new Date().toISOString(),
+            parameters: {
+                sample_mass: parseFloat(document.getElementById('sampleMass').value) || 0,
+                naoh_conc: parseFloat(document.getElementById('naohConc').value) || 0,
+                sample_vol: parseFloat(document.getElementById('sampleVol').value) || 0,
+                blank_vol: parseFloat(document.getElementById('blankVol').value) || 0,
+                limit: parseFloat(document.getElementById('limitVal').value) || 0
+            },
+            result: (() => {
+                const resDiv = document.getElementById('resultArea');
+                const contentMatch = resDiv.innerText.match(/二氧化硫含量.*?(\d+\.\d+)/);
+                const statusMatch = resDiv.innerText.includes('合格') ? 'pass' : (resDiv.innerText.includes('不合格') ? 'fail' : 'unknown');
+                return {
+                    content: contentMatch ? parseFloat(contentMatch[1]) : null,
+                    status: statusMatch
+                };
+            })()
+        };
+    }
+
+    function updateJSON() {
+        const data = collectData();
+        document.getElementById('jsonDisplay').textContent = JSON.stringify(data, null, 2);
+    }
+
+    function exportJSON() {
+        const data = collectData();
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `SO2_titration_${new Date().toISOString().slice(0,10)}.json`;
+        link.click();
+    }
+
+    function importJSON(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const json = JSON.parse(e.target.result);
+                const p = json.parameters;
+                if (p) {
+                    if (p.sample_mass !== undefined) document.getElementById('sampleMass').value = p.sample_mass;
+                    if (p.naoh_conc !== undefined) document.getElementById('naohConc').value = p.naoh_conc;
+                    if (p.sample_vol !== undefined) document.getElementById('sampleVol').value = p.sample_vol;
+                    if (p.blank_vol !== undefined) document.getElementById('blankVol').value = p.blank_vol;
+                    if (p.limit !== undefined) document.getElementById('limitVal').value = p.limit;
+                }
+                updateJSON();
+                alert('✅ 数据导入成功！');
+            } catch (err) {
+                alert('❌ JSON 解析失败：' + err.message);
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = '';
+    }
+
+    // 自动更新 JSON
+    document.addEventListener('input', function(e) {
+        if (e.target.closest('.form-group')) {
+            clearTimeout(window.jsonTimeout);
+            window.jsonTimeout = setTimeout(updateJSON, 400);
+        }
+    });
+
+    updateJSON();
+</script>
+</body>
+</html>

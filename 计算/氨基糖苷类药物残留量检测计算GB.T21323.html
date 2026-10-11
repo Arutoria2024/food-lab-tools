@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GB/T 21323-2007 氨基糖苷类药物残留 自动计算系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background: #f0f5fa;
+            padding: 25px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 28px 28px 40px;
+        }
+        h1 {
+            font-size: 26px;
+            color: #0a2f44;
+            border-left: 6px solid #1a7a8a;
+            padding-left: 18px;
+            margin-bottom: 4px;
+        }
+        .sub {
+            color: #4a6a7a;
+            font-size: 14px;
+            margin-bottom: 22px;
+            padding-left: 24px;
+            background: #ecf3f8;
+            display: inline-block;
+            padding: 6px 24px;
+            border-radius: 30px;
+        }
+
+        .card {
+            background: #f9fcff;
+            border: 1px solid #dce6ef;
+            border-radius: 16px;
+            padding: 20px 22px;
+            margin-bottom: 20px;
+        }
+        .card .card-title {
+            font-weight: 700;
+            font-size: 17px;
+            color: #1a4a6a;
+            border-bottom: 2px solid #d0dce8;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .card .card-title .badge {
+            background: #1a7a8a;
+            color: #fff;
+            font-size: 12px;
+            border-radius: 30px;
+            padding: 0 14px;
+            line-height: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 12px;
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2a4a5a;
+            min-width: 120px;
+        }
+        .form-group input,
+        .form-group select {
+            border: 1.5px solid #d0dce8;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 14px;
+            background: #fff;
+            flex: 1;
+            min-width: 80px;
+            max-width: 200px;
+            transition: 0.2s;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #1a7a8a;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 122, 138, 0.15);
+        }
+        .form-group .unit {
+            font-size: 12px;
+            color: #5a7a8a;
+        }
+        .form-group .hint {
+            font-size: 12px;
+            color: #7a8a9a;
+            margin-left: 4px;
+        }
+
+        .btn {
+            background: #1a7a8a;
+            color: #fff;
+            border: none;
+            padding: 9px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(26, 122, 138, 0.25);
+        }
+        .btn:hover {
+            background: #0e5f6e;
+            transform: translateY(-1px);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #1a7a8a;
+            border: 2px solid #1a7a8a;
+            box-shadow: none;
+            padding: 5px 14px;
+            font-size: 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-outline:hover {
+            background: #e6f3f7;
+        }
+
+        .result-box {
+            background: #eaf5f9;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-top: 14px;
+            border-left: 5px solid #1a7a8a;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dashed #c8dae5;
+            font-size: 14px;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-item .label {
+            color: #3a5a6a;
+        }
+        .result-item .value {
+            font-weight: 700;
+            color: #0a2f44;
+        }
+        .result-item .value.pass {
+            color: #1a8a4a;
+        }
+        .result-item .value.fail {
+            color: #c0392b;
+        }
+
+        .json-area {
+            background: #1e2a36;
+            color: #b8d4e0;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 160px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        .flex-end {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .drug-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 16px;
+            font-size: 13px;
+            color: #2a4a5a;
+            padding: 6px 0 6px 16px;
+        }
+        @media (max-width: 600px) {
+            .drug-list {
+                grid-template-columns: 1fr;
+            }
+        }
+        .drug-list .item {
+            padding: 2px 0;
+            border-bottom: 1px dashed #e8eef4;
+        }
+
+        .footnote {
+            margin-top: 28px;
+            font-size: 13px;
+            color: #5a6a7a;
+            border-top: 1px solid #dce6ef;
+            padding-top: 18px;
+            line-height: 1.8;
+        }
+        .footnote .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 12px;
+            padding: 1px 12px;
+            border-radius: 20px;
+            margin: 2px 4px 2px 0;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 16px;
+            }
+            .form-group label {
+                min-width: 70px;
+                font-size: 12px;
+            }
+            .form-group input {
+                font-size: 13px;
+                max-width: 100%;
+            }
+            .card {
+                padding: 14px 14px;
+            }
+            .drug-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 GB/T 21323-2007 · 氨基糖苷类药物残留</h1>
+        <div class="sub">外标法定量 · HPLC-MS/MS 定量计算</div>
+
+        <div class="card">
+            <div class="card-title">
+                📊 外标法定量计算
+                <span class="badge">峰面积外标法</span>
+            </div>
+
+            <div class="form-group">
+                <label>药物名称 :</label>
+                <select id="compound">
+                    <option value="壮观霉素">壮观霉素 (Spectinomycin)</option>
+                    <option value="潮霉素B">潮霉素B (Hygromycin B)</option>
+                    <option value="双氢链霉素">双氢链霉素 (Dihydrostreptomycin)</option>
+                    <option value="链霉素">链霉素 (Streptomycin)</option>
+                    <option value="丁胺卡那霉素">丁胺卡那霉素 (Amikacin)</option>
+                    <option value="卡那霉素">卡那霉素 (Kanamycin)</option>
+                    <option value="安普霉素">安普霉素 (Apramycin)</option>
+                    <option value="妥布霉素">妥布霉素 (Tobramycin)</option>
+                    <option value="庆大霉素">庆大霉素 (Gentamicin)</option>
+                    <option value="新霉素">新霉素 (Neomycin)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>标准品浓度 (c<sub>s</sub>) :</label>
+                <input type="number" id="stdConc" value="50.0" step="0.1">
+                <span class="unit">μg/L</span>
+            </div>
+            <div class="form-group">
+                <label>标准品峰面积 (A<sub>s</sub>) :</label>
+                <input type="number" id="stdArea" value="650000" step="1">
+            </div>
+            <div class="form-group">
+                <label>样品峰面积 (A<sub>x</sub>) :</label>
+                <input type="number" id="sampleArea" value="280000" step="1">
+            </div>
+            <div class="form-group">
+                <label>样品质量 (m) :</label>
+                <input type="number" id="sampleMass" value="2.0" step="0.01">
+                <span class="unit">g</span>
+            </div>
+            <div class="form-group">
+                <label>定容体积 (V) :</label>
+                <input type="number" id="finalVol" value="1.0" step="0.1">
+                <span class="unit">mL</span>
+            </div>
+            <div class="form-group">
+                <label>稀释倍数 (f) :</label>
+                <input type="number" id="dilution" value="1" step="1">
+                <span class="unit">（若未稀释则为1）</span>
+            </div>
+            <div class="form-group">
+                <label>MRL 限值 :</label>
+                <input type="number" id="mrlLimit" value="100" step="1">
+                <span class="unit">μg/kg</span>
+                <span class="hint">（肌肉组织参考限值）</span>
+            </div>
+
+            <button class="btn" onclick="calcAminoglycoside()" style="width:100%;">🧪 计算残留量</button>
+
+            <div id="resultArea" style="margin-top:14px;">
+                <!-- 动态填充 -->
+            </div>
+        </div>
+
+        <!-- 检测信息 -->
+        <div class="card">
+            <div class="card-title">📋 检测信息</div>
+            <div style="font-size:14px; color:#2a4a5a; line-height:1.8;">
+                <p><strong>📌 测定低限：</strong> 50.0 μg/kg</p>
+                <p><strong>🔬 检测方法：</strong> 高效液相色谱-串联质谱法（HPLC-MS/MS）</p>
+                <p><strong>⚖️ 定量方式：</strong> 外标峰面积法定量</p>
+                <p><strong>📊 质控要求：</strong> 加标回收率 70% ~ 120%，R² ≥ 0.990</p>
+            </div>
+            <div style="border-top:1px solid #d0dce8; padding-top:12px; margin-top:8px;">
+                <div style="font-weight:600; color:#1a4a6a; font-size:14px; margin-bottom:6px;">🧬 可检测药物（10种）</div>
+                <div class="drug-list">
+                    <div class="item">壮观霉素</div>
+                    <div class="item">潮霉素B</div>
+                    <div class="item">双氢链霉素</div>
+                    <div class="item">链霉素</div>
+                    <div class="item">丁胺卡那霉素</div>
+                    <div class="item">卡那霉素</div>
+                    <div class="item">安普霉素</div>
+                    <div class="item">妥布霉素</div>
+                    <div class="item">庆大霉素</div>
+                    <div class="item">新霉素</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JSON数据 -->
+        <div class="card" style="background:#f4f8fb;">
+            <div class="card-title">
+                📁 实验数据 (JSON)
+                <span style="margin-left:auto; display:flex; gap:8px;">
+                    <button class="btn-outline" onclick="exportJSON()">💾 导出 JSON</button>
+                    <button class="btn-outline" onclick="document.getElementById('jsonFileInput').click()">📂 导入 JSON</button>
+                    <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="importJSON(event)">
+                </span>
+            </div>
+            <div class="json-area" id="jsonDisplay">
+                // 点击「计算残留量」或「导出 JSON」后更新
+            </div>
+        </div>
+
+        <div class="footnote">
+            <strong>📌 编制依据：</strong><br>
+            <span class="tag">📖</span> GB/T 21323-2007《动物组织中氨基糖苷类药物残留量的测定 高效液相色谱-质谱/质谱法》<br>
+            <span class="tag">📖</span> 发布部门：国家质量监督检验检疫总局、国家标准化管理委员会<br>
+            <span class="tag">📊</span> 计算公式：X = (Aₓ × cₛ × V × f) / (Aₛ × m)<br>
+            <span class="tag">📋</span> 本标准适用于动物内脏、肌肉和水产品中10种氨基糖苷类药物残留量的测定<br>
+            <span class="tag">⚠️</span> MRL 限值参考：肌肉组织通常为 100 μg/kg，具体以目标市场要求为准
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 核心计算 — 外标法
+        // 公式：X = (Aₓ × cₛ × V) / (Aₛ × m)
+        // ============================================================
+        function calcAminoglycoside() {
+            const compound = document.getElementById('compound').value;
+            const cs = parseFloat(document.getElementById('stdConc').value);
+            const As = parseFloat(document.getElementById('stdArea').value);
+            const Ax = parseFloat(document.getElementById('sampleArea').value);
+            const m = parseFloat(document.getElementById('sampleMass').value);
+            const V = parseFloat(document.getElementById('finalVol').value);
+            const f = parseFloat(document.getElementById('dilution').value);
+            const limit = parseFloat(document.getElementById('mrlLimit').value);
+
+            if ([cs, As, Ax, m, V, f, limit].some(isNaN)) {
+                alert('请完整填写所有参数！');
+                return;
+            }
+            if (As === 0) {
+                alert('标准品峰面积不能为 0！');
+                return;
+            }
+
+            // 计算残留量 (μg/kg)
+            const content = (Ax * cs * V * f) / (As * m);
+            if (content < 0) {
+                alert('计算结果为负值，请检查峰面积或曲线参数！');
+                return;
+            }
+
+            const isPass = content <= limit;
+            const statusText = isPass ? '✅ 合格（未超标）' : '❌ 不合格（超标）';
+            const statusClass = isPass ? 'pass' : 'fail';
+
+            const resultHTML = `
+                <div class="result-box">
+                    <div class="result-item"><span class="label">药物</span><span class="value">${compound}</span></div>
+                    <div class="result-item"><span class="label">标准品浓度 (c<sub>s</sub>)</span><span class="value">${cs.toFixed(2)} μg/L</span></div>
+                    <div class="result-item"><span class="label">标准品峰面积 (A<sub>s</sub>)</span><span class="value">${As.toFixed(0)}</span></div>
+                    <div class="result-item"><span class="label">样品峰面积 (A<sub>x</sub>)</span><span class="value">${Ax.toFixed(0)}</span></div>
+                    <div class="result-item"><span class="label">样品质量 (m)</span><span class="value">${m.toFixed(2)} g</span></div>
+                    <div class="result-item"><span class="label">定容体积 (V)</span><span class="value">${V.toFixed(1)} mL</span></div>
+                    <div class="result-item"><span class="label">稀释倍数 (f)</span><span class="value">${f.toFixed(0)}</span></div>
+                    <div class="result-item" style="border-bottom:2px solid #1a7a8a; padding-top:8px; margin-top:4px;">
+                        <span class="label" style="font-weight:700; font-size:16px;">残留量 (μg/kg)</span>
+                        <span class="value" style="font-size:18px;">${content.toFixed(3)}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">MRL 限值 (μg/kg)</span>
+                        <span class="value">${limit.toFixed(0)}</span>
+                    </div>
+                    <div class="result-item" style="border-top:2px solid #d0dce8; margin-top:6px; padding-top:10px;">
+                        <span class="label" style="font-weight:700;">判定结果</span>
+                        <span class="value ${statusClass}" style="font-size:18px;">${statusText}</span>
+                    </div>
+                    <div class="result-item" style="font-size:12px; color:#6a8a9a; border-top:1px dashed #c8dae5; margin-top:4px; padding-top:6px;">
+                        <span class="label">📌 方法性能</span>
+                        <span class="value" style="font-weight:400;">测定低限 50.0 μg/kg</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('resultArea').innerHTML = resultHTML;
+            updateJSON();
+        }
+
+        // ============================================================
+        // JSON 导入导出
+        // ============================================================
+        function collectData() {
+            return {
+                method: 'GB/T 21323-2007 外标法',
+                timestamp: new Date().toISOString(),
+                compound: document.getElementById('compound').value,
+                parameters: {
+                    std_conc: parseFloat(document.getElementById('stdConc').value) || 0,
+                    std_area: parseFloat(document.getElementById('stdArea').value) || 0,
+                    sample_area: parseFloat(document.getElementById('sampleArea').value) || 0,
+                    sample_mass: parseFloat(document.getElementById('sampleMass').value) || 0,
+                    final_vol: parseFloat(document.getElementById('finalVol').value) || 0,
+                    dilution: parseFloat(document.getElementById('dilution').value) || 1,
+                    mrl_limit: parseFloat(document.getElementById('mrlLimit').value) || 0
+                },
+                result: (() => {
+                    const resDiv = document.getElementById('resultArea');
+                    const contentMatch = resDiv.innerText.match(/残留量.*?(\d+\.\d+)/);
+                    const statusMatch = resDiv.innerText.includes('合格') ? 'pass' :
+                        (resDiv.innerText.includes('不合格') ? 'fail' : 'unknown');
+                    return {
+                        content: contentMatch ? parseFloat(contentMatch[1]) : null,
+                        status: statusMatch
+                    };
+                })()
+            };
+        }
+
+        function updateJSON() {
+            const data = collectData();
+            document.getElementById('jsonDisplay').textContent = JSON.stringify(data, null, 2);
+        }
+
+        function exportJSON() {
+            const data = collectData();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `aminoglycoside_${new Date().toISOString().slice(0,10)}.json`;
+            link.click();
+        }
+
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    const p = json.parameters;
+                    if (p) {
+                        if (p.std_conc !== undefined) document.getElementById('stdConc').value = p.std_conc;
+                        if (p.std_area !== undefined) document.getElementById('stdArea').value = p.std_area;
+                        if (p.sample_area !== undefined) document.getElementById('sampleArea').value = p.sample_area;
+                        if (p.sample_mass !== undefined) document.getElementById('sampleMass').value = p.sample_mass;
+                        if (p.final_vol !== undefined) document.getElementById('finalVol').value = p.final_vol;
+                        if (p.dilution !== undefined) document.getElementById('dilution').value = p.dilution;
+                        if (p.mrl_limit !== undefined) document.getElementById('mrlLimit').value = p.mrl_limit;
+                    }
+                    if (json.compound) {
+                        const select = document.getElementById('compound');
+                        for (let opt of select.options) {
+                            if (opt.value === json.compound) { select.value = json.compound; break; }
+                        }
+                    }
+                    updateJSON();
+                    alert('✅ 数据导入成功！');
+                } catch (err) {
+                    alert('❌ JSON 解析失败：' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // 自动更新 JSON
+        document.addEventListener('input', function(e) {
+            if (e.target.closest('.form-group') || e.target.closest('select')) {
+                clearTimeout(window.jsonTimeout);
+                window.jsonTimeout = setTimeout(updateJSON, 400);
+            }
+        });
+
+        updateJSON();
+    </script>
+</body>
+</html>

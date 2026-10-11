@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GB/T 5750.4-2023 完整实验操作规程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #eef2f7;
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            padding: 28px 24px 40px;
+        }
+        h1 {
+            font-size: 26px;
+            text-align: center;
+            color: #0a2f44;
+            border-bottom: 3px solid #2a7f8a;
+            padding-bottom: 12px;
+            margin-bottom: 4px;
+        }
+        .subhead {
+            text-align: center;
+            color: #4a5a6a;
+            font-size: 14px;
+            margin-bottom: 28px;
+            background: #eaf0f5;
+            padding: 8px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .subhead span { font-weight: 600; color: #0f4a6a; }
+
+        /* 折叠面板 */
+        .indicator-details {
+            margin-bottom: 18px;
+            border: 1.5px solid #c8d6e5;
+            border-radius: 14px;
+            background: #fbfdff;
+            transition: all 0.15s;
+            overflow: hidden;
+        }
+        .indicator-details:hover { border-color: #2a7f8a; }
+        .indicator-summary {
+            font-weight: 700;
+            font-size: 17px;
+            color: #0a2f44;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 22px;
+            user-select: none;
+            background: #f6faff;
+            border-radius: 12px 12px 0 0;
+        }
+        .indicator-summary::-webkit-details-marker { display: none; }
+        .indicator-summary:hover { background: #ecf5fa; }
+        .indicator-summary .badge-method {
+            background: #2a7f8a;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 0 14px;
+            line-height: 26px;
+            border-radius: 30px;
+            flex-shrink: 0;
+        }
+        .indicator-summary .arrow-icon {
+            margin-left: auto;
+            font-size: 14px;
+            color: #7f8c8d;
+            transition: transform 0.25s;
+        }
+        .indicator-details[open] .indicator-summary .arrow-icon {
+            transform: rotate(180deg);
+        }
+        .indicator-body {
+            padding: 10px 22px 24px;
+            border-top: 1px dashed #dce5ed;
+        }
+        .section-title {
+            font-weight: 700;
+            font-size: 15px;
+            color: #1a4a6a;
+            margin: 16px 0 8px 0;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #d4e2e9;
+        }
+        .step-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .step-list li {
+            padding: 4px 0 4px 24px;
+            position: relative;
+            font-size: 13.5px;
+            line-height: 1.7;
+            color: #2a3a4a;
+        }
+        .step-list li::before {
+            content: "▸";
+            position: absolute;
+            left: 4px;
+            color: #2a7f8a;
+            font-weight: 700;
+        }
+        .step-list li strong {
+            color: #0a2f44;
+        }
+        .step-list li .highlight {
+            background: #fef3d6;
+            padding: 0 4px;
+            border-radius: 3px;
+            font-weight: 600;
+            color: #9e6f1a;
+        }
+        .step-list li .warn {
+            color: #b33;
+            font-weight: 600;
+        }
+        .formula {
+            background: #f4f8fb;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            margin: 6px 0;
+            display: inline-block;
+            border-left: 4px solid #2a7f8a;
+        }
+        .table-wrap {
+            overflow-x: auto;
+            margin: 8px 0 12px;
+        }
+        .table-wrap table {
+            border-collapse: collapse;
+            font-size: 13px;
+            width: 100%;
+            min-width: 300px;
+        }
+        .table-wrap th, .table-wrap td {
+            border: 1px solid #c8d6e5;
+            padding: 6px 12px;
+            text-align: center;
+        }
+        .table-wrap th {
+            background: #eaf0f5;
+            font-weight: 700;
+        }
+        .footnote {
+            margin-top: 28px;
+            font-size: 13px;
+            color: #5a6a7a;
+            border-top: 1px solid #e0e8ee;
+            padding-top: 18px;
+            line-height: 1.8;
+        }
+        .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 12px;
+            padding: 1px 12px;
+            border-radius: 20px;
+            margin: 2px 4px 2px 0;
+        }
+        @media (max-width: 640px) {
+            .container { padding: 16px 12px; }
+            .indicator-summary { font-size: 15px; padding: 12px 16px; }
+            .indicator-body { padding: 8px 12px 18px; }
+            .step-list li { font-size: 13px; padding-left: 20px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>💧 GB/T 5750.4-2023 · 感官性状与物理指标</h1>
+    <div style="text-align:center;">
+        <div class="subhead">📋 生活饮用水标准检验方法 第4部分 <span>| 完整操作规程（共10项）</span></div>
+    </div>
+
+    <!-- ========== 1. 色度 ========== -->
+    <details class="indicator-details">
+        <summary class="indicator-summary">
+            <span>🎨 色度</span>
+            <span class="badge-method">铂-钴标准比色法</span>
+            <span class="arrow-icon">▼</span>
+        </summary>
+        <div class="indicator-body">
+            <div class="section-title">1. 试剂准备</div>
+            <ul class="step-list">
+                <li><strong>纯水</strong>：蒸馏水经 <span class="highlight">0.22μm滤膜</span> 过滤。</li>
+                <li><strong>铂-钴标准溶液（500度）</strong>：称取 <span class="highlight">1.246g 氯铂酸钾（K₂PtCl₆）</span> 和 <span class="highlight">1.000g 干燥的六水合氯化钴（CoCl₂·6H₂O）</span>，溶于100mL纯水，加入100mL盐酸（ρ₂₀=1.19g/mL），用纯水定容至1000mL，混匀。</li>
+            </ul>
+            <div class="section-title">2. 仪器设备</div>
+            <ul class="step-list">
+                <li>成套高型无色具塞比色管：<span class="highlight">50mL</span></li>
+                <li>离心机（用于浑浊水样）</li>
+            </ul>
+            <div class="section-title">3. 样品采集与保存</div>
+            <ul class="step-list"><li>按GB/T 5750.2执行，样品应尽快测定，避免颜色变化。</li></ul>
+            <div class="section-title">4. 试验步骤</div>
+            <ul class="step-list">
+                <li><strong>4.1 样品处理</strong>：取 <span class="highlight">50mL</span> 透明水样于比色管中。若浑浊，先离心或过滤。若色度过高，可取少量水样稀释后比色，结果乘以稀释倍数。</li>
+                <li><strong>4.2 标准系列配制</strong>：取11支比色管，分别加入铂-钴标准溶液 <span class="highlight">0, 0.50, 1.00, 1.50, 2.00, 2.50, 3.00, 3.50, 4.00, 4.50, 5.00 mL</span>，加纯水至50mL刻度，摇匀，得到色度 <span class="highlight">0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50度</span> 的标准色列。</li>
+                <li><strong>4.3 比色</strong>：将水样与标准色列在白色背景下 <span class="highlight">目视比较</span>，找出最接近的色度。若色调不一致，描述为“异色”。</li>
+            </ul>
+            <div class="section-title">5. 结果计算</div>
+            <ul class="step-list">
+                <li>色度（度）=（标准溶液用量mL × 500）/ 水样体积mL。若稀释，结果乘以稀释倍数。</li>
+                <li><span class="highlight">最低检测色度：5度</span>，测定范围5～50度。</li>
+            </ul>
+            <div class="section-title">6. 质量要求</div>
+            <ul class="step-list"><li>目视比色应避免视觉疲劳，平行样测定偏差不超过10%。</li></ul>
+        </div>
+    </details>
+
+    <!-- ========== 2. 浑浊度 ========== -->
+    <details class="indicator-details">
+        <summary class="indicator-summary">
+            <span>🌫️ 浑浊度</span>
+            <span class="badge-method">散射法（福尔马肼标准）</span>
+            <span class="arrow-icon">▼</span>
+        </summary>
+        <div class="indicator-body">
+            <div class="section-title">1. 试剂准备</div>
+            <ul class="step-list">
+                <li><strong>纯水</strong>：经0.22μm滤膜过滤。</li>
+                <li><strong>硫酸肼溶液（10g/L）</strong>：称取 <span class="highlight">1.000g 硫酸肼</span>，溶于纯水并定容至100mL。</li>
+                <li><strong>六亚甲基四胺溶液（100g/L）</strong>：称取 <span class="highlight">10.00g 六亚甲基四胺</span>，溶于纯水并定容至100mL。</li>
+                <li><strong>福尔马肼标准混悬液（400NTU）</strong>：分别吸取硫酸肼溶液和六亚甲基四胺溶液各 <span class="highlight">5.00mL</span> 于100mL容量瓶，混匀，25℃±3℃放置24h，加纯水至刻度，混匀。可使用约1个月。</li>
+                <li><strong>福尔马肼标准使用液（40NTU）</strong>：将400NTU标准液用纯水稀释10倍。使用时再根据需要稀释。</li>
+            </ul>
+            <div class="section-title">2. 仪器设备</div>
+            <ul class="step-list"><li>散射式浑浊度仪（符合ISO 7027）</li></ul>
+            <div class="section-title">3. 样品采集与保存</div>
+            <ul class="step-list"><li>用清洁玻璃瓶采集，避免光照，尽快测定。</li></ul>
+            <div class="section-title">4. 试验步骤</div>
+            <ul class="step-list">
+                <li><strong>4.1 仪器校准</strong>：按仪器说明书，用零浊度水和福尔马肼标准液进行校准。</li>
+                <li><strong>4.2 样品测定</strong>：将摇匀的水样（无气泡）倒入测定管，放入仪器读取 <span class="highlight">NTU值</span>。若浑浊度超过40NTU，用纯水稀释后测定，结果乘以稀释倍数。</li>
+            </ul>
+            <div class="section-title">5. 结果计算</div>
+            <ul class="step-list"><li>直接读取NTU，稀释后乘以倍数。<span class="highlight">最低检测值：0.5 NTU</span>。</li></ul>
+            <div class="section-title">6. 注意事项</div>
+            <ul class="step-list"><li>硫酸肼具致癌毒性，操作时戴手套、口罩，避免吸入。</li></ul>
+        </div>
+    </details>
+
+    <!-- ========== 3. 臭和味 ========== -->
+    <details class="indicator-details">
+        <summary class="indicator-summary">
+            <span>👃</span> 臭和味
+            <span class="badge-method">嗅气和尝味法 / 嗅阈值法 / 嗅觉层次分析法</span>
+            <span class="arrow-icon">▼</span>
+        </summary>
+        <div class="indicator-body">
+            <div class="section-title">方法一：嗅气和尝味法（6.1）</div>
+            <ul class="step-list">
+                <li><strong>仪器</strong>：250mL锥形瓶。</li>
+                <li><strong>步骤</strong>：取100mL水样于锥形瓶，振摇后闻气味；同时取少量品尝（仅限无毒水样）。按 <span class="highlight">六级强度</span>（0无～5很强）记录。再将水样加热至沸腾，稍冷后重复嗅气和尝味。</li>
+                <li>注：分析人员需满足无感冒、无异味等要求。</li>
+            </ul>
+            <div class="section-title">方法二：嗅阈值法（6.2）</div>
+            <ul class="step-list">
+                <li><strong>试剂</strong>：无臭水、2-甲基异戊醇标准品、土臭素标准品、硫代硫酸钠溶液（70g/L）等。</li>
+                <li><strong>步骤</strong>：取150mL水样于250mL具塞锥形瓶，60℃水浴加热5min，轻摇后闻气味。若有味，则用无臭水稀释，确定刚能闻出臭味时的稀释倍数，即嗅阈值（TON）。</li>
+                <li><strong>计算</strong>：TON = (水样体积+无臭水体积)/水样体积。多人测定取几何均数。</li>
+                <li><span class="highlight">精密度</span>：生活饮用水RSD 0%～3.6%，水源水0%～6.7%。</li>
+            </ul>
+            <div class="section-title">方法三：嗅觉层次分析法（6.3）</div>
+            <ul class="step-list">
+                <li><strong>原理</strong>：3～5人组成评价小组，45℃水浴加热水样，闻臭气，单独评价异臭类型和强度（7级），再讨论确定。</li>
+                <li><strong>试剂</strong>：无臭水、已醛、2,6-壬二烯醛、土臭素、2-甲基异戊醇等标准品。</li>
+                <li><strong>步骤</strong>：取200mL水样于样品瓶，45℃水浴10～15min，闻测。记录异臭类型和强度等级（0～12级）。</li>
+                <li><strong>质量控制</strong>：每月进行加标试验，参考致臭物质（土霉味、黄瓜味等），相关系数应＞0.80。</li>
+            </ul>
+        </div>
+    </details>
+
+    <!-- ========== 4. 肉眼可见物 ========== -->
+    <details class="indicator-details">
+        <summary class="indicator-summary">
+            <span>👀</span> 肉眼可见物
+            <span class="badge-method">直接观察法</span>
+            <span class="arrow-icon">▼</span>
+        </summary>
+        <div class="indicator-body">
+            <div class="section-title">1. 仪器设备</div>
+            <ul class="step-list"><li>洁净透明的锥形瓶或烧杯。</li></ul>
+            <div class="section-title">2. 试验步骤</div>
+            <ul class="step-list">
+                <li>将水样摇匀，倒入透明容器中，在 <span class="highlight">光线明亮处</span> 迎光直接观察。</li>
+                <li>记录所见 <span class="highlight">悬浮物、沉淀物、浮游生物</span> 等，描述其形状、颜色、数量。</li>
+                <li>结果报告：“有”或“无”肉眼可见物。</li>
+            </ul>
+        </div>
+    </details>
+
+    <!-- ========== 5. pH值 ========== -->
+    <details class="indicator-details">
+        <summary class="indicator-summary">
+            <span>⚗️</span> pH值
+            <span class="badge-method">玻璃电极法（8.1）</span>
+            <span class="arrow-icon">▼</span>
+        </summary>
+        <div class="indicator-body">
+            <div class="section-title">1. 试剂准备</div>
+            <ul class="step-list">
+                <li><strong>标准缓冲溶液</strong>（现用现配或使用有证标准物质）：
+                    <ul style="list-style:none; padding-left:20px; margin-top:4px;">
+                        <li>• <strong>邻苯二甲酸氢钾</strong>（pH 4.00 @20℃）：称取10.21g于105℃烘干2h的邻苯二甲酸氢钾，溶于水定容至1000mL。</li>
+                        <li>• <strong>混合磷酸盐</strong>（pH 6.88 @20℃）：称取3.40g磷酸二氢钾和3.55g磷酸氢二钠，溶于水定容至1000mL。</li>
+                        <li>• <strong>四硼酸钠</strong>（pH 9.22 @20℃）：称取3.81g十水合四硼酸钠，溶于水定容至1000mL。</li>
+                    </ul>
+                </li>
+                <li>配制缓冲溶液所用纯水应为 <span class="highlight">新煮沸并放冷的蒸馏水</span>，储存于聚乙烯瓶，可稳定1～2个月。</li>
+            </ul>
+            <div class="section-title">2. 仪器设备</div>
+            <ul class="step-list">
+                <li>精密酸度计（精度≤0.02）</li>
+                <li>pH玻璃电极、饱和甘汞电极</li>
+                <li>温度计（0～50℃）</li>
+                <li>塑料烧杯（50mL）</li>
+            </ul>
+            <div class="section-title">3. 试验步骤</div>
+            <ul class="step-list">
+                <li><strong>3.1 电极处理</strong>：玻璃电极在使用前应放入纯水中浸泡 <span class="highlight">24h以上</span>。</li>
+                <li><strong>3.2 仪器校正</strong>：开机预热30min，选用一种与被测水样pH接近的标准缓冲溶液进行 <span class="highlight">定位</span>，再用另一标准液 <span class="highlight">复定位</span>（如pH<7用邻苯二甲酸氢钾定位，四硼酸钠复定位；pH>7反之）。</li>
+                <li><strong>3.3 测定</strong>：用纯水淋洗电极，再用水样淋洗6～8次，插入水样中，1min后读取pH值，精确至 <span class="highlight">0.01</span>。</li>
+            </ul>
+            <div class="section-title">4. 注意事项</div>
+            <ul class="step-list">
+                <li>pH值宜 <span class="highlight">现场测定</span>，水样保存时间短。</li>
+                <li>甘汞电极内应保持有氯化钾晶体，保证饱和状态。</li>
+                <li>pH>9时需使用高碱玻璃电极。</li>
+            </ul>
+        </div>
+    </details>
+
+    <!-- ========== 6. 电导率 ========== -->
+    <details class="indicator-details">
+        <summary class="indicator-summary">
+            <span>⚡</span> 电导率
+            <span class="badge-method">电极法（9.1）</span>
+            <span class="arrow-icon">▼</span>
+        </summary>
+        <div class="indicator-body">
+            <div class="section-title">1. 试剂准备</div>
+            <ul class="step-list">
+                <li><strong>氯化钾标准溶液 [c(KCl)=0.01000mol/L]</strong>：称取 <span class="highlight">0.7456g</span> 优级纯氯化钾（110℃烘干），溶于新煮沸冷却的纯水中（电导率＜1μS/cm），于25℃定容至1000mL。此溶液25℃电导率为 <span class="highlight">1413 μS/cm</span>，储于塑料瓶中。</li>
+            </ul>
+            <div class="section-title">2. 仪器设备</div>
+            <ul class="step-list">
+                <li>电导仪（带温度补偿）</li>
+                <li>恒温水浴（控温±0.1℃）</li>
+            </ul>
+            <div class="section-title">3. 试验步骤</div>
+            <ul class="step-list">
+                <li><strong>3.1 恒温</strong>：将氯化钾标准溶液和水样同置于25℃±0.1℃水浴中加热30min。</li>
+                <li><strong>3.2 测定电导池常数</strong>：用氯化钾溶液冲洗电极和电导池，测量其电导 G<sub>KCl</sub>，计算电导池常数 C = 1413 / G<sub>KCl</sub>。</li>
+                <li><strong>3.3 测定水样</strong>：用水样冲洗电极，测量水样电导 G<sub>s</sub>，计算电导率 γ = C × G<sub>s</sub>（μS/cm）。</li>
+            </ul>
+            <div class="section-title">4. 结果报告</div>
+            <ul class="step-list"><li>报告25℃时的电导率（μS/cm），非25℃需温度校正。</li></ul>
+        </div>
+    </details>
+
+    <!-- ========== 7. 总硬度 ========== -->
+    <details class="indicator-details">
+        <summary class="indicator-summary">
+            <span>🧂</span> 总硬度
+            <span class="badge-method">EDTA滴定法（10.1）</span>
+            <span class="arrow-icon">▼</span>
+        </summary>
+        <div class="indicator-body">
+            <div class="section-title">1. 试剂准备</div>
+            <ul class="step-list">
+                <li><strong>缓冲溶液（pH=10）</strong>：称取16.9g氯化铵溶于143mL氨水（ρ=0.88g/mL），另取0.780g MgSO₄·7H₂O和1.178g Na₂EDTA·2H₂O溶于50mL水，加2mL上述氨性溶液和5滴铬黑T，用EDTA滴至纯蓝色，合并两液，用水稀释至250mL。</li>
+                <li><strong>铬黑T指示剂（5g/L）</strong>：0.5g铬黑T溶于95%乙醇，定容至100mL，冰箱保存，可稳定1个月。</li>
+                <li><strong>EDTA标准溶液 [c≈0.01mol/L]</strong>：称取3.72g Na₂EDTA·2H₂O溶于水定容至1000mL，用锌标准溶液标定。</li>
+                <li><strong>硫化钠溶液（50g/L）</strong>、<strong>盐酸羟胺溶液（10g/L）</strong>、<strong>氰化钾溶液（100g/L）</strong>（剧毒！）用于消除干扰。</li>
+            </ul>
+            <div class="section-title">2. 仪器设备</div>
+            <ul class="step-list"><li>150mL锥形瓶，10mL或25mL滴定管。</li></ul>
+            <div class="section-title">3. 试验步骤</div>
+            <ul class="step-list">
+                <li><strong>3.1 取样</strong>：取 <span class="highlight">50.0mL</span> 水样（硬度高时取适量稀释至50mL；硬度低时取100mL）于锥形瓶。</li>
+                <li><strong>3.2 滴定</strong>：加入1～2mL缓冲液，5滴铬黑T指示剂，立即用EDTA标准溶液滴定，溶液由 <span class="highlight">紫红色</span> 变为 <span class="highlight">纯蓝色</span> 为终点，同时做空白试验。</li>
+                <li><strong>3.3 干扰消除</strong>：若终点延迟或变色不敏锐，可另取水样加入盐酸羟胺和硫化钠（或氰化钾）后再滴定。</li>
+            </ul>
+            <div class="section-title">4. 结果计算</div>
+            <ul class="step-list">
+                <li>总硬度（以CaCO₃计，mg/L）= (V₁－V₀) × c × 100.09 × 1000 / V</li>
+                <li>其中 V₁ 为样品消耗EDTA体积（mL），V₀ 空白体积，c 为EDTA浓度（mol/L），V 为水样体积（mL）。</li>
+                <li><span class="highlight">最低检测质量浓度：1.0 mg/L（取50mL）</span></li>
+            </ul>
+            <div class="section-title">5. 警示</div>
+            <ul class="step-list"><li class="warn">⚠️ 氰化钾溶液剧毒！操作时严格戴手套、护目镜，在通风橱内进行，废液需专门处理。</li></ul>
+        </div>
+    </details>
+
+    <!-- ========== 8. 溶解性总固体 ========== -->
+    <details class="indicator-details">
+        <summary class="indicator-summary">
+            <span>⚖️</span> 溶解性总固体
+            <span class="badge-method">称量法（105℃或180℃烘干）</span>
+            <span class="arrow-icon">▼</span>
+        </summary>
+        <div class="indicator-body">
+            <div class="section-title">1. 试剂准备</div>
+            <ul class="step-list"><li><strong>碳酸钠溶液（10g/L）</strong>（用于180℃烘干法）：称取10g无水碳酸钠溶于水定容至1000mL。</li></ul>
+            <div class="section-title">2. 仪器设备</div>
+            <ul class="step-list">
+                <li>天平（分辨力0.0001g）</li>
+                <li>水浴锅、电热恒温干燥箱</li>
+                <li>100mL瓷蒸发皿、干燥器（硅胶）</li>
+                <li>中速定量滤纸或0.45μm滤膜及滤器</li>
+            </ul>
+            <div class="section-title">3. 试验步骤（105℃烘干）</div>
+            <ul class="step-list">
+                <li><strong>3.1 恒重蒸发皿</strong>：将蒸发皿洗净，于105℃±3℃烘30min，干燥器冷却30min，称量，重复至恒重（两次称量差≤0.0004g）。</li>
+                <li><strong>3.2 过滤水样</strong>：将水样上清液过滤。</li>
+                <li><strong>3.3 蒸发</strong>：吸取 <span class="highlight">100mL</span> 滤液于蒸发皿，水浴蒸干。</li>
+                <li><strong>3.4 烘干称量</strong>：将蒸发皿移入105℃烘箱1h，取出冷却30min称量，再烘30min至恒重。</li>
+            </ul>
+            <div class="section-title">4. 试验步骤（180℃烘干）</div>
+            <ul class="step-list">
+                <li>蒸发皿在180℃±3℃烘干至恒重。</li>
+                <li>取100mL水样，精确加入 <span class="highlight">25.0mL 碳酸钠溶液</span>，混匀，同时做空白（加25.0mL碳酸钠溶液）。蒸干后180℃烘干至恒重，结果减去空白质量。</li>
+            </ul>
+            <div class="section-title">5. 结果计算</div>
+            <ul class="step-list">
+                <li>ρ(TDS) = (m₁－m₀) × 1000 / V （mg/L）</li>
+                <li>m₁：蒸发皿+残渣质量（mg），m₀：蒸发皿质量（mg），V：水样体积（mL）。</li>
+            </ul>
+        </div>
+    </details>
+
+    <!-- ========== 9. 挥发酚类 ========== -->
+    <details class="indicator-details">
+        <summary class="indicator-summary">
+            <span>🧪</span> 挥发酚类
+            <span class="badge-method">4-氨基安替比林萃取分光光度法（12.1）</span>
+            <span class="arrow-icon">▼</span>
+        </summary>
+        <div class="indicator-body">
+            <div class="section-title">1. 试剂准备</div>
+            <ul class="step-list">
+                <li><strong>无酚纯水</strong>：于水中加NaOH至pH>12，蒸馏。</li>
+                <li><strong>硫酸铜溶液（100g/L）</strong>：10g CuSO₄·5H₂O溶于水定容至100mL。</li>
+                <li><strong>氨水-氯化铵缓冲液（pH9.8）</strong>：20g NH₄Cl溶于100mL氨水（ρ=0.88g/mL）。</li>
+                <li><strong>4-氨基安替比林溶液（20g/L）</strong>：2.0g 4-AAP溶于水定容至100mL，棕色瓶，现配。</li>
+                <li><strong>铁氰化钾溶液（80g/L）</strong>：8.0g K₃Fe(CN)₆溶于水定容至100mL，棕色瓶，现配。</li>
+                <li><strong>酚标准储备溶液</strong>：精制苯酚配制并标定，或使用有证标准物质。</li>
+                <li><strong>酚标准使用液（1.00μg/mL）</strong>：临用前稀释。</li>
+                <li><strong>溴酸钾-溴化钾溶液 [c(1/6KBrO₃)=0.1mol/L]</strong>、淀粉溶液（5g/L）、硫代硫酸钠标准溶液（0.0500mol/L）等用于标定。</li>
+            </ul>
+            <div class="section-title">2. 仪器设备</div>
+            <ul class="step-list">
+                <li>500mL全玻璃蒸馏器（避免橡胶连接）</li>
+                <li>500mL分液漏斗、10mL具塞比色管</li>
+                <li>分光光度计</li>
+            </ul>
+            <div class="section-title">3. 试验步骤</div>
+            <ul class="step-list">
+                <li><strong>3.1 蒸馏</strong>：取 <span class="highlight">250mL</span> 水样于蒸馏瓶，加甲基橙指示剂，用硫酸调至橙色（pH<4），加5mL硫酸铜和数粒玻璃珠，加热蒸馏，收集 <span class="highlight">250mL</span> 馏出液。</li>
+                <li><strong>3.2 显色萃取</strong>：将馏出液转入分液漏斗。另取标准使用液 0, 0.50, 1.00, 2.00, 4.00, 6.00, 8.00, 10.00 mL 于盛有100mL纯水的分液漏斗中，补加水至250mL。各加2mL缓冲液，1.50mL 4-AAP溶液，混匀，再加1.50mL铁氰化钾，混匀，静置10min。加入10.0mL三氯甲烷，振摇2min，静置分层。</li>
+                <li><strong>3.3 测定</strong>：将三氯甲烷层放入干燥比色管，于 <span class="highlight">460nm</span> 波长，2cm比色皿，以三氯甲烷为参比，测吸光度。</li>
+                <li><strong>3.4 标准曲线</strong>：绘制标准曲线，查出样品中酚的质量（μg）。</li>
+            </ul>
+            <div class="section-title">4. 结果计算</div>
+            <ul class="step-list">
+                <li>挥发酚（以苯酚计，mg/L）= m / V（m为从标准曲线查得质量，μg；V为水样体积，mL）。</li>
+                <li><span class="highlight">最低检测质量浓度：0.002 mg/L（取250mL）</span></li>
+            </ul>
+            <div class="section-title">5. 干扰消除</div>
+            <ul class="step-list"><li>硫化物、余氯、苯胺类、石油等干扰；蒸馏可分离硫化物，余氯加硫酸亚铁或亚砷酸钠还原，苯胺在酸性下不被蒸出，石油可用有机溶剂萃取除去。</li></ul>
+        </div>
+    </details>
+
+    <!-- ========== 10. 阴离子合成洗涤剂 ========== -->
+    <details class="indicator-details">
+        <summary class="indicator-summary">
+            <span>🧼</span> 阴离子合成洗涤剂
+            <span class="badge-method">亚甲基蓝分光光度法（13.1）</span>
+            <span class="arrow-icon">▼</span>
+        </summary>
+        <div class="indicator-body">
+            <div class="section-title">1. 试剂准备</div>
+            <ul class="step-list">
+                <li><strong>亚甲基蓝溶液（0.03g/L）</strong>：称取30mg 三水合亚甲基蓝，溶于500mL纯水，加6.8mL硫酸和50g NaH₂PO₄·H₂O，定容至1000mL。</li>
+                <li><strong>洗涤液</strong>：6.8mL硫酸和50g NaH₂PO₄·H₂O溶于水定容至1000mL。</li>
+                <li><strong>氢氧化钠溶液（40g/L）</strong>、<strong>硫酸溶液 [c(1/2H₂SO₄)=0.5mol/L]</strong>。</li>
+                <li><strong>十二烷基苯磺酸钠（DBS）标准储备液（1mg/mL）</strong>：称取0.500g DBS溶于水定容至500mL（或使用有证标准物质）。</li>
+                <li><strong>DBS标准使用液（10μg/mL）</strong>：取储备液100.0mL定容至1000mL。</li>
+                <li><strong>酚酞溶液（1g/L）</strong>。</li>
+                <li><strong>三氯甲烷</strong>（萃取溶剂）。</li>
+            </ul>
+            <div class="section-title">2. 仪器设备</div>
+            <ul class="step-list">
+                <li>分光光度计</li>
+                <li>25mL比色管</li>
+                <li>125mL分液漏斗</li>
+            </ul>
+            <div class="section-title">3. 试验步骤</div>
+            <ul class="step-list">
+                <li><strong>3.1 标准系列</strong>：取7个分液漏斗，分别加入DBS标准使用液 0, 0.50, 1.00, 2.00, 3.00, 4.00, 5.00 mL，用水补至50mL。</li>
+                <li><strong>3.2 样品</strong>：取 <span class="highlight">50.0mL</span> 水样（若浓度过高则稀释至50mL，若过低则增加体积并使标准系列一致）。</li>
+                <li><strong>3.3 显色萃取</strong>：向样品和标准系列中各加3滴酚酞，用NaOH调至碱性，再用硫酸调至红色刚褪。加入5mL三氯甲烷和10mL亚甲基蓝溶液，剧烈振摇30s，静置分层。</li>
+                <li><strong>3.4 洗涤</strong>：将三氯甲烷相转入第二套分液漏斗，加入25mL洗涤液，振摇30s，静置。</li>
+                <li><strong>3.5 测量</strong>：将三氯甲烷相放入25mL比色管，再用5mL三氯甲烷重复萃取两次，合并萃取液，用三氯甲烷定容至刻度。于 <span class="highlight">650nm</span>，3cm比色皿，以三氯甲烷为参比，测吸光度。</li>
+            </ul>
+            <div class="section-title">4. 结果计算</div>
+            <ul class="step-list">
+                <li>阴离子合成洗涤剂（以DBS计，mg/L）= m / V（m为从标准曲线查得质量，μg；V为水样体积，mL）。</li>
+                <li><span class="highlight">最低检测质量浓度：0.050 mg/L（取100mL）</span></li>
+            </ul>
+            <div class="section-title">5. 干扰及消除</div>
+            <ul class="step-list"><li>酚、有机硫酸盐、磷酸盐、大量氯化物、硝酸盐等干扰。本方法可通过洗涤液减少干扰。</li></ul>
+            <div class="section-title">6. 其他方法</div>
+            <ul class="step-list">
+                <li>标准中还包括 <strong>二氮杂菲萃取分光光度法（13.2）</strong>、<strong>流动注射法（13.3）</strong>、<strong>连续流动法（13.4）</strong>，可参考标准原文选择。</li>
+            </ul>
+        </div>
+    </details>
+
+    <!-- ===== 底部说明 ===== -->
+    <div class="footnote">
+        <strong>📌 方法说明与安全警示：</strong><br />
+        <span class="tag">📖</span> 本规程依据 <strong>GB/T 5750.4-2023</strong> 编制，涵盖10项感官性状与物理指标。<br />
+        <span class="tag">⚠️</span> 涉及 <strong>氰化钾</strong>（总硬度）和 <strong>三氯甲烷</strong>（挥发酚、洗涤剂）等有毒试剂，操作须在通风橱内进行，佩戴防护手套、护目镜，废液按危险废物处置。<br />
+        <span class="tag">🧪</span> 挥发酚类、阴离子合成洗涤剂另有 <strong>流动注射法</strong> 和 <strong>连续流动法</strong>，如需自动化分析可选用。<br />
+        <span class="tag">🌡️</span> pH值、电导率宜 <strong>现场测定</strong>；溶解性总固体烘干温度可根据样品选择105℃或180℃。
+    </div>
+</div>
+</body>
+</html>

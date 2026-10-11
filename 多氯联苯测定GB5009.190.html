@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GB 5009.190-2014 食品中指示性多氯联苯测定 实验流程图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background: #f0f5fa;
+            padding: 25px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1300px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 30px 30px 40px;
+        }
+        h1 {
+            font-size: 26px;
+            color: #0a2f44;
+            border-left: 6px solid #1a7a8a;
+            padding-left: 18px;
+            margin-bottom: 4px;
+        }
+        .sub {
+            color: #4a6a7a;
+            font-size: 14px;
+            margin-bottom: 22px;
+            padding-left: 24px;
+            background: #ecf3f8;
+            display: inline-block;
+            padding: 6px 24px;
+            border-radius: 30px;
+        }
+        .note-box {
+            background: #fef9e6;
+            border: 1px solid #f0dca0;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6a5a1a;
+            line-height: 1.8;
+        }
+        .note-box strong {
+            color: #8a6d1a;
+        }
+
+        /* 流程图 */
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 20px 10px;
+            background: #f8fbfe;
+            border-radius: 16px;
+            border: 1px solid #dce6ef;
+            margin-bottom: 30px;
+        }
+
+        .node {
+            background: #ffffff;
+            border: 2px solid #c8d6e5;
+            border-radius: 12px;
+            padding: 14px 24px;
+            min-width: 200px;
+            max-width: 750px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.15s;
+        }
+        .node:hover {
+            border-color: #1a7a8a;
+            box-shadow: 0 4px 14px rgba(26, 122, 138, 0.12);
+        }
+        .node-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0a2f44;
+        }
+        .node-desc {
+            font-size: 13px;
+            color: #4a5a6a;
+            margin-top: 4px;
+            line-height: 1.6;
+        }
+        .node-desc .highlight {
+            background: #fef3d6;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #8a6d1a;
+        }
+        .node-desc .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 11px;
+            padding: 0 10px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+        .node-desc .warn {
+            color: #b33;
+            font-weight: 600;
+        }
+
+        /* 节点颜色 */
+        .node-start {
+            border-color: #1a7a8a;
+            background: #eef7fa;
+        }
+        .node-start .node-title {
+            color: #0a4a5a;
+        }
+        .node-decision {
+            border-color: #d4a017;
+            background: #fefaf0;
+            border-style: dashed;
+        }
+        .node-end {
+            border-color: #1a8a4a;
+            background: #eaf7f0;
+        }
+        .node-end .node-title {
+            color: #0a6a3a;
+        }
+        .node-warn {
+            border-color: #c0392b;
+            background: #fdf0ee;
+        }
+        .node-warn .node-title {
+            color: #a93226;
+        }
+        .node-branch {
+            border-color: #7f8c8d;
+            background: #f4f6f8;
+            border-style: dotted;
+        }
+        .node-method {
+            border-color: #2a7f8a;
+            background: #f0f7fc;
+        }
+        .node-method-a {
+            border-color: #8e44ad;
+            background: #f8f0fc;
+        }
+        .node-method-b {
+            border-color: #2980b9;
+            background: #f0f7fe;
+        }
+
+        .arrow-connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2px 0;
+        }
+        .arrow-line {
+            width: 2px;
+            height: 16px;
+            background: #8aa9bb;
+        }
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 14px solid #8aa9bb;
+        }
+        .arrow-short {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid #8aa9bb;
+        }
+
+        /* 分支布局 */
+        .branch-wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            width: 100%;
+            padding: 6px 0;
+        }
+        .branch-col {
+            flex: 1 1 300px;
+            min-width: 260px;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .branch-label {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1a5a7a;
+            background: #dce8f0;
+            padding: 4px 18px;
+            border-radius: 30px;
+            margin-bottom: 4px;
+        }
+        .branch-col .node {
+            max-width: 100%;
+            padding: 10px 16px;
+        }
+        .branch-col .node-title {
+            font-size: 14px;
+        }
+        .branch-col .node-desc {
+            font-size: 12px;
+        }
+
+        /* 子步骤展开 */
+        .sub-flow {
+            width: 100%;
+            max-width: 480px;
+            background: #f4f8fb;
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 1px solid #d0dce8;
+            margin: 2px 0;
+        }
+        .sub-flow .sub-title {
+            font-weight: 700;
+            font-size: 13px;
+            color: #1a4a6a;
+            text-align: center;
+            margin-bottom: 6px;
+            border-bottom: 2px solid #d0dce8;
+            padding-bottom: 4px;
+        }
+        .sub-flow .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 4px 0;
+            font-size: 12px;
+            color: #2a4a5a;
+            line-height: 1.6;
+            border-bottom: 1px dashed #e0e8ee;
+        }
+        .sub-flow .step-item:last-child {
+            border-bottom: none;
+        }
+        .sub-flow .step-num {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            background: #1a7a8a;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+        .sub-flow .step-item .highlight {
+            background: #fef3d6;
+            padding: 0 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* 图例 */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 28px;
+            justify-content: center;
+            padding: 12px 16px;
+            margin-top: 12px;
+            background: #f4f8fb;
+            border-radius: 10px;
+            border: 1px solid #dce6ef;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #2a4a5a;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid #c8d6e5;
+        }
+        .legend-color.start {
+            border-color: #1a7a8a;
+            background: #eef7fa;
+        }
+        .legend-color.method-a {
+            border-color: #8e44ad;
+            background: #f8f0fc;
+        }
+        .legend-color.method-b {
+            border-color: #2980b9;
+            background: #f0f7fe;
+        }
+        .legend-color.decision {
+            border-color: #d4a017;
+            background: #fefaf0;
+            border-style: dashed;
+        }
+        .legend-color.end {
+            border-color: #1a8a4a;
+            background: #eaf7f0;
+        }
+
+        /* 底部 */
+        .footnote {
+            margin-top: 28px;
+            font-size: 13px;
+            color: #5a6a7a;
+            border-top: 1px solid #dce6ef;
+            padding-top: 18px;
+            line-height: 1.8;
+        }
+        .footnote .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 12px;
+            padding: 1px 12px;
+            border-radius: 20px;
+            margin: 2px 4px 2px 0;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 16px;
+            }
+            .node {
+                padding: 10px 14px;
+                min-width: unset;
+            }
+            .branch-wrapper {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .branch-col {
+                max-width: 100%;
+                width: 100%;
+            }
+            .sub-flow {
+                padding: 10px 12px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            .legend {
+                gap: 10px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧪 GB 5009.190-2014 · 食品中指示性多氯联苯测定</h1>
+    <div class="sub">第一法：稳定性同位素稀释-气相色谱-质谱法 &amp; 第二法：气相色谱法</div>
+
+    <div class="note-box">
+        <strong>📌 适用范围：</strong> 鱼类、贝类、蛋类、肉类、奶类及其制品等动物性食品和油脂类试样中指示性PCBs的测定。[reference:0]<br>
+        <strong>🎯 检测目标：</strong> 第一法测定PCB28、PCB52、PCB101、PCB118、PCB138、PCB153、PCB180及PCB18、PCB33、PCB44、PCB70、PCB105、PCB128、PCB170、PCB187、PCB194、PCB195、PCB199、PCB206[reference:1]；第二法测定PCB28、PCB52、PCB101、PCB118、PCB138、PCB153、PCB180[reference:2]。
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- 主流程图 -->
+    <!-- ========================================================== -->
+    <div class="flowchart">
+
+        <!-- 1. 样品制备 -->
+        <div class="node node-start">
+            <div class="node-title">📦 样品制备</div>
+            <div class="node-desc">
+                鱼类、贝类、肉类等动物性食品及油脂类试样<br>
+                <span class="highlight">均质化处理</span>，-18 °C 以下保存[reference:3]
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 2. 方法分支 -->
+        <div class="node node-decision">
+            <div class="node-title">🔬 选择测定方法</div>
+            <div class="node-desc">根据实验室仪器配置及检测需求选择</div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 分支：两种方法 -->
+        <div class="branch-wrapper">
+
+            <!-- ===== 第一法 ===== -->
+            <div class="branch-col">
+                <div class="branch-label">🔹 第一法 · 同位素稀释-GC-MS</div>
+
+                <div class="node node-method-a">
+                    <div class="node-title">🧪 添加同位素内标</div>
+                    <div class="node-desc">
+                        加入 <span class="highlight">¹³C₁₂标记的PCBs</span> 作为定量标准[reference:4][reference:5]
+                    </div>
+                </div>
+                <div class="arrow-connector"><div class="arrow-short"></div></div>
+
+                <div class="sub-flow">
+                    <div class="sub-title">⏳ 索氏提取</div>
+                    <div class="step-item"><span class="step-num">1</span> 提取套筒以 <span class="highlight">正己烷+二氯甲烷（50+50）</span> 预提取 8 h[reference:6]</div>
+                    <div class="step-item"><span class="step-num">2</span> 称取试样置于提取套筒中</div>
+                    <div class="step-item"><span class="step-num">3</span> 索氏提取 <span class="highlight">6 h</span> 以上[reference:7]</div>
+                    <div class="step-item"><span class="step-num">4</span> 收集提取液，浓缩</div>
+                </div>
+                <div class="arrow-connector"><div class="arrow-short"></div></div>
+
+                <div class="sub-flow">
+                    <div class="sub-title">🧹 净化（柱色谱层析）</div>
+                    <div class="step-item"><span class="step-num">1</span> <span class="highlight">多层硅胶柱</span> 或 <span class="highlight">凝胶渗透色谱（GPC）</span> 净化[reference:8]</div>
+                    <div class="step-item"><span class="step-num">2</span> 去除脂肪等干扰物[reference:9]</div>
+                    <div class="step-item"><span class="step-num">3</span> 收集洗脱液</div>
+                </div>
+                <div class="arrow-connector"><div class="arrow-short"></div></div>
+
+                <div class="sub-flow">
+                    <div class="sub-title">💧 浓缩与定容</div>
+                    <div class="step-item"><span class="step-num">1</span> 洗脱液 <span class="highlight">吹氮浓缩</span> 至近干</div>
+                    <div class="step-item"><span class="step-num">2</span> 加入 <span class="highlight">回收内标</span>[reference:10]</div>
+                    <div class="step-item"><span class="step-num">3</span> 定容至适当体积，待测</div>
+                </div>
+                <div class="arrow-connector"><div class="arrow-short"></div></div>
+
+                <div class="node node-method-a">
+                    <div class="node-title">📊 GC-MS 分析</div>
+                    <div class="node-desc">
+                        <span class="highlight">气相色谱-低分辨质谱联用仪</span>[reference:11]<br>
+                        四极杆质谱 <span class="highlight">SIM</span> 或离子阱串联质谱 <span class="highlight">MRM</span> 模式[reference:12]<br>
+                        <span class="highlight">同位素稀释内标法定量</span>[reference:13]
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 第二法 ===== -->
+            <div class="branch-col">
+                <div class="branch-label">🔸 第二法 · 气相色谱法</div>
+
+                <div class="node node-method-b">
+                    <div class="node-title">🧪 提取</div>
+                    <div class="node-desc">
+                        正己烷提取[reference:14]<br>
+                        <span class="highlight">索氏提取</span> 或振荡提取
+                    </div>
+                </div>
+                <div class="arrow-connector"><div class="arrow-short"></div></div>
+
+                <div class="sub-flow">
+                    <div class="sub-title">🧹 净化与除脂</div>
+                    <div class="step-item"><span class="step-num">1</span> <span class="highlight">浓硫酸</span> 去除脂肪等杂质[reference:15][reference:16]</div>
+                    <div class="step-item"><span class="step-num">2</span> <span class="highlight">硅胶柱</span> 和 <span class="highlight">Florisil硅土柱</span> 净化[reference:17]</div>
+                    <div class="step-item"><span class="step-num">3</span> 丙酮洗脱[reference:18]</div>
+                </div>
+                <div class="arrow-connector"><div class="arrow-short"></div></div>
+
+                <div class="sub-flow">
+                    <div class="sub-title">💧 浓缩与定容</div>
+                    <div class="step-item"><span class="step-num">1</span> 洗脱液 <span class="highlight">浓缩</span> 至近干[reference:19]</div>
+                    <div class="step-item"><span class="step-num">2</span> 定容至适当体积，待测</div>
+                </div>
+                <div class="arrow-connector"><div class="arrow-short"></div></div>
+
+                <div class="node node-method-b">
+                    <div class="node-title">📊 气相色谱分析</div>
+                    <div class="node-desc">
+                        <span class="highlight">气相色谱-电子捕获检测器（GC-ECD）</span>[reference:20]<br>
+                        <span class="highlight">外标法定量</span>[reference:21]
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 合并：结果计算 -->
+        <div class="node node-end">
+            <div class="node-title">📊 结果计算</div>
+            <div class="node-desc">
+                第一法：<span class="highlight">同位素稀释内标法</span> 定量[reference:22]<br>
+                第二法：<span class="highlight">外标法</span> 定量[reference:23]<br>
+                计算结果以 μg/kg 表示
+            </div>
+        </div>
+
+        <!-- ===== 图例 ===== -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color start"></div>
+                <span>起始/制备</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color method-a"></div>
+                <span>第一法（GC-MS）</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color method-b"></div>
+                <span>第二法（GC-ECD）</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color decision"></div>
+                <span>分支/决策</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color end"></div>
+                <span>终点/结果</span>
+            </div>
+        </div>
+
+    </div><!-- end flowchart -->
+
+    <!-- ========================================================== -->
+    <!-- 关键操作要点 -->
+    <!-- ========================================================== -->
+    <details style="background:#e8f0f8; border-radius:12px; padding:6px 18px; margin-top:10px; border:1px solid #c8dae5;">
+        <summary style="font-weight:700; font-size:16px; color:#0a2f44; cursor:pointer; list-style:none; display:flex; align-items:center; gap:8px; padding:8px 0;">
+            <span>📋 关键操作要点与质量控制</span>
+            <span style="margin-left:auto; transition:transform 0.2s;">▼</span>
+        </summary>
+        <div style="padding:10px 6px 18px 6px; font-size:14px; line-height:1.8; color:#1a2a3a;">
+            <div style="margin-bottom:10px; border-left:4px solid #1a7a8a; padding-left:16px;">
+                <strong>🧪 样品前处理要点</strong><br>
+                • 索氏提取套筒须经 <span class="highlight">正己烷+二氯甲烷（50+50）</span> 预提取 8 h[reference:24]<br>
+                • 第一法须在提取前加入 <span class="highlight">¹³C₁₂标记的PCBs内标</span>[reference:25]<br>
+                • 第二法采用 <span class="highlight">浓硫酸除脂</span> + 硅胶柱/Florisil柱净化[reference:26]
+            </div>
+            <div style="margin-bottom:10px; border-left:4px solid #d4a017; padding-left:16px;">
+                <strong>📊 仪器分析要点</strong><br>
+                • 第一法：GC-MS，<span class="highlight">SIM或MRM</span> 模式采集[reference:27]<br>
+                • 第二法：GC-<span class="highlight">ECD</span> 检测器[reference:28]<br>
+                • 定量方式：第一法 <span class="highlight">同位素稀释内标法</span>，第二法 <span class="highlight">外标法</span>[reference:29][reference:30]
+            </div>
+            <div style="border-left:4px solid #c0392b; padding-left:16px;">
+                <strong>⚠️ 质量控制要求</strong><br>
+                • 须进行 <span class="highlight">空白试验、平行样测试、回收率试验</span>[reference:31]<br>
+                • 第二法平均回收率 <span class="highlight">71.0% ~ 104.9%</span>，RSD 1.98% ~ 6.86%[reference:32]<br>
+                • 第一法检出限可达 <span class="highlight">0.02 μg/kg</span>（以湿重计）[reference:33]
+            </div>
+        </div>
+    </details>
+
+    <!-- ========================================================== -->
+    <!-- 底部说明 -->
+    <!-- ========================================================== -->
+    <div class="footnote">
+        <strong>📌 编制依据：</strong><br>
+        <span class="tag">📖</span> GB 5009.190-2014《食品安全国家标准 食品中指示性多氯联苯含量的测定》[reference:34]<br>
+        <span class="tag">📖</span> 代替 GB/T 5009.190-2006《食品中指示性多氯联苯含量的测定》和 GB/T 22331-2008《水产品中多氯联苯残留量的测定 气相色谱法》[reference:35]<br>
+        <span class="tag">🔬</span> 第一法：稳定性同位素稀释-气相色谱-质谱法；第二法：气相色谱法[reference:36]<br>
+        <span class="tag">📋</span> 本标准适用于鱼类、贝类、蛋类、肉类、奶类及其制品等动物性食品和油脂类试样[reference:37]
+    </div>
+
+</div>
+</body>
+</html>

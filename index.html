@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>食品检测方法 · 智能分析中心 | 汕头海关技术中心实习作品</title>
+<meta name="description" content="食品理化与兽药残留检测国标方法流程梳理与自动计算工具集，汕头海关技术中心食品检测实验室实习期间整理。">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--ink:#0a2f44;--sub:#4a6a7a;--line:#dce6ef;--brand:#1a7a8a;--brand2:#0e5f6b;--bg:#f0f5fa}
+  body{font-family:'Microsoft YaHei','PingFang SC','Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--ink);
+       padding:28px 16px 48px;line-height:1.6;-webkit-text-size-adjust:100%}
+  .wrap{max-width:1240px;margin:0 auto;background:#fff;border-radius:24px;
+        box-shadow:0 10px 40px rgba(10,47,68,.08);padding:34px 32px 42px}
+  header{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;
+         border-bottom:2px solid #eef4f9;padding-bottom:20px;margin-bottom:8px}
+  h1{font-size:27px;border-left:6px solid var(--brand);padding-left:16px;line-height:1.3}
+  .badge{background:var(--brand);color:#fff;padding:5px 18px;border-radius:30px;font-size:13px;font-weight:600;white-space:nowrap}
+  .lead{color:var(--sub);font-size:15px;background:#ecf3f8;border-radius:14px;padding:14px 20px;margin:18px 0 28px}
+  .lead b{color:var(--brand2)}
+  h2{font-size:19px;margin:34px 0 16px;display:flex;align-items:center;gap:10px}
+  h2::before{content:'';width:5px;height:19px;background:var(--brand);border-radius:3px;display:inline-block}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px}
+  .card{border:1.5px solid var(--line);border-radius:16px;padding:18px 18px 16px;background:#fff;
+        transition:.2s;display:flex;flex-direction:column}
+  .card:hover{border-color:var(--brand);transform:translateY(-3px);box-shadow:0 10px 26px rgba(26,122,138,.13)}
+  .card-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px}
+  .emoji{font-size:26px;line-height:1.2}
+  .card h3{font-size:16px;line-height:1.35}
+  .code{font-size:12px;color:var(--brand2);font-weight:700;letter-spacing:.2px;margin-top:2px}
+  .desc{font-size:13px;color:var(--sub);flex:1;margin-bottom:14px}
+  .actions{display:flex;flex-wrap:wrap;gap:8px}
+  .btn{display:inline-block;font-size:12.5px;font-weight:600;padding:7px 15px;border-radius:30px;
+       text-decoration:none;transition:.2s;border:1.5px solid transparent;white-space:nowrap}
+  .btn.primary{background:var(--brand);color:#fff}
+  .btn.primary:hover{background:var(--brand2)}
+  .btn.ghost{background:#eef6f8;color:var(--brand2)}
+  .btn.ghost:hover{background:#dcecef}
+  .btn.link{background:transparent;color:var(--sub);border-color:var(--line);padding:7px 12px}
+  .btn.link:hover{border-color:var(--brand);color:var(--brand2)}
+  .tool{border-color:#f0dca0;background:#fffdf6}
+  .tool:hover{border-color:#d9a72c;box-shadow:0 10px 26px rgba(217,167,44,.15)}
+  .tool .btn.primary{background:#d9a72c}
+  .tool .code{color:#a87b12}
+  ul.refs{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+  ul.refs a{display:block;border:1.5px solid var(--line);border-radius:12px;padding:12px 16px;text-decoration:none;transition:.2s}
+  ul.refs a:hover{border-color:var(--brand);background:#f7fbfd}
+  ul.refs strong{display:block;font-size:14px;color:var(--brand2)}
+  ul.refs span{font-size:12.5px;color:var(--sub)}
+  footer{margin-top:34px;padding-top:20px;border-top:2px solid #eef4f9;font-size:12.5px;color:#7b93a3;text-align:center;line-height:1.9}
+  @media (max-width:600px){
+    body{padding:14px 10px 30px}
+    .wrap{padding:22px 16px 28px;border-radius:18px}
+    h1{font-size:21px}
+    .lead{font-size:13.5px;padding:12px 15px}
+    .grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🧪 食品检测方法 · 智能分析中心</h1>
+    <span class="badge">国标方法 · 自动计算</span>
+  </header>
+
+  <div class="lead">
+    本页面汇总了在 <b>汕头海关技术中心食品检测实验室</b> 实习期间（2026-07-15 ~ 2026-08-31）梳理的
+    <b>10 类食品理化与兽药残留检测标准方法</b>：每条标准均配有<b>完整操作流程</b>（含试剂配制、前处理、仪器条件、结果计算、安全提示）
+    与<b>快速计算模块</b>（输入实验数据即可自动得出含量并判定限量），另附标准原文 PDF 与两个实用小工具。<br>
+    💡 点击卡片中的按钮即可跳转；手机、平板、电脑均可正常浏览。
+  </div>
+
+  <h2>📄 检测方法（完整流程 + 自动计算）</h2>
+  <div class="grid">
+      <article class="card">
+        <div class="card-head"><span class="emoji">🧬</span>
+          <div><h3>亚硝酸盐测定</h3><p class="code">GB 5009.33-2025</p></div>
+        </div>
+        <p class="desc">第二法 分光光度法（盐酸萘乙二胺显色）· 外标法定量</p>
+        <div class="actions">
+          <a class="btn primary" href="亚硝酸测定GB5009.33-2025.html">完整流程</a>
+          <a class="btn ghost" href="计算/亚硝酸盐含量检测计算GB5009.33-2025.html">快速计算</a>
+          <a class="btn link" href="https://down.foodmate.net/standard/sort/3/15637.html" target="_blank" rel="noopener">📖 标准来源</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="emoji">💧</span>
+          <div><h3>生活饮用水感官与物理指标</h3><p class="code">GB/T 5750.4-2023</p></div>
+        </div>
+        <p class="desc">色度、浑浊度、pH、电导率、总硬度、TDS、挥发酚等 10 项</p>
+        <div class="actions">
+          <a class="btn primary" href="水的各项物理指标测定GB.T-5750.4.html">完整流程</a>
+          <a class="btn ghost" href="计算/水的各项物理指标测定计算GB.T-5750.4.html">快速计算</a>
+          <a class="btn link" href="国标原文/GBT5750.4-2023dz.pdf" >📖 国标原文</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="emoji">💊</span>
+          <div><h3>四环素类兽药残留</h3><p class="code">GB/T 21317-2007</p></div>
+        </div>
+        <p class="desc">LC-MS/MS 法 / HPLC 法 · 外标峰面积法定量（10 种）</p>
+        <div class="actions">
+          <a class="btn primary" href="四环素类兽药残留检测GB.T21317-2007.html">完整流程</a>
+          <a class="btn ghost" href="计算/四环素类兽药残留计算.html">快速计算</a>
+          <a class="btn link" href="国标原文/GBT21317-2007-1.pdf" >📖 国标原文</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="emoji">🧪</span>
+          <div><h3>二氧化硫测定</h3><p class="code">GB 5009.34-2022</p></div>
+        </div>
+        <p class="desc">第一法 酸碱滴定法（充氮蒸馏 · 过氧化氢吸收）</p>
+        <div class="actions">
+          <a class="btn primary" href="二氧化硫检测GB.5009.34.html">完整流程</a>
+          <a class="btn ghost" href="计算/二氧化硫测定计算GB5009.34-2022.html">快速计算</a>
+          <a class="btn link" href="国标原文/GB5009.34-2022kw.pdf" >📖 国标原文</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="emoji">⚗️</span>
+          <div><h3>指示性多氯联苯（PCBs）</h3><p class="code">GB 5009.190-2014</p></div>
+        </div>
+        <p class="desc">第一法 同位素稀释-GC-MS / 第二法 GC-ECD</p>
+        <div class="actions">
+          <a class="btn primary" href="多氯联苯测定GB5009.190.html">完整流程</a>
+          <a class="btn ghost" href="计算/多氯联苯测定计算GB5009.190.html">快速计算</a>
+          <a class="btn link" href="国标原文/GB5009.190-2014.pdf" >📖 国标原文</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="emoji">🧫</span>
+          <div><h3>氨基糖苷类药物残留</h3><p class="code">GB/T 21323-2007</p></div>
+        </div>
+        <p class="desc">HPLC-MS/MS 法 · 外标法定量（10 种）</p>
+        <div class="actions">
+          <a class="btn primary" href="氨基糖苷类药物残留量检测GB.T21323.html">完整流程</a>
+          <a class="btn ghost" href="计算/氨基糖苷类药物残留量检测计算GB.T21323.html">快速计算</a>
+          <a class="btn link" href="国标原文/GBT21323-2007dz.pdf" >📖 国标原文</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="emoji">🦐</span>
+          <div><h3>磺胺类及喹诺酮类药物残留</h3><p class="code">农业部1077号公告-1-2008</p></div>
+        </div>
+        <p class="desc">LC-MS/MS 法 · 同位素内标法定量（17 种磺胺 + 15 种喹诺酮）</p>
+        <div class="actions">
+          <a class="btn primary" href="水产品中17种磺胺类及15种喹诺酮类药物残留量的测定.农业部1077.1.2008.html">完整流程</a>
+          <a class="btn ghost" href="计算/水产品中17种磺胺类及15种喹诺酮类药物残留量的测定计算.农业部1077.1.2008.html">快速计算</a>
+          <a class="btn link" href="国标原文/1077-1-2008dz.pdf" >📖 国标原文</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="emoji">🐟</span>
+          <div><h3>硝基呋喃代谢物残留</h3><p class="code">GB/T 21311-2007</p></div>
+        </div>
+        <p class="desc">HPLC-MS/MS 法 · 稳定同位素内标法定量（AOZ/AMOZ/AHD/SEM）</p>
+        <div class="actions">
+          <a class="btn primary" href="硝基呋喃检测GB.T21311.html">完整流程</a>
+          <a class="btn ghost" href="计算/硝基呋喃检测计算GB.T21311.html">快速计算</a>
+          <a class="btn link" href="国标原文/GBT21311-2007dz.pdf" >📖 国标原文</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="emoji">🔬</span>
+          <div><h3>喹诺酮类药物残留（进出口）</h3><p class="code">SN/T 1751.2-2007</p></div>
+        </div>
+        <p class="desc">LC-MS/MS 法 · 外标法定量（16 种）</p>
+        <div class="actions">
+          <a class="btn primary" href="进出口动物源食品中喹诺酮类药物残留量SN.T1751.2.html">完整流程</a>
+          <a class="btn ghost" href="计算/进出口动物源食品中喹诺酮类药物残留量计算SN.T1751.2.html">快速计算</a>
+          <a class="btn link" href="https://down.foodmate.net/standard/sort/3/137077.html" target="_blank" rel="noopener">📖 标准来源</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="emoji">🎨</span>
+          <div><h3>食品中合成着色剂</h3><p class="code">GB 5009.35-2023</p></div>
+        </div>
+        <p class="desc">HPLC-DAD 法 · 外标法定量（11 种着色剂）</p>
+        <div class="actions">
+          <a class="btn primary" href="食品中合成着色剂的测定GB5009.35.html">完整流程</a>
+          <a class="btn ghost" href="计算/食品中合成着色剂的测定计算GB5009.35.html">快速计算</a>
+          <a class="btn link" href="国标原文/GB5009.35-2023.pdf" >📖 国标原文</a>
+        </div>
+      </article></div>
+
+  <h2>🧰 实用小工具</h2>
+  <div class="grid">
+      <article class="card tool">
+        <div class="card-head"><span class="emoji">📅</span>
+          <div><h3>通用节假日与工作日计算器</h3><p class="code">实用小工具</p></div>
+        </div>
+        <p class="desc">内置 2024–2026 年节假日 / 调休数据，支持自定义年份并导出 Excel</p>
+        <div class="actions"><a class="btn primary" href="工作日.html">打开工具</a></div>
+      </article>
+      <article class="card tool">
+        <div class="card-head"><span class="emoji">🗓️</span>
+          <div><h3>2026 年节假日与周末一览</h3><p class="code">实用小工具</p></div>
+        </div>
+        <p class="desc">按国务院办公厅通知编排的全年节假日、调休、工作日可视化日历</p>
+        <div class="actions"><a class="btn primary" href="节假日.html">打开工具</a></div>
+      </article></div>
+
+  <h2>📚 参考资料（国标原文 PDF）</h2>
+  <ul class="refs"><li><a href="国标原文/GB5009.97-2023.pdf" target="_blank" rel="noopener"><strong>GB 5009.97-2023</strong><span>食品中环己基氨基磺酸钠（甜蜜素）的测定</span></a></li><li><a href="国标原文/GB5009.27-2016.pdf" target="_blank" rel="noopener"><strong>GB 5009.27-2016</strong><span>食品中苯并(a)芘的测定</span></a></li><li><a href="国标原文/GBT5750.3-2023dz.pdf" target="_blank" rel="noopener"><strong>GB/T 5750.3-2023</strong><span>生活饮用水标准检验方法 第 3 部分：水质分析质量控制</span></a></li><li><a href="国标原文/KA00704H_莱克多巴胺一步法（40min）说明书.pdf" target="_blank" rel="noopener"><strong>KA00704H</strong><span>莱克多巴胺一步法检测卡说明书（40 min）</span></a></li></ul>
+
+  <footer>
+    汕头海关技术中心食品检测实验室 · 实习整理资料<br>
+    整理人：王彦平 &nbsp;|&nbsp; 实习时间：2026-07-15 ~ 2026-08-31<br>
+    本页面内容仅为个人学习整理，标准原文版权归发布机构所有，检测判定请以现行有效标准为准。
+  </footer>
+</div>
+</body>
+</html>

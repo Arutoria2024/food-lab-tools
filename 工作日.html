@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📅 通用节假日与工作日计算器（支持自定义未来年份）</title>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js">
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', Roboto, sans-serif;
+            background: #f1f5f9;
+            padding: 20px 16px;
+            color: #0f172a;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            padding: 28px 24px 36px;
+        }
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 18px;
+            gap: 12px;
+        }
+        .header-left h1 {
+            font-size: 26px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0f172a, #475569);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header-left .sub {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+        .header-right {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .header-right label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+        }
+        .header-right input[type="number"] {
+            width: 80px;
+            padding: 6px 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .header-right input[type="number"]:focus {
+            outline: none;
+            border-color: #0f172a;
+        }
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .btn-primary {
+            background: #0f172a;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25);
+        }
+        .btn-success {
+            background: #059669;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #047857;
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #e2e8f0;
+        }
+        .btn-outline:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+        }
+        .btn-warning {
+            background: #d97706;
+            color: #fff;
+        }
+        .btn-warning:hover {
+            background: #b45309;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: #dc2626;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+        }
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px 24px;
+            margin-bottom: 20px;
+            padding: 12px 18px;
+            background: #f8fafc;
+            border-radius: 14px;
+            border: 1px solid #e9edf2;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #334155;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        .color-holiday {
+            background: #ef4444;
+        }
+        .color-workday {
+            background: #22c55e;
+        }
+        .color-weekend {
+            background: #e2e8f0;
+        }
+        .color-adjust {
+            background: #3b82f6;
+        }
+
+        .month-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 18px;
+            justify-content: center;
+        }
+        .month-nav .mbtn {
+            padding: 5px 14px;
+            border-radius: 18px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            color: #475569;
+            transition: all 0.15s;
+        }
+        .month-nav .mbtn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+        .month-nav .mbtn.active {
+            background: #0f172a;
+            color: #fff;
+            border-color: #0f172a;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 14px;
+            margin-top: 6px;
+        }
+        .month-card {
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid #e9edf2;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s;
+        }
+        .month-card:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            border-color: #cbd5e1;
+        }
+        .month-title {
+            background: #f8fafc;
+            padding: 8px 0 6px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            border-bottom: 1px solid #e9edf2;
+        }
+        .month-title .year-badge {
+            font-weight: 400;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+        .weekdays-row {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background: #fafbfc;
+            border-bottom: 1px solid #e9edf2;
+        }
+        .weekdays-row .wd {
+            padding: 4px 0 3px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: 600;
+            color: #94a3b8;
+        }
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0;
+        }
+        .day-cell {
+            aspect-ratio: 1 / 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1e293b;
+            background: #fff;
+            border-right: 1px solid #f1f5f9;
+            border-bottom: 1px solid #f1f5f9;
+            padding: 2px;
+            min-height: 38px;
+            position: relative;
+        }
+        .day-cell.empty {
+            background: #fafbfc;
+            border-color: #f1f5f9;
+        }
+        .day-cell .day-number {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        .day-cell .day-label {
+            font-size: 7px;
+            font-weight: 600;
+            margin-top: 1px;
+            padding: 1px 3px;
+            border-radius: 3px;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.2);
+            white-space: nowrap;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .day-cell.type-holiday {
+            background: #fef2f2;
+        }
+        .day-cell.type-holiday .day-number {
+            color: #dc2626;
+        }
+        .day-cell.type-holiday .day-label {
+            background: #dc2626;
+        }
+        .day-cell.type-workday {
+            background: #f0fdf4;
+        }
+        .day-cell.type-workday .day-number {
+            color: #16a34a;
+        }
+        .day-cell.type-weekend {
+            background: #f8fafc;
+        }
+        .day-cell.type-weekend .day-number {
+            color: #94a3b8;
+        }
+        .day-cell.type-adjust {
+            background: #eff6ff;
+        }
+        .day-cell.type-adjust .day-number {
+            color: #2563eb;
+        }
+        .day-cell.type-adjust .day-label {
+            background: #2563eb;
+        }
+        .month-card.hidden-month {
+            display: none;
+        }
+
+        .summary-section {
+            margin-top: 28px;
+            padding-top: 22px;
+            border-top: 2px solid #f1f5f9;
+        }
+        .summary-top {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .summary-title {
+            font-size: 19px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .summary-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 28px;
+            font-size: 14px;
+        }
+        .summary-stats span {
+            font-weight: 600;
+        }
+        .stat-holiday {
+            color: #dc2626;
+        }
+        .stat-weekend {
+            color: #64748b;
+        }
+        .stat-workday {
+            color: #16a34a;
+        }
+        .stat-adjust {
+            color: #2563eb;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+        .summary-box {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 14px 18px;
+            border: 1px solid #e9edf2;
+        }
+        .summary-box h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .summary-box h3 .badge {
+            font-size: 12px;
+            font-weight: 600;
+            background: #e2e8f0;
+            padding: 0 10px;
+            border-radius: 12px;
+            color: #475569;
+        }
+        .summary-box .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 8px;
+        }
+        .summary-box .tag {
+            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 16px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            color: #334155;
+            font-weight: 500;
+        }
+        .tag-holiday {
+            border-color: #fca5a5 !important;
+            background: #fef2f2 !important;
+            color: #b91c1c !important;
+        }
+        .tag-adjust {
+            border-color: #93c5fd !important;
+            background: #eff6ff !important;
+            color: #1d4ed8 !important;
+        }
+
+        /* ===== 模态框（管理面板） ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-box {
+            background: #fff;
+            border-radius: 20px;
+            max-width: 680px;
+            width: 100%;
+            max-height: 90vh;
+            padding: 28px 30px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+            overflow-y: auto;
+            animation: modalIn 0.25s ease;
+        }
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        .modal-box h2 {
+            font-size: 22px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-box .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: 0.2s;
+            padding: 0 8px;
+        }
+        .modal-box .close-btn:hover {
+            color: #0f172a;
+            transform: rotate(90deg);
+        }
+        .modal-box .sub {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+        .modal-box .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: flex-end;
+            background: #f8fafc;
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 1px solid #e9edf2;
+        }
+        .modal-box .form-row label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .modal-box .form-row label span {
+            font-weight: 400;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+        .modal-box .form-row input {
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 140px;
+            transition: 0.2s;
+        }
+        .modal-box .form-row input:focus {
+            outline: none;
+            border-color: #0f172a;
+            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+        }
+        .modal-box .form-row input[type="text"] {
+            width: 120px;
+        }
+        .modal-box .form-row .btn {
+            margin-top: 4px;
+        }
+
+        .modal-box .list-section {
+            margin-top: 10px;
+        }
+        .modal-box .list-section h4 {
+            font-size: 14px;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+        .modal-box .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 6px 4px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 13px;
+        }
+        .modal-box .list-item .del-btn {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 16px;
+            padding: 0 6px;
+        }
+        .modal-box .list-item .del-btn:hover {
+            color: #b91c1c;
+        }
+        .modal-box .empty-tip {
+            color: #94a3b8;
+            font-size: 13px;
+            font-style: italic;
+            padding: 8px 0;
+        }
+        .modal-box .year-filter {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .modal-box .year-filter input {
+            width: 80px;
+            padding: 4px 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .modal-box .year-filter .btn {
+            padding: 4px 14px;
+            font-size: 12px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #0f172a;
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+            z-index: 999;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 1200px) {
+            .calendar-grid {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 12px;
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px 12px 24px;
+            }
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .header-left h1 {
+                font-size: 20px;
+            }
+            .header-right {
+                justify-content: flex-start;
+            }
+            .header-right input[type="number"] {
+                width: 70px;
+            }
+            .btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            .calendar-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            .day-cell {
+                min-height: 32px;
+                font-size: 11px;
+            }
+            .day-cell .day-number {
+                font-size: 12px;
+            }
+            .day-cell .day-label {
+                font-size: 6px;
+                padding: 0 2px;
+            }
+            .month-title {
+                font-size: 13px;
+                padding: 5px 0;
+            }
+            .weekdays-row .wd {
+                font-size: 8px;
+                padding: 3px 0;
+            }
+            .summary-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .summary-stats {
+                font-size: 12px;
+                gap: 8px 16px;
+            }
+            .legend {
+                gap: 8px 14px;
+                padding: 10px 14px;
+                font-size: 12px;
+            }
+            .legend-color {
+                width: 16px;
+                height: 16px;
+            }
+            .month-nav .mbtn {
+                padding: 4px 10px;
+                font-size: 11px;
+            }
+            .modal-box {
+                padding: 20px 16px;
+            }
+            .modal-box .form-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .modal-box .form-row input {
+                width: 100%;
+            }
+            .modal-box .form-row label {
+                width: 100%;
+            }
+        }
+        @media (max-width: 480px) {
+            .calendar-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+            .day-cell {
+                min-height: 28px;
+                font-size: 10px;
+            }
+            .day-cell .day-number {
+                font-size: 11px;
+            }
+            .day-cell .day-label {
+                font-size: 5px;
+            }
+        }
+        @media print {
+            .btn,
+            .month-nav,
+            .header-right,
+            .modal-overlay {
+                display: none !important;
+            }
+            .container {
+                box-shadow: none;
+                padding: 8px;
+            }
+            .day-cell {
+                border-color: #e2e8f0 !important;
+            }
+            .month-card {
+                border-color: #d1d5db !important;
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app">
+        <!-- 头部 -->
+        <div class="header">
+            <div class="header-left">
+                <h1>📅 通用节假日与工作日计算器</h1>
+                <div class="sub">内置 2024–2026 年 · 支持自定义未来年份（保存到本地）</div>
+            </div>
+            <div class="header-right">
+                <label for="yearInput">📆 年份</label>
+                <input type="number" id="yearInput" min="2000" max="2100" value="2026">
+                <button class="btn btn-primary" onclick="loadYear()">加载</button>
+                <button class="btn btn-outline" onclick="resetView()">🔄 重置</button>
+                <button class="btn btn-warning" onclick="openModal('holiday')">📝 管理节假日</button>
+                <button class="btn btn-warning" onclick="openModal('adjust')">🔄 管理调休</button>
+                <button class="btn btn-success" onclick="exportExcel()">📤 导出 Excel</button>
+            </div>
+        </div>
+
+        <div class="legend">
+            <span class="legend-item"><span class="legend-color color-holiday"></span>法定节假日</span>
+            <span class="legend-item"><span class="legend-color color-adjust"></span>调休上班</span>
+            <span class="legend-item"><span class="legend-color color-workday"></span>工作日</span>
+            <span class="legend-item"><span class="legend-color color-weekend"></span>周末休息</span>
+            <span style="margin-left:auto;font-size:13px;color:#94a3b8;" id="yearDisplay">2026年 · 共 365 天</span>
+        </div>
+
+        <div class="month-nav" id="monthNav"></div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+
+        <div class="summary-section">
+            <div class="summary-top">
+                <div class="summary-title">📊 年度统计</div>
+                <div class="summary-stats">
+                    <span>🎉 节假日 <span class="stat-holiday" id="statHoliday">0</span> 天</span>
+                    <span>📅 工作日 <span class="stat-workday" id="statWorkday">0</span> 天</span>
+                    <span>🌙 周末 <span class="stat-weekend" id="statWeekend">0</span> 天</span>
+                    <span>🔄 调休 <span class="stat-adjust" id="statAdjust">0</span> 天</span>
+                </div>
+            </div>
+            <div class="summary-grid">
+                <div class="summary-box">
+                    <h3>🎉 法定节假日 <span class="badge" id="holidayCount">0</span></h3>
+                    <div class="tag-list" id="holidayTags"></div>
+                </div>
+                <div class="summary-box">
+                    <h3>🔄 调休上班日 <span class="badge" id="adjustCount">0</span></h3>
+                    <div class="tag-list" id="adjustTags"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 模态框（管理面板） ===== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <h2>
+                <span id="modalTitle">管理节假日</span>
+                <button class="close-btn" onclick="closeModal()">✕</button>
+            </h2>
+            <div class="sub" id="modalSub">添加或删除自定义的节假日/调休日，数据自动保存在浏览器中。</div>
+
+            <div class="form-row">
+                <label>年份 <span>YYYY</span>
+                    <input type="number" id="inputYear" placeholder="2027" value="2027">
+                </label>
+                <label>日期 <span>YYYY-MM-DD</span>
+                    <input type="text" id="inputDate" placeholder="2027-01-01">
+                </label>
+                <label>名称 <span>如“元旦”</span>
+                    <input type="text" id="inputName" placeholder="节日名称">
+                </label>
+                <button class="btn btn-primary" onclick="addCustomItem()">➕ 添加</button>
+            </div>
+
+            <div class="year-filter">
+                <span style="font-weight:600;font-size:14px;">📋 已添加列表</span>
+                <input type="number" id="filterYear" placeholder="年份" value="2027">
+                <button class="btn btn-outline btn-sm" onclick="renderCustomList()">筛选</button>
+                <button class="btn btn-danger btn-sm" onclick="clearAllCustom()">🗑️ 清空当前年份</button>
+            </div>
+
+            <div class="list-section" id="customListContainer">
+                <div class="empty-tip">加载中...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ================================================================
+            // 1. 内置数据（2024–2026）
+            // ================================================================
+            const HOLIDAY_DATA = {
+                '2024-01-01': '元旦',
+                '2024-02-10': '春节',
+                '2024-02-11': '春节',
+                '2024-02-12': '春节',
+                '2024-02-13': '春节',
+                '2024-02-14': '春节',
+                '2024-02-15': '春节',
+                '2024-02-16': '春节',
+                '2024-02-17': '春节',
+                '2024-04-04': '清明节',
+                '2024-04-05': '清明节',
+                '2024-04-06': '清明节',
+                '2024-05-01': '劳动节',
+                '2024-05-02': '劳动节',
+                '2024-05-03': '劳动节',
+                '2024-05-04': '劳动节',
+                '2024-05-05': '劳动节',
+                '2024-06-08': '端午节',
+                '2024-06-09': '端午节',
+                '2024-06-10': '端午节',
+                '2024-09-15': '中秋节',
+                '2024-09-16': '中秋节',
+                '2024-09-17': '中秋节',
+                '2024-10-01': '国庆节',
+                '2024-10-02': '国庆节',
+                '2024-10-03': '国庆节',
+                '2024-10-04': '国庆节',
+                '2024-10-05': '国庆节',
+                '2024-10-06': '国庆节',
+                '2024-10-07': '国庆节',
+                '2025-01-01': '元旦',
+                '2025-01-28': '春节',
+                '2025-01-29': '春节',
+                '2025-01-30': '春节',
+                '2025-01-31': '春节',
+                '2025-02-01': '春节',
+                '2025-02-02': '春节',
+                '2025-02-03': '春节',
+                '2025-02-04': '春节',
+                '2025-04-04': '清明节',
+                '2025-04-05': '清明节',
+                '2025-04-06': '清明节',
+                '2025-05-01': '劳动节',
+                '2025-05-02': '劳动节',
+                '2025-05-03': '劳动节',
+                '2025-05-04': '劳动节',
+                '2025-05-05': '劳动节',
+                '2025-05-31': '端午节',
+                '2025-06-01': '端午节',
+                '2025-06-02': '端午节',
+                '2025-10-01': '国庆节',
+                '2025-10-02': '国庆节',
+                '2025-10-03': '国庆节',
+                '2025-10-04': '国庆节',
+                '2025-10-05': '国庆节',
+                '2025-10-06': '国庆节',
+                '2025-10-07': '国庆节',
+                '2025-10-08': '国庆节',
+                '2026-01-01': '元旦',
+                '2026-01-02': '元旦',
+                '2026-01-03': '元旦',
+                '2026-02-15': '春节',
+                '2026-02-16': '春节',
+                '2026-02-17': '春节',
+                '2026-02-18': '春节',
+                '2026-02-19': '春节',
+                '2026-02-20': '春节',
+                '2026-02-21': '春节',
+                '2026-02-22': '春节',
+                '2026-02-23': '春节',
+                '2026-04-04': '清明节',
+                '2026-04-05': '清明节',
+                '2026-04-06': '清明节',
+                '2026-05-01': '劳动节',
+                '2026-05-02': '劳动节',
+                '2026-05-03': '劳动节',
+                '2026-05-04': '劳动节',
+                '2026-05-05': '劳动节',
+                '2026-06-19': '端午节',
+                '2026-06-20': '端午节',
+                '2026-06-21': '端午节',
+                '2026-09-25': '中秋节',
+                '2026-09-26': '中秋节',
+                '2026-09-27': '中秋节',
+                '2026-10-01': '国庆节',
+                '2026-10-02': '国庆节',
+                '2026-10-03': '国庆节',
+                '2026-10-04': '国庆节',
+                '2026-10-05': '国庆节',
+                '2026-10-06': '国庆节',
+                '2026-10-07': '国庆节',
+            };
+            const ADJUST_DATA = {
+                '2024-02-04': '春节调休',
+                '2024-02-18': '春节调休',
+                '2024-04-07': '清明节调休',
+                '2024-05-11': '劳动节调休',
+                '2024-09-14': '中秋节调休',
+                '2024-09-29': '国庆节调休',
+                '2024-10-12': '国庆节调休',
+                '2025-01-26': '春节调休',
+                '2025-02-08': '春节调休',
+                '2025-04-27': '劳动节调休',
+                '2025-09-28': '国庆节调休',
+                '2025-10-11': '国庆节调休',
+                '2026-01-04': '元旦调休',
+                '2026-02-14': '春节调休',
+                '2026-02-28': '春节调休',
+                '2026-05-09': '劳动节调休',
+                '2026-09-20': '国庆节调休',
+                '2026-10-10': '国庆节调休',
+            };
+
+            // ================================================================
+            // 2. 用户自定义数据（localStorage）
+            // ================================================================
+            const STORAGE_KEY_H = 'user_holidays';
+            const STORAGE_KEY_A = 'user_adjusts';
+
+            function loadUserData() {
+                try {
+                    const h = localStorage.getItem(STORAGE_KEY_H);
+                    const a = localStorage.getItem(STORAGE_KEY_A);
+                    return {
+                        holidays: h ? JSON.parse(h) : {},
+                        adjusts: a ? JSON.parse(a) : {}
+                    };
+                } catch { return { holidays: {}, adjusts: {} }; }
+            }
+
+            function saveUserData(holidays, adjusts) {
+                localStorage.setItem(STORAGE_KEY_H, JSON.stringify(holidays));
+                localStorage.setItem(STORAGE_KEY_A, JSON.stringify(adjusts));
+            }
+
+            let userHolidays = {};
+            let userAdjusts = {};
+            // 初始化加载
+            (function initStorage() {
+                const data = loadUserData();
+                userHolidays = data.holidays || {};
+                userAdjusts = data.adjusts || {};
+            })();
+
+            // ================================================================
+            // 3. 工具函数
+            // ================================================================
+            const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月',
+                '七月', '八月', '九月', '十月', '十一月', '十二月'
+            ];
+
+            function formatDate(y, m, d) {
+                return y + '-' + String(m + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+            }
+
+            function getWeekdayCN(dt) {
+                return ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][dt.getDay()];
+            }
+
+            function isLeap(y) { return (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0); }
+
+            function getDaysInMonth(y, m) {
+                return [31, isLeap(y) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m];
+            }
+
+            function isValidDate(str) {
+                const parts = str.split('-');
+                if (parts.length !== 3) return false;
+                const y = parseInt(parts[0]),
+                    m = parseInt(parts[1]),
+                    d = parseInt(parts[2]);
+                if (isNaN(y) || isNaN(m) || isNaN(d)) return false;
+                if (m < 1 || m > 12 || d < 1 || d > 31) return false;
+                const dt = new Date(y, m - 1, d);
+                return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
+            }
+
+            function getAllHolidays(year) {
+                const base = {};
+                for (const k in HOLIDAY_DATA) {
+                    if (k.startsWith(String(year) + '-')) base[k] = HOLIDAY_DATA[k];
+                }
+                for (const k in userHolidays) {
+                    if (k.startsWith(String(year) + '-')) base[k] = userHolidays[k];
+                }
+                return base;
+            }
+
+            function getAllAdjusts(year) {
+                const base = {};
+                for (const k in ADJUST_DATA) {
+                    if (k.startsWith(String(year) + '-')) base[k] = ADJUST_DATA[k];
+                }
+                for (const k in userAdjusts) {
+                    if (k.startsWith(String(year) + '-')) base[k] = userAdjusts[k];
+                }
+                return base;
+            }
+
+            // ================================================================
+            // 4. 核心数据生成与渲染
+            // ================================================================
+            let currentYear = 2026;
+            let allDays = [];
+            let grouped = {};
+
+            function buildYearData(year) {
+                const holidays = getAllHolidays(year);
+                const adjusts = getAllAdjusts(year);
+                const days = [];
+                for (let m = 0; m < 12; m++) {
+                    const dim = getDaysInMonth(year, m);
+                    for (let d = 1; d <= dim; d++) {
+                        const dateStr = formatDate(year, m, d);
+                        const dt = new Date(year, m, d);
+                        const wd = dt.getDay();
+                        let type = 'workday';
+                        let label = '';
+                        if (holidays[dateStr]) {
+                            type = 'holiday';
+                            label = holidays[dateStr];
+                        } else if (adjusts[dateStr]) {
+                            type = 'adjust';
+                            label = adjusts[dateStr];
+                        } else if (wd === 0 || wd === 6) {
+                            type = 'weekend';
+                        }
+                        days.push({
+                            year,
+                            month: m,
+                            day: d,
+                            dateStr,
+                            weekday: wd,
+                            weekdayCN: getWeekdayCN(dt),
+                            type,
+                            label,
+                            sortKey: dateStr
+                        });
+                    }
+                }
+                return days;
+            }
+
+            function groupByMonth(days) {
+                const g = {};
+                days.forEach(d => {
+                    if (!g[d.month]) g[d.month] = [];
+                    g[d.month].push(d);
+                });
+                return g;
+            }
+
+            const grid = document.getElementById('calendarGrid');
+            const nav = document.getElementById('monthNav');
+
+            function buildNav() {
+                nav.innerHTML = '';
+                for (let i = 0; i < 12; i++) {
+                    const btn = document.createElement('button');
+                    btn.className = 'mbtn' + (i === 0 ? ' active' : '');
+                    btn.textContent = monthNames[i];
+                    btn.dataset.month = i;
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.mbtn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        const mi = parseInt(this.dataset.month);
+                        document.querySelectorAll('.month-card').forEach(card => {
+                            const cm = parseInt(card.dataset.month);
+                            card.classList.toggle('hidden-month', cm !== mi);
+                        });
+                        const target = document.querySelector(`.month-card[data-month="${mi}"]`);
+                        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    });
+                    nav.appendChild(btn);
+                }
+            }
+
+            function renderCalendar(year) {
+                const days = buildYearData(year);
+                allDays = days;
+                grouped = groupByMonth(days);
+                currentYear = year;
+
+                grid.innerHTML = '';
+                for (let m = 0; m < 12; m++) {
+                    const monthDays = grouped[m] || [];
+                    const card = document.createElement('div');
+                    card.className = 'month-card' + (m === 0 ? '' : ' hidden-month');
+                    card.dataset.month = m;
+
+                    const title = document.createElement('div');
+                    title.className = 'month-title';
+                    title.innerHTML = `${monthNames[m]} <span class="year-badge">${year}</span>`;
+                    card.appendChild(title);
+
+                    const wRow = document.createElement('div');
+                    wRow.className = 'weekdays-row';
+                    ['一', '二', '三', '四', '五', '六', '日'].forEach(w => {
+                        const span = document.createElement('span');
+                        span.className = 'wd';
+                        span.textContent = w;
+                        wRow.appendChild(span);
+                    });
+                    card.appendChild(wRow);
+
+                    const dGrid = document.createElement('div');
+                    dGrid.className = 'days-grid';
+                    const firstDay = new Date(year, m, 1).getDay();
+                    const startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+                    for (let i = 0; i < startOffset; i++) {
+                        const empty = document.createElement('div');
+                        empty.className = 'day-cell empty';
+                        dGrid.appendChild(empty);
+                    }
+                    monthDays.forEach(d => {
+                        const cell = document.createElement('div');
+                        cell.className = `day-cell type-${d.type}`;
+                        const num = document.createElement('div');
+                        num.className = 'day-number';
+                        num.textContent = d.day;
+                        cell.appendChild(num);
+                        if (d.label) {
+                            const lbl = document.createElement('div');
+                            lbl.className = 'day-label';
+                            lbl.textContent = d.label.length > 4 ? d.label.slice(0, 4) : d.label;
+                            cell.appendChild(lbl);
+                        }
+                        const typeMap = { holiday: '法定节假日', adjust: '调休上班', workday: '工作日', weekend: '周末' };
+                        cell.title =
+                            `${d.dateStr} ${d.weekdayCN} · ${typeMap[d.type] || d.type}${d.label ? ' · '+d.label : ''}`;
+                        dGrid.appendChild(cell);
+                    });
+                    card.appendChild(dGrid);
+                    grid.appendChild(card);
+                }
+
+                updateSummary(year);
+                document.getElementById('yearDisplay').textContent = `${year}年 · 共 ${allDays.length} 天`;
+                document.getElementById('yearInput').value = year;
+            }
+
+            // ================================================================
+            // 5. 汇总统计
+            // ================================================================
+            function updateSummary(year) {
+                const holidays = allDays.filter(d => d.type === 'holiday');
+                const adjusts = allDays.filter(d => d.type === 'adjust');
+                const weekends = allDays.filter(d => d.type === 'weekend');
+                const workdays = allDays.filter(d => d.type === 'workday');
+
+                document.getElementById('statHoliday').textContent = holidays.length;
+                document.getElementById('statAdjust').textContent = adjusts.length;
+                document.getElementById('statWeekend').textContent = weekends.length;
+                document.getElementById('statWorkday').textContent = workdays.length;
+
+                document.getElementById('holidayCount').textContent = holidays.length;
+                document.getElementById('adjustCount').textContent = adjusts.length;
+
+                const hContainer = document.getElementById('holidayTags');
+                hContainer.innerHTML = '';
+                holidays.forEach(d => {
+                    const tag = document.createElement('span');
+                    tag.className = 'tag tag-holiday';
+                    tag.textContent = `${d.dateStr} ${d.label}`;
+                    hContainer.appendChild(tag);
+                });
+
+                const aContainer = document.getElementById('adjustTags');
+                aContainer.innerHTML = '';
+                adjusts.forEach(d => {
+                    const tag = document.createElement('span');
+                    tag.className = 'tag tag-adjust';
+                    tag.textContent = `${d.dateStr} ${d.label}`;
+                    aContainer.appendChild(tag);
+                });
+            }
+
+            // ================================================================
+            // 6. 交互
+            // ================================================================
+            window.loadYear = function() {
+                const input = document.getElementById('yearInput');
+                let y = parseInt(input.value);
+                if (isNaN(y) || y < 2000 || y > 2100) {
+                    showToast('⚠️ 请输入 2000–2100 之间的年份');
+                    return;
+                }
+                renderCalendar(y);
+                document.querySelectorAll('.mbtn').forEach(b => b.classList.remove('active'));
+                const firstBtn = document.querySelector('.mbtn[data-month="0"]');
+                if (firstBtn) firstBtn.classList.add('active');
+                document.querySelectorAll('.month-card').forEach(card => card.classList.remove('hidden-month'));
+                showToast(`✅ 已加载 ${y} 年数据`);
+            };
+
+            window.resetView = function() {
+                document.querySelectorAll('.mbtn').forEach(b => b.classList.remove('active'));
+                const firstBtn = document.querySelector('.mbtn[data-month="0"]');
+                if (firstBtn) firstBtn.classList.add('active');
+                document.querySelectorAll('.month-card').forEach(card => card.classList.remove('hidden-month'));
+                showToast('🔄 已重置视图');
+            };
+
+            function showToast(msg) {
+                const el = document.getElementById('toast');
+                el.textContent = msg;
+                el.classList.add('show');
+                clearTimeout(el._timer);
+                el._timer = setTimeout(() => { el.classList.remove('show'); }, 2600);
+            }
+
+            // ================================================================
+            // 7. 管理面板（模态框）
+            // ================================================================
+            let modalMode = 'holiday'; // 'holiday' or 'adjust'
+
+            window.openModal = function(mode) {
+                modalMode = mode;
+                const overlay = document.getElementById('modalOverlay');
+                const title = document.getElementById('modalTitle');
+                const sub = document.getElementById('modalSub');
+                if (mode === 'holiday') {
+                    title.textContent = '📝 管理法定节假日';
+                    sub.textContent = '添加或删除自定义的节假日日期，数据自动保存在浏览器中。';
+                } else {
+                    title.textContent = '🔄 管理调休上班日';
+                    sub.textContent = '添加或删除自定义的调休上班日期（周末上班），数据自动保存在浏览器中。';
+                }
+                overlay.classList.add('active');
+                // 默认筛选年份为当前年份
+                document.getElementById('filterYear').value = currentYear;
+                renderCustomList();
+            };
+
+            window.closeModal = function() {
+                document.getElementById('modalOverlay').classList.remove('active');
+            };
+
+            // 点击外部关闭
+            document.getElementById('modalOverlay').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+
+            window.addCustomItem = function() {
+                const year = parseInt(document.getElementById('inputYear').value);
+                const dateStr = document.getElementById('inputDate').value.trim();
+                const name = document.getElementById('inputName').value.trim();
+
+                if (!year || isNaN(year) || year < 2000 || year > 2100) {
+                    showToast('⚠️ 请输入有效年份 (2000-2100)');
+                    return;
+                }
+                if (!isValidDate(dateStr)) {
+                    showToast('⚠️ 日期格式错误，请使用 YYYY-MM-DD');
+                    return;
+                }
+                if (!name) {
+                    showToast('⚠️ 请输入名称');
+                    return;
+                }
+                // 检查年份是否匹配
+                const y = parseInt(dateStr.split('-')[0]);
+                if (y !== year) {
+                    showToast('⚠️ 日期年份与输入年份不一致');
+                    return;
+                }
+
+                // 保存
+                if (modalMode === 'holiday') {
+                    userHolidays[dateStr] = name;
+                } else {
+                    userAdjusts[dateStr] = name;
+                }
+                saveUserData(userHolidays, userAdjusts);
+                showToast(`✅ 已添加 ${dateStr} ${name}`);
+                document.getElementById('inputDate').value = '';
+                document.getElementById('inputName').value = '';
+                renderCustomList();
+                // 刷新主日历（如果当前年份匹配）
+                const curYear = currentYear;
+                if (curYear === year || curYear === parseInt(document.getElementById('filterYear').value)) {
+                    renderCalendar(curYear);
+                } else {
+                    // 即使不刷新，也重新加载数据以便后续切换
+                }
+            };
+
+            window.renderCustomList = function() {
+                const container = document.getElementById('customListContainer');
+                const filterYear = parseInt(document.getElementById('filterYear').value) || currentYear;
+
+                const data = (modalMode === 'holiday') ? userHolidays : userAdjusts;
+                const entries = Object.entries(data)
+                    .filter(([k]) => k.startsWith(String(filterYear) + '-'))
+                    .sort((a, b) => a[0].localeCompare(b[0]));
+
+                if (entries.length === 0) {
+                    container.innerHTML = `<div class="empty-tip">📭 暂无 ${filterYear} 年的自定义记录</div>`;
+                    return;
+                }
+
+                let html = '';
+                entries.forEach(([date, name]) => {
+                    const wd = getWeekdayCN(new Date(date));
+                    html += `
+                            <div class="list-item">
+                                <span>${date} (${wd}) · <strong>${name}</strong></span>
+                                <button class="del-btn" onclick="deleteCustom('${date}')">✕</button>
+                            </div>
+                        `;
+                });
+                container.innerHTML = html;
+            };
+
+            window.deleteCustom = function(dateStr) {
+                if (!confirm(`确定要删除 ${dateStr} 吗？`)) return;
+                if (modalMode === 'holiday') {
+                    delete userHolidays[dateStr];
+                } else {
+                    delete userAdjusts[dateStr];
+                }
+                saveUserData(userHolidays, userAdjusts);
+                showToast(`已删除 ${dateStr}`);
+                renderCustomList();
+                // 刷新主日历
+                const curYear = currentYear;
+                if (curYear === parseInt(dateStr.split('-')[0])) {
+                    renderCalendar(curYear);
+                }
+            };
+
+            window.clearAllCustom = function() {
+                const filterYear = parseInt(document.getElementById('filterYear').value) || currentYear;
+                if (!confirm(`确定要清空 ${filterYear} 年的所有自定义${modalMode === 'holiday' ? '节假日' : '调休'}数据吗？`))
+                    return;
+                const data = (modalMode === 'holiday') ? userHolidays : userAdjusts;
+                const keys = Object.keys(data).filter(k => k.startsWith(String(filterYear) + '-'));
+                keys.forEach(k => delete data[k]);
+                saveUserData(userHolidays, userAdjusts);
+                showToast(`已清空 ${filterYear} 年数据`);
+                renderCustomList();
+                if (currentYear === filterYear) renderCalendar(currentYear);
+            };
+
+            // 筛选输入框回车触发
+            document.getElementById('filterYear').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') renderCustomList();
+            });
+
+            // ================================================================
+            // 8. 导出 Excel
+            // ================================================================
+            window.exportExcel = function() {
+                try {
+                    const year = currentYear;
+                    const filtered = allDays.filter(d => d.type === 'holiday' || d.type === 'weekend');
+                    if (filtered.length === 0) {
+                        showToast('⚠️ 没有可导出的数据');
+                        return;
+                    }
+
+                    const sheet1Data = [
+                        ['日期', '星期', '类型', '备注']
+                    ];
+                    filtered.forEach(d => {
+                        let typeText = (d.type === 'holiday') ? '法定节假日' : '周末休息';
+                        sheet1Data.push([d.dateStr, d.weekdayCN, typeText, d.label || '']);
+                    });
+
+                    const holidayDates = allDays.filter(d => d.type === 'holiday').map(d => d.dateStr).sort();
+                    const examples = [
+                        { start: `${year}-01-01`, end: `${year}-01-31` },
+                        { start: `${year}-02-01`, end: `${year}-02-28` },
+                        { start: `${year}-05-01`, end: `${year}-05-31` },
+                        { start: `${year}-10-01`, end: `${year}-10-31` },
+                    ];
+
+                    const sheet2Data = [
+                        ['开始日期', '结束日期', '工作日天数 (排除节假日, 含单位)', '公式说明', '', '法定节假日列表 (供公式引用)']
+                    ];
+                    const holidayStartRow = 7;
+                    examples.forEach((ex, idx) => {
+                        const rowNum = idx + 2;
+                        const endRef = holidayStartRow + holidayDates.length;
+                        sheet2Data.push([
+                            ex.start,
+                            ex.end,
+                            `=NETWORKDAYS(A${rowNum}, B${rowNum}, $F$${holidayStartRow}:$F$${endRef}) & "工作日"`,
+                            '=NETWORKDAYS(开始, 结束, 节假日区域) & "工作日"',
+                            '',
+                            ''
+                        ]);
+                    });
+                    sheet2Data.push(['', '', '', '', '', '节假日日期']);
+                    holidayDates.forEach(d => {
+                        sheet2Data.push(['', '', '', '', '', d]);
+                    });
+
+                    const wb = XLSX.utils.book_new();
+                    const ws1 = XLSX.utils.aoa_to_sheet(sheet1Data);
+                    ws1['!cols'] = [{ wch: 14 }, { wch: 8 }, { wch: 14 }, { wch: 16 }];
+                    XLSX.utils.book_append_sheet(wb, ws1, '节假日与周末');
+
+                    const ws2 = XLSX.utils.aoa_to_sheet(sheet2Data);
+                    ws2['!cols'] = [{ wch: 14 }, { wch: 14 }, { wch: 18 }, { wch: 40 }, { wch: 4 }, { wch: 16 }];
+                    XLSX.utils.book_append_sheet(wb, ws2, '工作日计算示例');
+
+                    XLSX.writeFile(wb, `${year}年节假日与周末_含公式示例.xlsx`);
+                    showToast(`✅ 导出成功！${filtered.length} 条记录`);
+                } catch (e) {
+                    console.error(e);
+                    showToast('❌ 导出失败');
+                }
+            };
+
+            // ================================================================
+            // 9. 双击月份导出
+            // ================================================================
+            document.addEventListener('dblclick', function(e) {
+                const card = e.target.closest('.month-card');
+                if (!card) return;
+                const m = parseInt(card.dataset.month);
+                const days = grouped[m] || [];
+                const filtered = days.filter(d => d.type === 'holiday' || d.type === 'weekend');
+                if (filtered.length === 0) {
+                    showToast('该月没有节假日或周末');
+                    return;
+                }
+                const rows = [
+                    ['日期', '星期', '类型', '备注']
+                ];
+                filtered.forEach(d => {
+                    let typeText = (d.type === 'holiday') ? '法定节假日' : '周末休息';
+                    rows.push([d.dateStr, d.weekdayCN, typeText, d.label || '']);
+                });
+                try {
+                    const wb = XLSX.utils.book_new();
+                    const ws = XLSX.utils.aoa_to_sheet(rows);
+                    ws['!cols'] = [{ wch: 14 }, { wch: 8 }, { wch: 14 }, { wch: 16 }];
+                    XLSX.utils.book_append_sheet(wb, ws, monthNames[m]);
+                    XLSX.writeFile(wb, `${currentYear}年${monthNames[m]}_节假日与周末.xlsx`);
+                    showToast(`📤 已导出 ${monthNames[m]}`);
+                } catch (e) { showToast('❌ 导出失败'); }
+            });
+
+            // ================================================================
+            // 10. 初始化
+            // ================================================================
+            buildNav();
+            renderCalendar(2026);
+
+            document.getElementById('yearInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') loadYear();
+            });
+
+            console.log('✅ 通用节假日工具已加载，支持自定义未来年份（数据保存在浏览器）');
+            console.log('💡 点击“管理节假日”或“管理调休”即可添加 2027、2028 等未来年份的数据');
+
+        })();
+    </script>
+</body>
+</html>

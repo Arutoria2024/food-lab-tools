@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GB/T 21317-2007 四环素类兽药残留检测 自动计算系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background: #f0f5fa;
+            padding: 25px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 28px 28px 40px;
+        }
+        h1 {
+            font-size: 26px;
+            color: #0a2f44;
+            border-left: 6px solid #1a7a8a;
+            padding-left: 18px;
+            margin-bottom: 4px;
+        }
+        .sub {
+            color: #4a6a7a;
+            font-size: 14px;
+            margin-bottom: 22px;
+            padding-left: 24px;
+            background: #ecf3f8;
+            display: inline-block;
+            padding: 6px 24px;
+            border-radius: 30px;
+        }
+
+        /* 折叠流程样式 */
+        .flow-toggle {
+            background: #e8f0f8;
+            border-radius: 12px;
+            padding: 6px 18px;
+            margin-bottom: 22px;
+            border: 1px solid #c8dae5;
+        }
+        .flow-toggle summary {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0a2f44;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+        }
+        .flow-toggle summary::-webkit-details-marker {
+            display: none;
+        }
+        .flow-toggle summary .arrow {
+            margin-left: auto;
+            transition: transform 0.2s;
+        }
+        .flow-toggle[open] summary .arrow {
+            transform: rotate(180deg);
+        }
+        .flow-content {
+            padding: 10px 6px 18px 6px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #1a2a3a;
+        }
+        .flow-content .step {
+            margin-bottom: 12px;
+            border-left: 4px solid #1a7a8a;
+            padding-left: 16px;
+        }
+        .flow-content .step strong {
+            color: #0a4a5a;
+        }
+        .flow-content .step .highlight {
+            background: #fef3d6;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #8a6d1a;
+        }
+        .flow-content .step .warn {
+            color: #b33;
+            font-weight: 600;
+        }
+
+        /* 计算卡片 */
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 10px;
+        }
+        @media (max-width: 900px) {
+            .calc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: #f9fcff;
+            border: 1px solid #dce6ef;
+            border-radius: 16px;
+            padding: 20px 22px;
+        }
+        .card .card-title {
+            font-weight: 700;
+            font-size: 17px;
+            color: #1a4a6a;
+            border-bottom: 2px solid #d0dce8;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .card .card-title .badge {
+            background: #1a7a8a;
+            color: #fff;
+            font-size: 12px;
+            border-radius: 30px;
+            padding: 0 14px;
+            line-height: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 12px;
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2a4a5a;
+            min-width: 100px;
+        }
+        .form-group input,
+        .form-group select {
+            border: 1.5px solid #d0dce8;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 14px;
+            background: #fff;
+            flex: 1;
+            min-width: 80px;
+            max-width: 160px;
+            transition: 0.2s;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #1a7a8a;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 122, 138, 0.15);
+        }
+        .form-group .unit {
+            font-size: 12px;
+            color: #5a7a8a;
+        }
+        .form-group .hint {
+            font-size: 12px;
+            color: #7a8a9a;
+            margin-left: 4px;
+        }
+
+        .btn {
+            background: #1a7a8a;
+            color: #fff;
+            border: none;
+            padding: 9px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(26, 122, 138, 0.25);
+        }
+        .btn:hover {
+            background: #0e5f6e;
+            transform: translateY(-1px);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #1a7a8a;
+            border: 2px solid #1a7a8a;
+            box-shadow: none;
+            padding: 5px 14px;
+            font-size: 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-outline:hover {
+            background: #e6f3f7;
+        }
+
+        .result-box {
+            background: #eaf5f9;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-top: 14px;
+            border-left: 5px solid #1a7a8a;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dashed #c8dae5;
+            font-size: 14px;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-item .label {
+            color: #3a5a6a;
+        }
+        .result-item .value {
+            font-weight: 700;
+            color: #0a2f44;
+        }
+        .result-item .value.pass {
+            color: #1a8a4a;
+        }
+        .result-item .value.fail {
+            color: #c0392b;
+        }
+
+        .json-area {
+            background: #1e2a36;
+            color: #b8d4e0;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 160px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .flex-end {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .drug-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 16px;
+            font-size: 13px;
+            color: #2a4a5a;
+            padding: 6px 0 6px 16px;
+        }
+        @media (max-width: 600px) {
+            .drug-list {
+                grid-template-columns: 1fr;
+            }
+        }
+        .drug-list .item {
+            padding: 2px 0;
+            border-bottom: 1px dashed #e8eef4;
+        }
+
+        .footnote {
+            margin-top: 28px;
+            font-size: 13px;
+            color: #5a6a7a;
+            border-top: 1px solid #dce6ef;
+            padding-top: 18px;
+            line-height: 1.8;
+        }
+        .footnote .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 12px;
+            padding: 1px 12px;
+            border-radius: 20px;
+            margin: 2px 4px 2px 0;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 16px;
+            }
+            .form-group label {
+                min-width: 70px;
+                font-size: 12px;
+            }
+            .form-group input {
+                font-size: 13px;
+                max-width: 100%;
+            }
+            .card {
+                padding: 14px 14px;
+            }
+            .drug-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 GB/T 21317-2007 · 四环素类兽药残留检测</h1>
+        <div class="sub">动物源性食品 — 液相色谱-质谱/质谱法与高效液相色谱法 · 外标法定量</div>
+
+        <!-- ===== 折叠实验流程 ===== -->
+        <details class="flow-toggle" open>
+            <summary>
+                <span>📋 实验操作流程（点击展开/收起）</span>
+                <span class="arrow">▼</span>
+            </summary>
+            <div class="flow-content">
+                <div class="step">
+                    <strong>1. 样品制备</strong><br>
+                    • 动物肌肉/肝脏/肾脏/水产品：取约 <span class="highlight">500 g</span> 组织捣碎均匀。<br>
+                    • 牛奶：取约 <span class="highlight">500 g</span> 充分混匀。<br>
+                    • 密封标识，<span class="highlight">-18 °C</span> 以下冷冻保存。
+                </div>
+                <div class="step">
+                    <strong>2. 提取</strong><br>
+                    • 称取 <span class="highlight">5 g</span> 试样（精确至 0.01 g），置于 50 mL 聚丙烯离心管中。<br>
+                    • 用 <span class="highlight">0.1 mol/L Na₂EDTA-McIlvaine 缓冲液（pH 4.0）</span> 冰水浴超声提取三次（约 20、20、10 mL）。<br>
+                    • 每次旋涡混合 1 min，超声 10 min，<span class="highlight">3000 r/min</span> 离心 5 min（＜15 °C）。<br>
+                    • 合并上清液，定容至 <span class="highlight">50 mL</span>，混匀，5000 r/min 离心 10 min（＜15 °C），快速滤纸过滤。
+                </div>
+                <div class="step">
+                    <strong>3. 净化（HLB固相萃取）</strong><br>
+                    • 准确吸取 <span class="highlight">10 mL</span> 提取液（相当于 1 g 样品），以 <span class="highlight">1 滴/秒</span> 过 HLB 柱（60 mg, 3 mL，预先用 5 mL 甲醇和 5 mL 水活化）。<br>
+                    • 依次用 <span class="highlight">5 mL 水</span> 和 <span class="highlight">5 mL 甲醇+水（1+19）</span> 淋洗，弃去流出液。<br>
+                    • 减压抽干 <span class="highlight">5 min</span>（2.0 kPa 以下）。<br>
+                    • 用 <span class="highlight">10 mL 甲醇+乙酸乙酯（1+9）</span> 洗脱，收集洗脱液。<br>
+                    • 吹氮浓缩至干（＜40 °C），用 <span class="highlight">1.0 mL（LC-MS/MS）或 0.5 mL（HPLC）</span> 甲醇+三氟乙酸水溶液（1+19）复溶，过 0.45 μm 滤膜。
+                </div>
+                <div class="step">
+                    <strong>4. 仪器测定</strong><br>
+                    <span style="font-weight:600; color:#0a4a5a;">LC-MS/MS 法：</span> C8柱（150×2.1 mm, 5 μm），甲醇+10 mmol/L 三氟乙酸梯度洗脱，流速 300 μL/min，ESI⁺ MRM 模式。<br>
+                    <span style="font-weight:600; color:#0a4a5a;">HPLC 法：</span> C8柱（250×4.6 mm, 5 μm），甲醇+乙腈+10 mmol/L 三氟乙酸梯度洗脱，流速 1.5 mL/min，<span class="highlight">检测波长 350 nm</span>。
+                </div>
+                <div class="step">
+                    <strong>5. 结果计算（外标法）</strong><br>
+                    • <span class="highlight">X = (Aₓ × cₛ × V) / (Aₛ × m)</span><br>
+                    &nbsp;&nbsp;X — 样品中待测组分含量（μg/kg）<br>
+                    &nbsp;&nbsp;Aₓ — 测定液中待测组分的峰面积<br>
+                    &nbsp;&nbsp;cₛ — 标准液中待测组分的浓度（μg/L）<br>
+                    &nbsp;&nbsp;V — 定容体积（mL）<br>
+                    &nbsp;&nbsp;Aₛ — 标准液中待测组分的峰面积<br>
+                    &nbsp;&nbsp;m — 最终样液所代表的样品质量（g）
+                </div>
+                <div style="margin-top:10px; padding:8px 14px; background:#fef6e6; border-radius:8px; color:#8a6d1a;">
+                    ⚠️ <strong>安全提示：</strong> 甲醇、乙腈、三氯甲烷等有机溶剂有毒，操作须在通风橱内进行，佩戴防护手套。
+                </div>
+            </div>
+        </details>
+
+        <!-- ===== 计算系统 ===== -->
+        <div class="calc-grid">
+
+            <!-- 左列：参数输入 -->
+            <div class="card">
+                <div class="card-title">
+                    📊 外标法定量计算
+                    <span class="badge">峰面积比</span>
+                </div>
+
+                <div class="form-group">
+                    <label>化合物名称 :</label>
+                    <select id="compoundName" style="max-width:160px;">
+                        <option value="土霉素">土霉素</option>
+                        <option value="四环素">四环素</option>
+                        <option value="金霉素">金霉素</option>
+                        <option value="强力霉素">强力霉素</option>
+                        <option value="二甲胺四环素">二甲胺四环素</option>
+                        <option value="去甲基金霉素">去甲基金霉素</option>
+                        <option value="甲烯土霉素">甲烯土霉素</option>
+                        <option value="差向土霉素">差向土霉素</option>
+                        <option value="差向四环素">差向四环素</option>
+                        <option value="差向金霉素">差向金霉素</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>标准品浓度 cₛ :</label>
+                    <input type="number" id="stdConc" value="100.0" step="0.1">
+                    <span class="unit">μg/L</span>
+                </div>
+                <div class="form-group">
+                    <label>标准品峰面积 Aₛ :</label>
+                    <input type="number" id="stdArea" value="850000" step="1">
+                </div>
+                <div class="form-group">
+                    <label>样品峰面积 Aₓ :</label>
+                    <input type="number" id="sampleArea" value="320000" step="1">
+                </div>
+                <div class="form-group">
+                    <label>定容体积 V :</label>
+                    <input type="number" id="finalVol" value="1.0" step="0.1">
+                    <span class="unit">mL</span>
+                    <span class="hint">（LC-MS/MS 为 1.0 mL，HPLC 为 0.5 mL）</span>
+                </div>
+                <div class="form-group">
+                    <label>样品代表质量 m :</label>
+                    <input type="number" id="sampleMass" value="1.0" step="0.01">
+                    <span class="unit">g</span>
+                    <span class="hint">（10 mL 提取液相当于 1 g 样品）</span>
+                </div>
+                <div class="form-group">
+                    <label>MRL 限值 :</label>
+                    <input type="number" id="mrlLimit" value="100" step="1">
+                    <span class="unit">μg/kg</span>
+                    <span class="hint">（肌肉组织常用 100 μg/kg）</span>
+                </div>
+
+                <button class="btn" onclick="calcResidue()" style="width:100%;">🧪 计算残留量</button>
+
+                <div id="resultArea" style="margin-top:14px;">
+                    <!-- 动态填充 -->
+                </div>
+            </div>
+
+            <!-- 右列：信息与数据 -->
+            <div class="card">
+                <div class="card-title">
+                    📋 检测信息
+                    <span class="badge">GB/T 21317-2007</span>
+                </div>
+
+                <div style="font-size:14px; color:#2a4a5a; line-height:1.8; margin-bottom:12px;">
+                    <p><strong>📌 测定低限：</strong> 50.0 μg/kg（两种方法均适用）[reference:0]</p>
+                    <p><strong>🔬 检测方法：</strong> LC-MS/MS 或 HPLC-UV/DAD</p>
+                    <p><strong>⚖️ 定量方式：</strong> 外标峰面积法定量[reference:1]</p>
+                    <p><strong>📊 精密度：</strong> RSD 一般＜10%</p>
+                </div>
+
+                <div style="border-top:1px solid #d0dce8; padding-top:12px; margin-top:4px;">
+                    <div style="font-weight:600; color:#1a4a6a; font-size:14px; margin-bottom:6px;">🧬 可检测化合物（10种）</div>
+                    <div class="drug-list">
+                        <div class="item">二甲胺四环素</div>
+                        <div class="item">差向土霉素</div>
+                        <div class="item">土霉素</div>
+                        <div class="item">差向四环素</div>
+                        <div class="item">四环素</div>
+                        <div class="item">去甲基金霉素</div>
+                        <div class="item">差向金霉素</div>
+                        <div class="item">金霉素</div>
+                        <div class="item">甲烯土霉素</div>
+                        <div class="item">强力霉素</div>
+                    </div>
+                </div>
+
+                <div style="border-top:1px solid #d0dce8; padding-top:12px; margin-top:12px;">
+                    <div style="font-weight:600; color:#1a4a6a; font-size:14px; margin-bottom:6px;">📁 实验数据 (JSON)</div>
+                    <div class="json-area" id="jsonDisplay">
+                        // 点击「计算残留量」或「导出 JSON」后更新
+                    </div>
+                    <div class="flex-end">
+                        <button class="btn-outline" onclick="exportJSON()">💾 导出 JSON</button>
+                        <button class="btn-outline" onclick="document.getElementById('jsonFileInput').click()">📂 导入 JSON</button>
+                        <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="importJSON(event)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== 底部说明 ===== -->
+        <div class="footnote">
+            <strong>📌 编制依据：</strong><br>
+            <span class="tag">📖</span> GB/T 21317-2007《动物源性食品中四环素类兽药残留量检测方法 液相色谱-质谱/质谱法与高效液相色谱法》[reference:2]<br>
+            <span class="tag">🔬</span> 方法原理：Na₂EDTA-McIlvaine 缓冲液提取 → HLB 固相萃取净化 → 外标峰面积法定量[reference:3]<br>
+            <span class="tag">📊</span> 计算公式：<strong>X = (Aₓ × cₛ × V) / (Aₛ × m)</strong>，结果保留三位有效数字<br>
+            <span class="tag">⚠️</span> MRL 限值参考：动物肌肉组织通常为 <strong>100 μg/kg</strong>，具体以 GB 31650 及目标市场要求为准
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================================
+        // 核心计算 — 外标法
+        // 公式：X = (Aₓ × cₛ × V) / (Aₛ × m)
+        // ============================================================
+        function calcResidue() {
+            const compound = document.getElementById('compoundName').value;
+            const cs = parseFloat(document.getElementById('stdConc').value);
+            const As = parseFloat(document.getElementById('stdArea').value);
+            const Ax = parseFloat(document.getElementById('sampleArea').value);
+            const V = parseFloat(document.getElementById('finalVol').value);
+            const m = parseFloat(document.getElementById('sampleMass').value);
+            const limit = parseFloat(document.getElementById('mrlLimit').value);
+
+            if ([cs, As, Ax, V, m, limit].some(isNaN)) {
+                alert('请完整填写所有参数！');
+                return;
+            }
+            if (As === 0) {
+                alert('标准品峰面积不能为 0！');
+                return;
+            }
+
+            // 计算含量 (μg/kg)
+            const content = (Ax * cs * V) / (As * m);
+
+            // 判定
+            const isPass = content <= limit;
+            const statusText = isPass ? '✅ 合格（未超标）' : '❌ 不合格（超标）';
+            const statusClass = isPass ? 'pass' : 'fail';
+
+            const resultHTML = `
+                <div class="result-box">
+                    <div class="result-item"><span class="label">化合物</span><span class="value">${compound}</span></div>
+                    <div class="result-item"><span class="label">标准品浓度 (cₛ)</span><span class="value">${cs.toFixed(2)} μg/L</span></div>
+                    <div class="result-item"><span class="label">标准品峰面积 (Aₛ)</span><span class="value">${As.toFixed(0)}</span></div>
+                    <div class="result-item"><span class="label">样品峰面积 (Aₓ)</span><span class="value">${Ax.toFixed(0)}</span></div>
+                    <div class="result-item"><span class="label">定容体积 (V)</span><span class="value">${V.toFixed(1)} mL</span></div>
+                    <div class="result-item"><span class="label">样品代表质量 (m)</span><span class="value">${m.toFixed(2)} g</span></div>
+                    <div class="result-item" style="border-bottom:2px solid #1a7a8a; padding-top:8px; margin-top:4px;">
+                        <span class="label" style="font-weight:700; font-size:16px;">残留量 (μg/kg)</span>
+                        <span class="value" style="font-size:18px;">${content.toFixed(3)}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">MRL 限值 (μg/kg)</span>
+                        <span class="value">${limit.toFixed(0)}</span>
+                    </div>
+                    <div class="result-item" style="border-top:2px solid #d0dce8; margin-top:6px; padding-top:10px;">
+                        <span class="label" style="font-weight:700;">判定结果</span>
+                        <span class="value ${statusClass}" style="font-size:18px;">${statusText}</span>
+                    </div>
+                    <div class="result-item" style="font-size:12px; color:#6a8a9a; border-top:1px dashed #c8dae5; margin-top:4px; padding-top:6px;">
+                        <span class="label">📌 方法性能</span>
+                        <span class="value" style="font-weight:400;">测定低限 50.0 μg/kg</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('resultArea').innerHTML = resultHTML;
+            updateJSON();
+        }
+
+        // ============================================================
+        // JSON 导入导出
+        // ============================================================
+        function collectData() {
+            return {
+                method: 'GB/T 21317-2007 外标峰面积法',
+                timestamp: new Date().toISOString(),
+                compound: document.getElementById('compoundName').value,
+                parameters: {
+                    std_conc: parseFloat(document.getElementById('stdConc').value) || 0,
+                    std_area: parseFloat(document.getElementById('stdArea').value) || 0,
+                    sample_area: parseFloat(document.getElementById('sampleArea').value) || 0,
+                    final_vol: parseFloat(document.getElementById('finalVol').value) || 0,
+                    sample_mass: parseFloat(document.getElementById('sampleMass').value) || 0,
+                    mrl_limit: parseFloat(document.getElementById('mrlLimit').value) || 0
+                },
+                result: (() => {
+                    const resDiv = document.getElementById('resultArea');
+                    const contentMatch = resDiv.innerText.match(/残留量.*?(\d+\.\d+)/);
+                    const statusMatch = resDiv.innerText.includes('合格') ? 'pass' :
+                        (resDiv.innerText.includes('不合格') ? 'fail' : 'unknown');
+                    return {
+                        content: contentMatch ? parseFloat(contentMatch[1]) : null,
+                        status: statusMatch
+                    };
+                })()
+            };
+        }
+
+        function updateJSON() {
+            const data = collectData();
+            document.getElementById('jsonDisplay').textContent = JSON.stringify(data, null, 2);
+        }
+
+        function exportJSON() {
+            const data = collectData();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `tetracycline_${new Date().toISOString().slice(0,10)}.json`;
+            link.click();
+        }
+
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    const p = json.parameters;
+                    if (p) {
+                        if (p.std_conc !== undefined) document.getElementById('stdConc').value = p.std_conc;
+                        if (p.std_area !== undefined) document.getElementById('stdArea').value = p.std_area;
+                        if (p.sample_area !== undefined) document.getElementById('sampleArea').value = p.sample_area;
+                        if (p.final_vol !== undefined) document.getElementById('finalVol').value = p.final_vol;
+                        if (p.sample_mass !== undefined) document.getElementById('sampleMass').value = p.sample_mass;
+                        if (p.mrl_limit !== undefined) document.getElementById('mrlLimit').value = p.mrl_limit;
+                    }
+                    if (json.compound) {
+                        const select = document.getElementById('compoundName');
+                        for (let opt of select.options) {
+                            if (opt.value === json.compound) { select.value = json.compound; break; }
+                        }
+                    }
+                    updateJSON();
+                    alert('✅ 数据导入成功！');
+                } catch (err) {
+                    alert('❌ JSON 解析失败：' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // 自动更新 JSON
+        document.addEventListener('input', function(e) {
+            if (e.target.closest('.form-group') || e.target.closest('select')) {
+                clearTimeout(window.jsonTimeout);
+                window.jsonTimeout = setTimeout(updateJSON, 400);
+            }
+        });
+
+        updateJSON();
+    </script>
+</body>
+</html>

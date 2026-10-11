@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SN/T 1751.2-2007 喹诺酮类药物残留检测 完整实验流程图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background: #f0f5fa;
+            padding: 25px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 30px 30px 40px;
+        }
+        h1 {
+            font-size: 26px;
+            color: #0a2f44;
+            border-left: 6px solid #1a7a8a;
+            padding-left: 18px;
+            margin-bottom: 4px;
+        }
+        .sub {
+            color: #4a6a7a;
+            font-size: 14px;
+            margin-bottom: 22px;
+            padding-left: 24px;
+            background: #ecf3f8;
+            display: inline-block;
+            padding: 6px 24px;
+            border-radius: 30px;
+        }
+        .note-box {
+            background: #fef9e6;
+            border: 1px solid #f0dca0;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6a5a1a;
+            line-height: 1.8;
+        }
+        .note-box strong {
+            color: #8a6d1a;
+        }
+
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 20px 10px;
+            background: #f8fbfe;
+            border-radius: 16px;
+            border: 1px solid #dce6ef;
+            margin-bottom: 30px;
+        }
+
+        .node {
+            background: #ffffff;
+            border: 2px solid #c8d6e5;
+            border-radius: 12px;
+            padding: 14px 24px;
+            min-width: 200px;
+            max-width: 750px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.15s;
+        }
+        .node:hover {
+            border-color: #1a7a8a;
+            box-shadow: 0 4px 14px rgba(26, 122, 138, 0.12);
+        }
+        .node-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0a2f44;
+        }
+        .node-desc {
+            font-size: 13px;
+            color: #4a5a6a;
+            margin-top: 4px;
+            line-height: 1.6;
+        }
+        .node-desc .highlight {
+            background: #fef3d6;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #8a6d1a;
+        }
+        .node-desc .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 11px;
+            padding: 0 10px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+        .node-desc .warn {
+            color: #b33;
+            font-weight: 600;
+        }
+
+        .node-start {
+            border-color: #1a7a8a;
+            background: #eef7fa;
+        }
+        .node-start .node-title {
+            color: #0a4a5a;
+        }
+        .node-end {
+            border-color: #1a8a4a;
+            background: #eaf7f0;
+        }
+        .node-end .node-title {
+            color: #0a6a3a;
+        }
+        .node-method {
+            border-color: #8e44ad;
+            background: #f8f0fc;
+        }
+        .node-warn {
+            border-color: #c0392b;
+            background: #fdf0ee;
+        }
+        .node-warn .node-title {
+            color: #a93226;
+        }
+
+        .arrow-connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2px 0;
+        }
+        .arrow-line {
+            width: 2px;
+            height: 16px;
+            background: #8aa9bb;
+        }
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 14px solid #8aa9bb;
+        }
+
+        .sub-flow {
+            width: 100%;
+            max-width: 750px;
+            background: #f4f8fb;
+            border-radius: 12px;
+            padding: 14px 18px;
+            border: 1px solid #d0dce8;
+            margin: 4px 0;
+        }
+        .sub-flow .sub-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1a4a6a;
+            text-align: center;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #d0dce8;
+            padding-bottom: 6px;
+        }
+        .sub-flow .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 5px 0;
+            font-size: 13px;
+            color: #2a4a5a;
+            line-height: 1.6;
+            border-bottom: 1px dashed #e0e8ee;
+        }
+        .sub-flow .step-item:last-child {
+            border-bottom: none;
+        }
+        .sub-flow .step-num {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            background: #1a7a8a;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+        .sub-flow .step-item .highlight {
+            background: #fef3d6;
+            padding: 0 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 28px;
+            justify-content: center;
+            padding: 12px 16px;
+            margin-top: 12px;
+            background: #f4f8fb;
+            border-radius: 10px;
+            border: 1px solid #dce6ef;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #2a4a5a;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid #c8d6e5;
+        }
+        .legend-color.start {
+            border-color: #1a7a8a;
+            background: #eef7fa;
+        }
+        .legend-color.method {
+            border-color: #8e44ad;
+            background: #f8f0fc;
+        }
+        .legend-color.end {
+            border-color: #1a8a4a;
+            background: #eaf7f0;
+        }
+        .legend-color.warn {
+            border-color: #c0392b;
+            background: #fdf0ee;
+        }
+
+        .footnote {
+            margin-top: 28px;
+            font-size: 13px;
+            color: #5a6a7a;
+            border-top: 1px solid #dce6ef;
+            padding-top: 18px;
+            line-height: 1.8;
+        }
+        .footnote .tag {
+            display: inline-block;
+            background: #d4e2e9;
+            color: #1a4a5a;
+            font-size: 12px;
+            padding: 1px 12px;
+            border-radius: 20px;
+            margin: 2px 4px 2px 0;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 16px;
+            }
+            .node {
+                padding: 10px 14px;
+                min-width: unset;
+            }
+            .sub-flow {
+                padding: 10px 12px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            .legend {
+                gap: 10px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧪 SN/T 1751.2-2007 · 进出口动物源食品中喹诺酮类药物残留检测</h1>
+    <div class="sub">液相色谱-质谱/质谱法（LC-MS/MS）— 外标法定量</div>
+
+    <div class="note-box">
+        <strong>📌 适用范围：</strong> 动物肌肉、内脏、水产品、奶等动物源食品中 <strong>16种喹诺酮类药物</strong>（萘啶酸、噁喹酸、氟甲喹、诺氟沙星、依诺沙星、环丙沙星、洛美沙星、丹诺沙星、恩诺沙星、氧氟沙星、沙拉沙星、二氟沙星、麻保沙星、培氟沙星、司帕沙星、奥比沙星）残留量的测定。<br>
+        <strong>🎯 定量方式：</strong> <span class="highlight">外标法</span> 定量。<br>
+        <strong>📊 方法性能：</strong> 测定低限 <span class="highlight">10.0 μg/kg</span>，回收率 70% ~ 120%（视基质和浓度而定）。
+    </div>
+
+    <!-- ===== 主流程图 ===== -->
+    <div class="flowchart">
+
+        <!-- 1. 样品制备 -->
+        <div class="node node-start">
+            <div class="node-title">📦 样品制备</div>
+            <div class="node-desc">
+                取代表性样品可食部分约 <span class="highlight">500 g</span><br>
+                组织切碎机充分捣碎均匀<br>
+                密封，-18 °C 以下冷冻存放
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 2. 称样 -->
+        <div class="node">
+            <div class="node-title">⚖️ 称样</div>
+            <div class="node-desc">
+                称取均质试样 <span class="highlight">5.0 g</span>（精确至 0.01 g）<br>
+                置于 50 mL 聚丙烯离心管中
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 3. 提取（两次超声） -->
+        <div class="node node-method">
+            <div class="node-title">🧪 提取（酸性乙腈超声）</div>
+            <div class="node-desc">
+                加入 <span class="highlight">15 mL 1% 乙酸的乙腈溶液</span>（5.7）<br>
+                <span class="highlight">15 °C 以下</span> 超声提取 5 min<br>
+                <span class="highlight">3500 r/min</span> 离心 5 min（15 °C 以下）<br>
+                收集上清液，残渣重复提取一次，合并上清液
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 4. 第一次正己烷脱脂 -->
+        <div class="node">
+            <div class="node-title">🧹 第一次脱脂（正己烷）</div>
+            <div class="node-desc">
+                合并提取液中加入 <span class="highlight">15 mL 正己烷</span><br>
+                混合 1 min<br>
+                <span class="highlight">3500 r/min</span> 离心 5 min（15 °C 以下）<br>
+                <span class="highlight">弃去正己烷层</span>（上层）
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 5. 旋转蒸发 -->
+        <div class="node node-warn">
+            <div class="node-title">🌡️ 旋转蒸发浓缩</div>
+            <div class="node-desc">
+                将乙腈层（下层）转移至 100 mL 鸡心瓶中<br>
+                加入 <span class="highlight">5 mL 异丙醇</span>（防暴沸）<br>
+                <span class="highlight">45 °C</span> 减压蒸发至近干
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 6. 复溶与定容 -->
+        <div class="node">
+            <div class="node-title">💧 复溶与初步定容</div>
+            <div class="node-desc">
+                用 <span class="highlight">样品溶解液</span>（0.1%甲酸乙腈+0.1%甲酸水=13+87）<br>
+                分次转移残渣至 15 mL 具刻度离心管<br>
+                定容至 <span class="highlight">5.0 mL</span>
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 7. 第二次正己烷脱脂 -->
+        <div class="node">
+            <div class="node-title">🧹 第二次脱脂（正己烷）</div>
+            <div class="node-desc">
+                加入 <span class="highlight">5 mL 正己烷</span><br>
+                混合 1 min<br>
+                <span class="highlight">3500 r/min</span> 离心 5 min（15 °C 以下）<br>
+                <span class="highlight">弃去正己烷层</span>（上层）
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 8. 过滤 -->
+        <div class="node">
+            <div class="node-title">💉 过滤</div>
+            <div class="node-desc">
+                取下层清液，过 <span class="highlight">0.45 μm 滤膜</span><br>
+                供 LC-MS/MS 测定
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 9. 仪器分析 -->
+        <div class="node node-method">
+            <div class="node-title">📊 LC-MS/MS 分析</div>
+            <div class="node-desc">
+                <span class="highlight">色谱柱：</span>C8柱（2.1×150 mm, 5 μm）<br>
+                <span class="highlight">流动相：</span>0.1%甲酸乙腈 + 0.1%甲酸水（梯度洗脱）<br>
+                <span class="highlight">质谱：</span>ESI⁺，MRM 模式，外标法定量
+            </div>
+        </div>
+        <div class="arrow-connector"><div class="arrow-line"></div><div class="arrow-down"></div></div>
+
+        <!-- 10. 结果 -->
+        <div class="node node-end">
+            <div class="node-title">✅ 结果计算与报告</div>
+            <div class="node-desc">
+                外标法定量，按公式计算各药物残留量（μg/kg）<br>
+                \( X = \frac{A_x \times c_s \times V}{A_s \times m} \)<br>
+                保留 <span class="highlight">三位有效数字</span>
+            </div>
+        </div>
+
+        <!-- ===== 图例 ===== -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color start"></div>
+                <span>起始/制备</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color method"></div>
+                <span>前处理/仪器分析</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color end"></div>
+                <span>终点/结果</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color warn"></div>
+                <span>注意事项</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 关键操作要点 ===== -->
+    <details style="background:#e8f0f8; border-radius:12px; padding:6px 18px; margin-top:10px; border:1px solid #c8dae5;">
+        <summary style="font-weight:700; font-size:16px; color:#0a2f44; cursor:pointer; list-style:none; display:flex; align-items:center; gap:8px; padding:8px 0;">
+            <span>📋 关键操作要点与质量控制</span>
+            <span style="margin-left:auto; transition:transform 0.2s;">▼</span>
+        </summary>
+        <div style="padding:10px 6px 18px 6px; font-size:14px; line-height:1.8; color:#1a2a3a;">
+            <div style="margin-bottom:10px; border-left:4px solid #1a7a8a; padding-left:16px;">
+                <strong>🧪 前处理要点</strong><br>
+                • 提取溶剂：<span class="highlight">1% 乙酸的乙腈溶液</span>（5.7），超声提取温度 <span class="highlight">≤ 15 °C</span><br>
+                • 离心温度均需控制在 <span class="highlight">15 °C 以下</span>，防止目标物降解<br>
+                • 旋转蒸发时加入 <span class="highlight">异丙醇</span> 可防止暴沸，温度 <span class="highlight">45 °C</span><br>
+                • 样品溶解液为 <span class="highlight">0.1%甲酸乙腈 : 0.1%甲酸水 = 13 : 87</span>（体积比）<br>
+                • 需进行两次 <span class="highlight">正己烷脱脂</span>，第一次在提取后，第二次在定容后
+            </div>
+            <div style="margin-bottom:10px; border-left:4px solid #d4a017; padding-left:16px;">
+                <strong>📊 仪器分析要点</strong><br>
+                • 色谱柱：Inertsil C8-3（或等效柱），梯度洗脱（见表1）<br>
+                • 流动相：<span class="highlight">0.1% 甲酸乙腈 + 0.1% 甲酸水</span>，流速 300 μL/min<br>
+                • 质谱：ESI⁺，MRM 模式，每个化合物监测 1 个母离子 + 2 个子离子<br>
+                • 外标法定量，需使用 <span class="highlight">空白基质匹配标准曲线</span>（5.11）以校正基质效应
+            </div>
+            <div style="border-left:4px solid #c0392b; padding-left:16px;">
+                <strong>⚠️ 质量控制要求</strong><br>
+                • 须进行 <span class="highlight">空白试验</span>（不加试样）<br>
+                • 回收率要求：添加浓度 10~100 μg/kg 时，回收率 <span class="highlight">70% ~ 120%</span><br>
+                • 精密度：批内 RSD ≤ 15%，批间 RSD ≤ 15%<br>
+                • 定性确证：保留时间偏差 ≤ ±2.5%，离子丰度比满足表2要求
+            </div>
+        </div>
+    </details>
+
+    <!-- ===== 底部说明 ===== -->
+    <div class="footnote">
+        <strong>📌 编制依据：</strong><br>
+        <span class="tag">📖</span> SN/T 1751.2-2007《进出口动物源食品中喹诺酮类药物残留量检测方法 第2部分：液相色谱-质谱/质谱法》<br>
+        <span class="tag">📖</span> 发布部门：国家认证认可监督管理委员会<br>
+        <span class="tag">📋</span> 本标准适用于动物肌肉、内脏、水产品、奶中16种喹诺酮类药物残留量的测定<br>
+        <span class="tag">⚠️</span> 标准工作溶液须用 <strong>空白样品基质溶液</strong>（5.11）配制，以抵消基质效应<br>
+        <span class="tag">📊</span> 检测结果以 <strong>μg/kg</strong> 表示，保留 <strong>3位有效数字</strong>
+    </div>
+</div>
+</body>
+</html>
